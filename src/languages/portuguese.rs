@@ -1,32 +1,26 @@
-pub fn phrases() -> Vec<String> {
-    let mut phrases = vec![];
-    for hours in 0..24 {
-        for minutes in 0..60 {
-            phrases.push(spell(hours, minutes));
-        }
-    }
-    phrases
-}
+use crate::languages::Language;
+use crate::models::time::Time;
 
-fn spell(hours: usize, minutes: usize) -> String {
-    assert!(hours < 24);
-    assert!(minutes < 60);
+pub struct Portuguese;
 
-    match (hours, minutes) {
-        (hours, 0) => spell_hours(hours),
-        (hours, 30) => format!("{} E MEIA", spell_hours(hours)),
-        (hours, minutes) if minutes < 30 => {
-            format!("{} E {}", spell_hours(hours), spell_number(minutes, true))
+impl Language for Portuguese {
+    fn spell(&self, time: Time) -> String {
+        match (time.hours(), time.minutes()) {
+            (hours, 0) => spell_hours(hours),
+            (hours, 30) => format!("{} E MEIA", spell_hours(hours)),
+            (hours, minutes) if minutes < 30 => {
+                format!("{} E {}", spell_hours(hours), spell_number(minutes, true))
+            }
+            (hours, minutes) => format!(
+                "{} PARA {}",
+                spell_number(60 - minutes, true),
+                spell_hours_with_article((hours + 1) % 24)
+            ),
         }
-        (hours, minutes) => format!(
-            "{} PARA {}",
-            spell_number(60 - minutes, true),
-            spell_hours_with_article((hours + 1) % 24)
-        ),
     }
 }
 
-fn spell_hours(hours: usize) -> String {
+fn spell_hours(hours: u8) -> String {
     assert!(hours < 24);
 
     match hours {
@@ -38,7 +32,7 @@ fn spell_hours(hours: usize) -> String {
     }
 }
 
-fn spell_hours_with_article(hours: usize) -> String {
+fn spell_hours_with_article(hours: u8) -> String {
     assert!(hours < 24);
 
     match hours {
@@ -50,7 +44,7 @@ fn spell_hours_with_article(hours: usize) -> String {
     }
 }
 
-fn spell_number(n: usize, masculine: bool) -> String {
+fn spell_number(n: u8, masculine: bool) -> String {
     assert!(n < 60);
 
     let solo = &[
@@ -83,11 +77,11 @@ fn spell_number(n: usize, masculine: bool) -> String {
         (1, false) => "UMA".to_owned(),
         (2, true) => "DOIS".to_owned(),
         (2, false) => "DUAS".to_owned(),
-        (n, _) if n < 20 => solo[n].to_owned(),
-        (n, _) if n % 10 == 0 => composed[n / 10 - 2].to_owned(),
+        (n, _) if n < 20 => solo[n as usize].to_owned(),
+        (n, _) if n % 10 == 0 => composed[(n / 10 - 2) as usize].to_owned(),
         (n, masculine) => format!(
             "{} E {}",
-            composed[n / 10 - 2],
+            composed[(n / 10 - 2) as usize],
             spell_number(n % 10, masculine)
         ),
     }

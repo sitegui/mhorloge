@@ -1,23 +1,34 @@
-pub mod en;
-pub mod fr;
-pub mod pt_br;
+use crate::models::time::Time;
+
+pub mod english;
+pub mod french;
+pub mod portuguese;
+
+/// Represents a possible language, that can spell out any valid time
+pub trait Language {
+    fn spell(&self, time: Time) -> String;
+}
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::languages::english::English;
+    use crate::languages::french::French;
+    use crate::languages::portuguese::Portuguese;
 
     #[test]
-    fn pt_br() {
-        println!("{:#?}", pt_br::phrases());
-    }
-
-    #[test]
-    fn fr() {
-        println!("{:#?}", fr::phrases());
-    }
-
-    #[test]
-    fn en() {
-        println!("{:#?}", en::phrases());
+    fn debug_languages() {
+        println!("English");
+        for time in Time::all_times() {
+            println!("{}: {}", time, English.spell(time));
+        }
+        println!("French");
+        for time in Time::all_times() {
+            println!("{}: {}", time, French.spell(time));
+        }
+        println!("Portuguese");
+        for time in Time::all_times() {
+            println!("{}: {}", time, Portuguese.spell(time));
+        }
     }
 }

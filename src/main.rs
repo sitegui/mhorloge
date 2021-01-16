@@ -3,7 +3,6 @@ use crate::languages::Language;
 use crate::models::phrase::PhraseSpec;
 use crate::models::texts::Texts;
 use crate::models::time::Time;
-use crate::models::token_graph::TokenGraph;
 
 mod languages;
 mod models;
@@ -11,10 +10,11 @@ mod optimizer;
 mod tokenize;
 
 fn main() {
+    env_logger::init();
+    log::info!("Starting");
+
     let (texts, phrases) = phrases(&[Box::new(Portuguese)]);
-    let graph = TokenGraph::new(&phrases);
-    let phrases = graph.into_phrases();
-    eprintln!("phrases = {:?}", phrases);
+    let phrases = tokenize::tokenize(&phrases, 5, 1, 17, 1_000);
 }
 
 fn phrases(languages: &[Box<dyn Language>]) -> (Texts, Vec<PhraseSpec>) {

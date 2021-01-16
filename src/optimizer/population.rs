@@ -26,7 +26,7 @@ impl<I: Individual<Action = A>, S: Select<A, I>, A> PopulationOptimizer<I, S> {
         }
     }
 
-    fn evolve(&mut self) {
+    pub fn evolve(&mut self) {
         // Create new individuals
         let mut new_individuals = vec![];
         for individual in &self.population {
@@ -42,16 +42,16 @@ impl<I: Individual<Action = A>, S: Select<A, I>, A> PopulationOptimizer<I, S> {
         self.select.select_population(&mut self.population);
     }
 
-    fn population(&self) -> &[I] {
+    pub fn population(&self) -> &[I] {
         &self.population
     }
 
-    fn best(&self) -> &I {
+    pub fn best(&self) -> &I {
         let best = self.select.best(&self.population);
         &self.population[best]
     }
 
-    fn into_best(mut self) -> I {
+    pub fn into_best(mut self) -> I {
         let best = self.select.best(&self.population);
         self.population.swap_remove(best)
     }

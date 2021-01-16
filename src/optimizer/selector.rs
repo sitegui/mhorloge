@@ -1,8 +1,7 @@
 use crate::optimizer::population::{Individual, Select};
 use itertools::Itertools;
 use rand::rngs::SmallRng;
-use rand::seq::SliceRandom;
-use rand::Rng;
+use rand::seq::{index, SliceRandom};
 
 pub struct Selector {
     max_actions: usize,
@@ -22,11 +21,15 @@ impl Selector {
 
 impl<A, I> Select<A, I> for Selector
 where
-    I: Individual,
-    I::Score: Ord,
+    I: Individual<Score = u32>,
 {
     fn select_actions(&mut self, actions: &mut Vec<A>) {
         if actions.len() > self.max_actions {
+            log::debug!(
+                "Select {} out of {} actions",
+                self.max_actions,
+                actions.len()
+            );
             actions.shuffle(&mut self.rng);
             actions.truncate(self.max_actions);
         }
@@ -34,20 +37,25 @@ where
 
     fn select_population(&mut self, population: &mut Vec<I>) {
         if population.len() > self.target_population {
-            // Sort population
-            population.sort_by_key(|individual| individual.score());
+            log::info!(
+                "Select around {} out of {} individuals",
+                self.target_population,
+                population.len()
+            );
 
-            // Select individuals: `p(i)` is the probability of the `i`-th worst individual to
-            // survive. Given that:
-            // - `p(0) = 0`: the worst individual will never be selected
-            // - `sum(p(i)) = target`: the expected final population size is the target
-            // - `p(i) = a + b * i`: the probability falls linearly
-            // Then the solution is uniquely defined: `p(i) = 2 * target * i / (n * (n-1))`
-            let n = population.len() as u32;
-            let target = self.target_population as u32;
+            // Sort population
+            let indexes = index::sample_weighted(
+                &mut self.rng,
+                population.len(),
+                |i| population[i].score(),
+                self.target_population,
+            )
+            .unwrap()
+            .into_vec();
+
             let mut i = 0;
             population.retain(|_| {
-                let retain = self.rng.gen_ratio(2 * target * i, n * (n - 1));
+                let retain = indexes.contains(&i);
                 i += 1;
                 retain
             });

@@ -12,6 +12,8 @@ pub struct TokenGraph<'a> {
     /// Each node represents a token. Each edge `A -> B` says that `A` must happen *before* `B`.
     /// The tokens are never removed from this graph, so their indexes are stable.
     graph: DiGraph<TokenSpec, (), u16>,
+    /// Store the list of tokens (merged or not) by their text
+    tokens_by_text: Arc<BTreeMap<TextTag, Vec<TokenId>>>,
     phrases: &'a [PhraseSpec],
 }
 
@@ -34,21 +36,43 @@ pub struct Token {
 impl<'a> TokenGraph<'a> {
     pub fn new(phrases: &'a [PhraseSpec]) -> Self {
         let mut graph = DiGraph::default();
+        let mut tokens_by_text: BTreeMap<_, Vec<_>> = BTreeMap::new();
 
         for phrase in phrases {
             let mut prev_token = None;
             for &text in phrase.words() {
                 let next_token = graph.add_node(TokenSpec::new(text));
-
                 if let Some(prev_token) = prev_token {
                     graph.add_edge(prev_token, next_token, ());
                 }
-
                 prev_token = Some(next_token);
+
+                tokens_by_text.entry(text).or_default().push(next_token);
             }
         }
 
-        TokenGraph { graph, phrases }
+        TokenGraph {
+            graph,
+            phrases,
+            tokens_by_text: Arc::new(tokens_by_text),
+        }
+    }
+
+    /// Return the total number of letters used by concrete (that is, non-merged) tokens
+    pub fn letters_len(&self) -> usize {
+        (&self.graph)
+            .node_references()
+            .filter(|(_, node)| node.merged_with.is_none())
+            .map(|(_, node)| node.text.len())
+            .sum()
+    }
+
+    /// Return the total number of concrete (that is, non-merged) tokens
+    pub fn tokens_len(&self) -> usize {
+        (&self.graph)
+            .node_references()
+            .filter(|(_, node)| node.merged_with.is_none())
+            .count()
     }
 
     pub fn into_phrases(self) -> Vec<Phrase> {
@@ -100,6 +124,45 @@ impl<'a> TokenGraph<'a> {
             })
             .collect()
     }
+
+    pub fn tokens_by_text(&self) -> &BTreeMap<TextTag, Vec<TokenId>> {
+        self.tokens_by_text.as_ref()
+    }
+
+    pub fn get(&self, id: TokenId) -> TokenSpec {
+        self.graph[id]
+    }
+
+    /// Merge the two given tokens
+    pub fn merge_tokens(&mut self, a: TokenId, b: TokenId) {
+        assert!(!self.graph[a].is_merged());
+        assert!(!self.graph[b].is_merged());
+
+        // Mark `b` as merged
+        self.graph[b].merged_with = Some(a);
+
+        // Copy all edges from `b` to `a`: incoming and outgoing
+        let mut neighbors = self
+            .graph
+            .neighbors_directed(b, Direction::Incoming)
+            .detach();
+        while let Some(neighbor) = neighbors.next_node(&self.graph) {
+            self.graph.add_edge(neighbor, a, ());
+        }
+        let mut neighbors = self
+            .graph
+            .neighbors_directed(b, Direction::Outgoing)
+            .detach();
+        while let Some(neighbor) = neighbors.next_node(&self.graph) {
+            self.graph.add_edge(a, neighbor, ());
+        }
+
+        // Remove all incoming edges to `b`: it will be "disconnected" from the graph.
+        // The outgoing edges can stay: they will no longer be used
+        while let Some(edge) = self.graph.first_edge(b, Direction::Incoming) {
+            self.graph.remove_edge(edge);
+        }
+    }
 }
 
 impl TokenSpec {
@@ -108,5 +171,9 @@ impl TokenSpec {
             text,
             merged_with: None,
         }
+    }
+
+    pub fn is_merged(self) -> bool {
+        self.merged_with.is_some()
     }
 }

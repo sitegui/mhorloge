@@ -1,60 +1,33 @@
-use crate::languages::english::English;
-use crate::languages::french::French;
-use crate::languages::portuguese::Portuguese;
-use crate::languages::Language;
-use crate::models::phrase::PhraseSpec;
-use crate::models::texts::Texts;
-use crate::models::time::Time;
-use crate::tokenize::Schedule;
+use crate::commands::generate_phrases::{generate_phrases, GeneratePhrases};
+use crate::commands::tokenize::{tokenize, Tokenize};
+use anyhow::Error;
+use structopt::StructOpt;
 
+mod commands;
 mod languages;
 mod models;
 mod optimizer;
 mod tokenize;
 
-fn main() {
+#[derive(Debug, StructOpt)]
+#[structopt(
+    name = "mhorloge",
+    about = "CLI for problems related to the mhorloge project."
+)]
+enum Opt {
+    GeneratePhrases(GeneratePhrases),
+    Tokenize(Tokenize),
+}
+
+fn main() -> Result<(), Error> {
     env_logger::init();
     log::info!("Starting");
 
-    let (texts, phrases) = phrases(&[Box::new(English), Box::new(French), Box::new(Portuguese)]);
-    let phrases = tokenize::tokenize(
-        &texts,
-        &phrases,
-        &[
-            Schedule {
-                max_actions: 3,
-                max_values: 10,
-                patience: 5,
-            },
-            Schedule {
-                max_actions: 5,
-                max_values: 100,
-                patience: 10,
-            },
-            Schedule {
-                max_actions: 10,
-                max_values: 1000,
-                patience: 20,
-            },
-            Schedule {
-                max_actions: 100,
-                max_values: 10000,
-                patience: 40,
-            },
-        ],
-        17,
-    );
-}
+    let opt = Opt::from_args();
+    println!("{:?}", opt);
 
-fn phrases(languages: &[Box<dyn Language>]) -> (Texts, Vec<PhraseSpec>) {
-    let mut texts = Texts::new();
-    let mut phrases = vec![];
-
-    for language in languages {
-        for time in Time::all_times() {
-            phrases.push(PhraseSpec::new(&mut texts, &language.spell(time)));
-        }
+    match opt {
+        Opt::GeneratePhrases(cmd) => generate_phrases(cmd),
+        Opt::Tokenize(cmd) => tokenize(cmd),
     }
-
-    (texts, phrases)
 }

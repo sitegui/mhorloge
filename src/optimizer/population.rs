@@ -8,8 +8,6 @@ pub struct PopulationOptimizer<V> {
     rng: SmallRng,
     values: Vec<WeightedValue<V>>,
     best: usize,
-    max_actions: usize,
-    max_values: usize,
 }
 
 pub trait Value: Sized {
@@ -24,12 +22,7 @@ pub struct WeightedValue<V> {
 }
 
 impl<V: Value> PopulationOptimizer<V> {
-    pub fn new(
-        rng: SmallRng,
-        initial_values: Vec<V>,
-        max_actions: usize,
-        max_values: usize,
-    ) -> Self {
+    pub fn new(rng: SmallRng, initial_values: Vec<V>) -> Self {
         let values = initial_values
             .into_iter()
             .map(WeightedValue::new)
@@ -40,27 +33,21 @@ impl<V: Value> PopulationOptimizer<V> {
             .position_max_by_key(|value| value.weight)
             .unwrap();
 
-        PopulationOptimizer {
-            rng,
-            values,
-            best,
-            max_actions,
-            max_values,
-        }
+        PopulationOptimizer { rng, values, best }
     }
 
-    pub fn evolve(&mut self) {
+    pub fn evolve(&mut self, max_actions: usize, max_values: usize) {
         // Create new values
         let mut new_values = vec![];
         for value in &self.values {
-            new_values.extend(value.value.evolve(self.max_actions, &mut self.rng));
+            new_values.extend(value.value.evolve(max_actions, &mut self.rng));
         }
         self.values.extend(new_values);
 
-        if self.values.len() > self.max_values {
-            log::info!(
+        if self.values.len() > max_values {
+            log::debug!(
                 "Will sample {} out of {} values",
-                self.max_values,
+                max_values,
                 self.values.len()
             );
             log::debug!(
@@ -73,7 +60,7 @@ impl<V: Value> PopulationOptimizer<V> {
                 &mut self.rng,
                 values.len(),
                 |index| values[index].weight,
-                self.max_values,
+                max_values,
             )
             .unwrap()
             .into_vec();

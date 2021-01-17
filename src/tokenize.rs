@@ -6,49 +6,59 @@ use itertools::Itertools;
 use rand::rngs::SmallRng;
 use rand::seq::{IteratorRandom, SliceRandom};
 use rand::SeedableRng;
+use std::fs;
+
+#[derive(Debug, Copy, Clone)]
+pub struct Schedule {
+    pub max_actions: usize,
+    pub max_values: usize,
+    pub patience: usize,
+}
 
 /// This is the first part of the problem: determine which tokens to consider, given a list of
 /// phrases.
 pub fn tokenize(
     texts: &Texts,
     phrases: &[PhraseSpec],
-    max_actions: usize,
-    max_values: usize,
+    schedules: &[Schedule],
     rng_seed: u64,
 ) -> Vec<Phrase> {
     let graph = TokenGraph::new(texts, phrases);
-    log::info!("Starting point: {}", graph);
+    log::debug!("Starting point: {}", graph);
     let initial_len = graph.letters_len();
     let graph = WeightedGraph::new(graph, initial_len);
 
     let rng = SmallRng::seed_from_u64(rng_seed);
 
-    let mut optimization = PopulationOptimizer::new(rng, vec![graph], max_actions, max_values);
+    let mut optimization = PopulationOptimizer::new(rng, vec![graph]);
 
-    let mut prev_weight = None;
-    let mut repeated = 0;
     let mut epoch = 0;
-    loop {
-        let best = optimization.best();
-        if prev_weight == Some(best.weight()) {
-            repeated += 1;
-            if repeated == 5 {
-                break;
+    for &schedule in schedules {
+        log::info!("Start schedule {:?}", schedule);
+        let mut prev_weight = 0.;
+        let mut repeated = 0;
+        loop {
+            let best = optimization.best();
+            if prev_weight >= best.weight() {
+                repeated += 1;
+                if repeated == schedule.patience {
+                    break;
+                }
+            } else {
+                repeated = 0;
             }
-        } else {
-            repeated = 0;
-        }
-        prev_weight = Some(best.weight());
+            prev_weight = best.weight();
 
-        log::info!(
-            "Start epoch {} with {} individuals. Best weight = {} with {} tokens",
-            epoch,
-            optimization.len(),
-            best.weight(),
-            best.tokens_len,
-        );
-        optimization.evolve();
-        epoch += 1;
+            log::info!(
+                "Start epoch {} with {} individuals. Best weight = {} with {} tokens",
+                epoch,
+                optimization.len(),
+                best.weight(),
+                best.tokens_len,
+            );
+            optimization.evolve(schedule.max_actions, schedule.max_values);
+            epoch += 1;
+        }
     }
 
     let best = optimization.into_best();
@@ -57,7 +67,10 @@ pub fn tokenize(
         best.weight(),
         best.tokens_len
     );
-    log::info!("Result: {}", best.graph);
+    log::debug!("Result: {}", best.graph);
+
+    fs::write("data/graph.dot", best.graph.dot()).unwrap();
+
     best.graph.into_phrases()
 }
 
@@ -97,8 +110,23 @@ impl<'a> WeightedGraph<'a> {
 impl<'a> Value for WeightedGraph<'a> {
     fn evolve(&self, max_actions: usize, rng: &mut SmallRng) -> Vec<WeightedValue<Self>> {
         // Choose which text to target
-        let texts = self.graph.tokens_by_text().keys().copied().collect_vec();
-        let text = *texts.choose_weighted(rng, |text| text.len()).unwrap();
+        let texts = self
+            .graph
+            .tokens_by_text()
+            .iter()
+            .filter_map(|(&text, tokens)| {
+                let unmerged_tokens = tokens
+                    .iter()
+                    .filter(|&&token| !self.graph.get(token).is_merged())
+                    .count();
+                if unmerged_tokens == 1 {
+                    None
+                } else {
+                    Some((text, text.len() * unmerged_tokens))
+                }
+            })
+            .collect_vec();
+        let (text, _) = *texts.choose_weighted(rng, |&(_, weight)| weight).unwrap();
         log::debug!("Selected text {:?}", self.graph.texts().decode(text));
 
         let unmerged_tokens = self.graph.tokens_by_text()[&text]

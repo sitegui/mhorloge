@@ -3,6 +3,7 @@ use crate::models::texts::{TextTag, Texts};
 use itertools::Itertools;
 use petgraph::algo;
 use petgraph::algo::DfsSpace;
+use petgraph::dot::{Config, Dot};
 use petgraph::prelude::*;
 use petgraph::visit::{IntoNodeReferences, Visitable, Walker};
 use std::collections::{BTreeMap, BTreeSet};
@@ -153,14 +154,14 @@ impl<'a> TokenGraph<'a> {
             .neighbors_directed(b, Direction::Incoming)
             .detach();
         while let Some(neighbor) = neighbors.next_node(&self.graph) {
-            self.graph.add_edge(neighbor, a, ());
+            self.graph.update_edge(neighbor, a, ());
         }
         let mut neighbors = self
             .graph
             .neighbors_directed(b, Direction::Outgoing)
             .detach();
         while let Some(neighbor) = neighbors.next_node(&self.graph) {
-            self.graph.add_edge(a, neighbor, ());
+            self.graph.update_edge(a, neighbor, ());
         }
 
         // Remove all incoming edges to `b`: it will be "disconnected" from the graph.
@@ -188,6 +189,21 @@ impl<'a> TokenGraph<'a> {
 
     pub fn texts(&self) -> &'a Texts {
         self.texts
+    }
+
+    pub fn dot(&self) -> String {
+        let debug_graph = self.graph.filter_map(
+            |id, node| {
+                if node.is_merged() {
+                    None
+                } else {
+                    Some(format!("{}({})", self.texts.decode(node.text), id.index()))
+                }
+            },
+            |_, _| Some(""),
+        );
+
+        Dot::with_config(&debug_graph, &[Config::EdgeNoLabel]).to_string()
     }
 }
 

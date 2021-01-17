@@ -91,6 +91,11 @@ impl<V: Value> PopulationOptimizer<V> {
     pub fn len(&self) -> usize {
         self.values.len()
     }
+
+    pub fn into_parts(self) -> (SmallRng, Vec<V>) {
+        let values = self.values.into_iter().map(|e| e.value).collect();
+        (self.rng, values)
+    }
 }
 
 impl<V: Value> WeightedValue<V> {

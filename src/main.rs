@@ -1,3 +1,5 @@
+use crate::languages::english::English;
+use crate::languages::french::French;
 use crate::languages::portuguese::Portuguese;
 use crate::languages::Language;
 use crate::models::phrase::PhraseSpec;
@@ -14,10 +16,10 @@ fn main() {
     env_logger::init();
     log::info!("Starting");
 
-    let (texts, phrases) = phrases(&[Box::new(Portuguese)]);
+    let (texts, phrases) = phrases(&[Box::new(English), Box::new(French), Box::new(Portuguese)]);
     let phrases = tokenize::tokenize(
         &texts,
-        &phrases[..3 * 60],
+        &phrases,
         &[
             Schedule {
                 max_actions: 3,
@@ -37,7 +39,7 @@ fn main() {
             Schedule {
                 max_actions: 100,
                 max_values: 10000,
-                patience: 200,
+                patience: 40,
             },
         ],
         17,

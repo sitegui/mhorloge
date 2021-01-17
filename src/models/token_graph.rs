@@ -193,17 +193,30 @@ impl<'a> TokenGraph<'a> {
 
     pub fn dot(&self) -> String {
         let debug_graph = self.graph.filter_map(
-            |id, node| {
+            |_, node| {
                 if node.is_merged() {
                     None
                 } else {
-                    Some(format!("{}({})", self.texts.decode(node.text), id.index()))
+                    Some(self.texts.decode(node.text))
                 }
             },
             |_, _| Some(""),
         );
 
         Dot::with_config(&debug_graph, &[Config::EdgeNoLabel]).to_string()
+    }
+
+    pub fn shrink(&mut self) {
+        self.graph.retain_edges(|graph, edge| {
+            let source = graph.edge_endpoints(edge).unwrap().0;
+            !graph[source].is_merged()
+        });
+
+        let mut tokens_by_text: BTreeMap<_, Vec<_>> = BTreeMap::new();
+        for (id, spec) in (&self.graph).node_references() {
+            tokens_by_text.entry(spec.text).or_default().push(id);
+        }
+        self.tokens_by_text = Arc::new(tokens_by_text);
     }
 }
 

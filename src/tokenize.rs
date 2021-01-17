@@ -6,6 +6,8 @@ use itertools::Itertools;
 use rand::rngs::SmallRng;
 use rand::seq::{IteratorRandom, SliceRandom};
 use rand::SeedableRng;
+use std::cmp::Reverse;
+use std::collections::BTreeMap;
 use std::fs;
 
 #[derive(Debug, Copy, Clone)]
@@ -23,7 +25,68 @@ pub fn tokenize(
     schedules: &[Schedule],
     rng_seed: u64,
 ) -> Vec<Phrase> {
-    let graph = TokenGraph::new(texts, phrases);
+    let mut graph = TokenGraph::new(texts, phrases);
+
+    // Detect texts that can be entirely merged
+    #[derive(Debug, Default, Copy, Clone)]
+    struct Info {
+        max_in_phrase: usize,
+        total: usize,
+    }
+    let mut info_by_text: BTreeMap<_, Info> = BTreeMap::new();
+    for phrase in phrases {
+        let mut count_by_text: BTreeMap<_, usize> = BTreeMap::new();
+        for &text in phrase.words() {
+            *count_by_text.entry(text).or_default() += 1;
+        }
+
+        for (text, count) in count_by_text {
+            let info = info_by_text.entry(text).or_default();
+            info.total += count;
+            info.max_in_phrase = info.max_in_phrase.max(count);
+        }
+    }
+    let collapsable_texts = info_by_text
+        .into_iter()
+        .filter_map(|(text, info)| {
+            if info.max_in_phrase == 1 {
+                Some((text, info))
+            } else {
+                None
+            }
+        })
+        .sorted_by_key(|(text, info)| Reverse(text.len() * info.total))
+        .collect_vec();
+    log::debug!(
+        "Collapsable = {}",
+        collapsable_texts
+            .iter()
+            .format_with(", ", |&(text, info), f| {
+                f(&format_args!("{}x{}", info.total, texts.decode(text)))
+            })
+    );
+
+    // Collapse those tokens
+    let mut dfs_space = graph.dfs_space();
+    for (text, _) in collapsable_texts {
+        let mut merged = 0;
+        let mut tokens = graph.tokens_by_text()[&text].clone().into_iter();
+        let mergeable = tokens.len() - 1;
+        let first = tokens.next().unwrap();
+        for other in tokens {
+            if graph.can_merge_tokens(first, other, &mut dfs_space) {
+                graph.merge_tokens(first, other);
+                merged += 1;
+            }
+        }
+        log::debug!(
+            "Merged {} out of {} for {}",
+            merged,
+            mergeable,
+            texts.decode(text)
+        );
+    }
+
     log::debug!("Starting point: {}", graph);
     let initial_len = graph.letters_len();
     let graph = WeightedGraph::new(graph, initial_len);
@@ -35,6 +98,19 @@ pub fn tokenize(
     let mut epoch = 0;
     for &schedule in schedules {
         log::info!("Start schedule {:?}", schedule);
+
+        // Reset weight
+        let (rng, values) = optimization.into_parts();
+        let initial_letters = values.iter().map(|graph| graph.letters_len).max().unwrap();
+        let values = values
+            .into_iter()
+            .map(|mut graph| {
+                graph.graph.shrink();
+                WeightedGraph::new(graph.graph, initial_letters)
+            })
+            .collect();
+        optimization = PopulationOptimizer::new(rng, values);
+
         let mut prev_weight = 0.;
         let mut repeated = 0;
         loop {
@@ -50,11 +126,13 @@ pub fn tokenize(
             prev_weight = best.weight();
 
             log::info!(
-                "Start epoch {} with {} individuals. Best weight = {} with {} tokens",
+                "Start epoch {} with {} individuals. Best weight = {} with {} tokens, patience {}/{}",
                 epoch,
                 optimization.len(),
                 best.weight(),
                 best.tokens_len,
+                repeated,
+                schedule.patience
             );
             optimization.evolve(schedule.max_actions, schedule.max_values);
             epoch += 1;
@@ -80,7 +158,7 @@ struct WeightedGraph<'a> {
     initial_letters: usize,
     letters_len: usize,
     tokens_len: usize,
-    /// weight = (saved letters) ^ 2
+    /// weight = 1 + (saved letters) ^ 2
     weight: f64,
 }
 
@@ -90,7 +168,7 @@ struct MergeTokens(TokenId, TokenId);
 impl<'a> WeightedGraph<'a> {
     pub fn new(graph: TokenGraph<'a>, initial_letters: usize) -> Self {
         let letters_len = graph.letters_len();
-        let saved_letters = (initial_letters - letters_len) as f64;
+        let saved_letters = 1. + (initial_letters - letters_len) as f64;
         WeightedGraph {
             initial_letters,
             letters_len,

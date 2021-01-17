@@ -1,58 +1,116 @@
-pub struct PopulationOptimizer<I, S> {
-    population: Vec<I>,
-    select: S,
+use itertools::Itertools;
+use ordered_float::NotNan;
+use rand::rngs::SmallRng;
+use rand::seq::index;
+
+#[derive(Debug, Clone)]
+pub struct PopulationOptimizer<V> {
+    rng: SmallRng,
+    values: Vec<WeightedValue<V>>,
+    best: usize,
+    max_actions: usize,
+    max_values: usize,
 }
 
-pub trait Individual {
-    type Action;
-    type Score;
-
-    fn possible_actions(&self) -> Vec<Self::Action>;
-    fn evolve(&self, action: Self::Action) -> Self;
-    fn score(&self) -> Self::Score;
+pub trait Value: Sized {
+    fn evolve(&self, max_actions: usize, rng: &mut SmallRng) -> Vec<WeightedValue<Self>>;
+    fn weight(&self) -> f64;
 }
 
-pub trait Select<A, I> {
-    fn select_actions(&mut self, actions: &mut Vec<A>);
-    fn select_population(&mut self, population: &mut Vec<I>);
-    fn best(&self, population: &[I]) -> usize;
+#[derive(Debug, Clone)]
+pub struct WeightedValue<V> {
+    value: V,
+    weight: NotNan<f64>,
 }
 
-impl<I: Individual<Action = A>, S: Select<A, I>, A> PopulationOptimizer<I, S> {
-    pub fn new(initial: Vec<I>, select: S) -> Self {
+impl<V: Value> PopulationOptimizer<V> {
+    pub fn new(
+        rng: SmallRng,
+        initial_values: Vec<V>,
+        max_actions: usize,
+        max_values: usize,
+    ) -> Self {
+        let values = initial_values
+            .into_iter()
+            .map(WeightedValue::new)
+            .collect_vec();
+
+        let best = values
+            .iter()
+            .position_max_by_key(|value| value.weight)
+            .unwrap();
+
         PopulationOptimizer {
-            population: initial,
-            select,
+            rng,
+            values,
+            best,
+            max_actions,
+            max_values,
         }
     }
 
     pub fn evolve(&mut self) {
-        // Create new individuals
-        let mut new_individuals = vec![];
-        for individual in &self.population {
-            let mut actions = individual.possible_actions();
-            self.select.select_actions(&mut actions);
-            for action in actions {
-                new_individuals.push(individual.evolve(action));
-            }
+        // Create new values
+        let mut new_values = vec![];
+        for value in &self.values {
+            new_values.extend(value.value.evolve(self.max_actions, &mut self.rng));
         }
-        self.population.extend(new_individuals);
+        self.values.extend(new_values);
 
-        // Select
-        self.select.select_population(&mut self.population);
+        if self.values.len() > self.max_values {
+            log::info!(
+                "Will sample {} out of {} values",
+                self.max_values,
+                self.values.len()
+            );
+            log::debug!(
+                "Value weights: {}",
+                self.values.iter().map(|value| value.weight).format(", ")
+            );
+
+            let values = &self.values;
+            let indexes = index::sample_weighted(
+                &mut self.rng,
+                values.len(),
+                |index| values[index].weight,
+                self.max_values,
+            )
+            .unwrap()
+            .into_vec();
+
+            let mut i = 0;
+            self.values.retain(|_| {
+                let retain = indexes.contains(&i);
+                i += 1;
+                retain
+            });
+        }
+
+        self.best = self
+            .values
+            .iter()
+            .position_max_by_key(|value| value.weight)
+            .unwrap();
     }
 
-    pub fn population(&self) -> &[I] {
-        &self.population
+    pub fn best(&self) -> &V {
+        &self.values[self.best].value
     }
 
-    pub fn best(&self) -> &I {
-        let best = self.select.best(&self.population);
-        &self.population[best]
+    pub fn into_best(mut self) -> V {
+        self.values.swap_remove(self.best).value
     }
 
-    pub fn into_best(mut self) -> I {
-        let best = self.select.best(&self.population);
-        self.population.swap_remove(best)
+    pub fn len(&self) -> usize {
+        self.values.len()
+    }
+}
+
+impl<V: Value> WeightedValue<V> {
+    pub fn new(value: V) -> Self {
+        WeightedValue {
+            weight: NotNan::new(value.weight()).unwrap(),
+            value,
+        }
     }
 }

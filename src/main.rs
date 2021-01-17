@@ -14,7 +14,7 @@ fn main() {
     log::info!("Starting");
 
     let (texts, phrases) = phrases(&[Box::new(Portuguese)]);
-    let phrases = tokenize::tokenize(&phrases, 5, 1, 17, 1_000);
+    let phrases = tokenize::tokenize(&texts, &phrases, 10, 10, 17);
 }
 
 fn phrases(languages: &[Box<dyn Language>]) -> (Texts, Vec<PhraseSpec>) {

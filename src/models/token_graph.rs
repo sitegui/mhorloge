@@ -1,8 +1,12 @@
 use crate::models::phrase::{Phrase, PhraseSpec};
-use crate::models::texts::TextTag;
+use crate::models::texts::{TextTag, Texts};
+use itertools::Itertools;
+use petgraph::algo;
+use petgraph::algo::DfsSpace;
 use petgraph::prelude::*;
-use petgraph::visit::{IntoNodeReferences, Walker};
+use petgraph::visit::{IntoNodeReferences, Visitable, Walker};
 use std::collections::{BTreeMap, BTreeSet};
+use std::fmt;
 use std::sync::Arc;
 
 pub type TokenId = NodeIndex<u16>;
@@ -14,6 +18,7 @@ pub struct TokenGraph<'a> {
     graph: DiGraph<TokenSpec, (), u16>,
     /// Store the list of tokens (merged or not) by their text
     tokens_by_text: Arc<BTreeMap<TextTag, Vec<TokenId>>>,
+    texts: &'a Texts,
     phrases: &'a [PhraseSpec],
 }
 
@@ -34,7 +39,7 @@ pub struct Token {
 }
 
 impl<'a> TokenGraph<'a> {
-    pub fn new(phrases: &'a [PhraseSpec]) -> Self {
+    pub fn new(texts: &'a Texts, phrases: &'a [PhraseSpec]) -> Self {
         let mut graph = DiGraph::default();
         let mut tokens_by_text: BTreeMap<_, Vec<_>> = BTreeMap::new();
 
@@ -52,6 +57,7 @@ impl<'a> TokenGraph<'a> {
         }
 
         TokenGraph {
+            texts,
             graph,
             phrases,
             tokens_by_text: Arc::new(tokens_by_text),
@@ -162,6 +168,79 @@ impl<'a> TokenGraph<'a> {
         while let Some(edge) = self.graph.first_edge(b, Direction::Incoming) {
             self.graph.remove_edge(edge);
         }
+    }
+
+    /// Check if two tokens can be merged without creating a cycle
+    pub fn can_merge_tokens(
+        &self,
+        a: TokenId,
+        b: TokenId,
+        dfs_space: &mut DfsSpace<TokenId, <DiGraph<TokenSpec, (), u16> as Visitable>::Map>,
+    ) -> bool {
+        a != b
+            && !algo::has_path_connecting(&self.graph, a, b, Some(dfs_space))
+            && !algo::has_path_connecting(&self.graph, b, a, Some(dfs_space))
+    }
+
+    pub fn dfs_space(&self) -> DfsSpace<TokenId, <DiGraph<TokenSpec, (), u16> as Visitable>::Map> {
+        DfsSpace::new(&self.graph)
+    }
+
+    pub fn texts(&self) -> &'a Texts {
+        self.texts
+    }
+}
+
+impl fmt::Display for TokenGraph<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        writeln!(f, "TokenGraph {{")?;
+
+        let graph = &self.graph;
+        let texts = self.texts;
+
+        let mut merged = vec![];
+        for source in graph.externals(Direction::Incoming) {
+            if let Some(merged_with) = graph[source].merged_with {
+                merged.push((source, merged_with));
+            } else {
+                let mut bfs = Bfs::new(graph, source);
+                let first_id = bfs.next(graph).unwrap();
+                write!(
+                    f,
+                    "\t{}({}): ",
+                    texts.decode(graph[first_id].text),
+                    first_id.index()
+                )?;
+                writeln!(
+                    f,
+                    "{}",
+                    bfs.iter(graph).format_with(", ", |node, f| {
+                        f(&format_args!(
+                            "{}({})",
+                            texts.decode(graph[node].text),
+                            node.index()
+                        ))
+                    })
+                )?;
+            }
+        }
+
+        writeln!(
+            f,
+            "\tMerged: {}",
+            merged
+                .into_iter()
+                .format_with(", ", |(source, merged_with), f| {
+                    f(&format_args!(
+                        "{}({}->{})",
+                        texts.decode(graph[source].text),
+                        source.index(),
+                        merged_with.index()
+                    ))
+                })
+        )?;
+
+        writeln!(f, "}}")
     }
 }
 

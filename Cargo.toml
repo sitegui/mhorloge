@@ -11,5 +11,10 @@ csv = "1.1.5"
 env_logger = "0.8.2"
 itertools = "0.10.0"
 log = "0.4.13"
+ordered-float = "2.0.1"
 petgraph = "0.5.1"
 rand = { version = "0.8.2", features = ["small_rng"] }
+
+[profile.release]
+debug = true
+opt-level = 2

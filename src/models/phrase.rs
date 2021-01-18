@@ -4,6 +4,7 @@ use std::sync::Arc;
 
 #[derive(Debug, Clone)]
 pub struct PhraseSpec {
+    id: u16,
     words: Vec<TextTag>,
 }
 
@@ -13,9 +14,9 @@ pub struct Phrase {
 }
 
 impl PhraseSpec {
-    pub fn new(texts: &mut Texts, phrase: &str) -> Self {
+    pub fn new(texts: &mut Texts, id: u16, phrase: &str) -> Self {
         let words = phrase.split(' ').map(|text| texts.encode(text)).collect();
-        PhraseSpec { words }
+        PhraseSpec { id, words }
     }
 
     pub fn words(&self) -> &[TextTag] {

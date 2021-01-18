@@ -9,7 +9,7 @@ mod commands;
 mod languages;
 mod models;
 mod optimizer;
-mod tokenize;
+mod utils;
 
 #[derive(Debug, StructOpt)]
 #[structopt(

@@ -1,10 +1,9 @@
 use crate::languages::Language;
 use crate::models::time::Time;
-use anyhow::{Context, Error};
+use crate::utils::create_file;
+use anyhow::Error;
 use serde::{Deserialize, Serialize};
-use std::fs;
-use std::fs::File;
-use std::io::BufWriter;
+use std::convert::TryInto;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
@@ -32,14 +31,14 @@ pub struct GeneratePhrasesOut {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GeneratePhrasesOutEl {
+    pub id: u16,
     pub language: Language,
     pub time: Time,
     pub phrase: String,
 }
 
 pub fn generate_phrases(cmd: GeneratePhrases) -> Result<(), Error> {
-    fs::create_dir_all(cmd.output.parent().context("no parent")?)?;
-    let file = BufWriter::new(File::create(cmd.output)?);
+    let output = create_file(cmd.output)?;
 
     let mut phrases = vec![];
     for mut language_tag in cmd.languages.split(',') {
@@ -55,7 +54,9 @@ pub fn generate_phrases(cmd: GeneratePhrases) -> Result<(), Error> {
         let language: Language = language_tag.parse()?;
 
         for time in Time::all_times().step_by(precision as usize) {
+            let next_id = phrases.len().try_into()?;
             phrases.push(GeneratePhrasesOutEl {
+                id: next_id,
                 language,
                 time,
                 phrase: language.spell(time),
@@ -63,7 +64,7 @@ pub fn generate_phrases(cmd: GeneratePhrases) -> Result<(), Error> {
         }
     }
 
-    serde_json::to_writer_pretty(file, &GeneratePhrasesOut { phrases })?;
+    serde_json::to_writer_pretty(output, &GeneratePhrasesOut { phrases })?;
 
     Ok(())
 }

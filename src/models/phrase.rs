@@ -1,12 +1,9 @@
 use crate::models::texts::{TextTag, Texts};
-use crate::models::time::Time;
 use crate::models::token_graph::Token;
 use std::sync::Arc;
 
 #[derive(Debug, Clone)]
 pub struct PhraseSpec {
-    language: String,
-    time: Time,
     words: Vec<TextTag>,
 }
 

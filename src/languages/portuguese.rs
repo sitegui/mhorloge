@@ -1,22 +1,17 @@
-use crate::languages::Language;
 use crate::models::time::Time;
 
-pub struct Portuguese;
-
-impl Language for Portuguese {
-    fn spell(&self, time: Time) -> String {
-        match (time.hours(), time.minutes()) {
-            (hours, 0) => spell_hours(hours),
-            (hours, 30) => format!("{} E MEIA", spell_hours(hours)),
-            (hours, minutes) if minutes < 30 => {
-                format!("{} E {}", spell_hours(hours), spell_number(minutes, true))
-            }
-            (hours, minutes) => format!(
-                "{} PARA {}",
-                spell_number(60 - minutes, true),
-                spell_hours_with_article((hours + 1) % 24)
-            ),
+pub fn spell(time: Time) -> String {
+    match (time.hours(), time.minutes()) {
+        (hours, 0) => spell_hours(hours),
+        (hours, 30) => format!("{} E MEIA", spell_hours(hours)),
+        (hours, minutes) if minutes < 30 => {
+            format!("{} E {}", spell_hours(hours), spell_number(minutes, true))
         }
+        (hours, minutes) => format!(
+            "{} PARA {}",
+            spell_number(60 - minutes, true),
+            spell_hours_with_article((hours + 1) % 24)
+        ),
     }
 }
 

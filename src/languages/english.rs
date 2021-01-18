@@ -1,26 +1,21 @@
-use crate::languages::Language;
 use crate::models::time::Time;
 
-pub struct English;
-
-impl Language for English {
-    fn spell(&self, time: Time) -> String {
-        match (time.hours(), time.minutes()) {
-            (hours, 0) => spell_hours(hours, true),
-            (hours, 15) => format!("QUARTER PAST {}", spell_hours(hours, false)),
-            (hours, 30) => format!("HALF PAST {}", spell_hours(hours, false)),
-            (hours, 45) => format!("QUARTER TO {}", spell_hours((hours + 1) % 24, false)),
-            (hours, minutes) if minutes < 30 => format!(
-                "{} PAST {}",
-                spell_number(minutes),
-                spell_hours(hours, false)
-            ),
-            (hours, minutes) => format!(
-                "{} TO {}",
-                spell_number(60 - minutes),
-                spell_hours((hours + 1) % 24, false),
-            ),
-        }
+pub fn spell(time: Time) -> String {
+    match (time.hours(), time.minutes()) {
+        (hours, 0) => spell_hours(hours, true),
+        (hours, 15) => format!("QUARTER PAST {}", spell_hours(hours, false)),
+        (hours, 30) => format!("HALF PAST {}", spell_hours(hours, false)),
+        (hours, 45) => format!("QUARTER TO {}", spell_hours((hours + 1) % 24, false)),
+        (hours, minutes) if minutes < 30 => format!(
+            "{} PAST {}",
+            spell_number(minutes),
+            spell_hours(hours, false)
+        ),
+        (hours, minutes) => format!(
+            "{} TO {}",
+            spell_number(60 - minutes),
+            spell_hours((hours + 1) % 24, false),
+        ),
     }
 }
 

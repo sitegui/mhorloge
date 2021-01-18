@@ -1,35 +1,47 @@
-use crate::languages::english::English;
-use crate::languages::french::French;
-use crate::languages::portuguese::Portuguese;
 use crate::languages::Language;
 use crate::models::time::Time;
-use anyhow::{bail, Error};
+use anyhow::{Context, Error};
+use serde::{Deserialize, Serialize};
+use std::fs;
 use std::fs::File;
-use std::io::{BufWriter, Write};
+use std::io::BufWriter;
 use std::path::PathBuf;
 use structopt::StructOpt;
 
 /// Generate the time phrases for the given languages
 #[derive(Debug, StructOpt)]
 pub struct GeneratePhrases {
-    /// Determine the languages to use. Available languages are: "english", "french" and
-    /// "portuguese". Multiple languages can be requested by separating them by comma. By
+    /// Determine the languages to use. Available languages are: "English", "French" and
+    /// "Portuguese". Multiple languages can be requested by separating them by comma. By
     /// default, all time phrases will be generated, that is, from 00:00 to 23:59 with 1-minute
     /// precision. To change the precision, append ":" followed by an integer representing the
     /// desired precision after each language name. Each language can determine their own
     /// precision.
     ///
-    /// Full example: "english:5,french" will generate for both languages, using a 1-minute
+    /// Full example: "English:5,French" will generate for both languages, using a 1-minute
     /// precision for French and 5-minute precision for English.
     languages: String,
-    /// The output file. Each line will be like "english 12 45 QUARTER TO ONE". The first word
-    /// is the language, followed by the hours, then minutes and finally the time phrase.
+    /// The output JSON file.
     output: PathBuf,
 }
 
-pub fn generate_phrases(cmd: GeneratePhrases) -> Result<(), Error> {
-    let mut file = BufWriter::new(File::open(cmd.output)?);
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GeneratePhrasesOut {
+    pub phrases: Vec<GeneratePhrasesOutEl>,
+}
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GeneratePhrasesOutEl {
+    pub language: Language,
+    pub time: Time,
+    pub phrase: String,
+}
+
+pub fn generate_phrases(cmd: GeneratePhrases) -> Result<(), Error> {
+    fs::create_dir_all(cmd.output.parent().context("no parent")?)?;
+    let file = BufWriter::new(File::create(cmd.output)?);
+
+    let mut phrases = vec![];
     for mut language_tag in cmd.languages.split(',') {
         let precision;
         match language_tag.find(':') {
@@ -40,24 +52,18 @@ pub fn generate_phrases(cmd: GeneratePhrases) -> Result<(), Error> {
             }
         }
 
-        let language: &dyn Language = match language_tag {
-            "english" => &English,
-            "french" => &French,
-            "portuguese" => &Portuguese,
-            _ => bail!("Language was not recognized: {}", language_tag),
-        };
+        let language: Language = language_tag.parse()?;
 
         for time in Time::all_times().step_by(precision as usize) {
-            writeln!(
-                file,
-                "{} {} {} {}",
-                language_tag,
-                time.hours(),
-                time.minutes(),
-                language.spell(time)
-            )?;
+            phrases.push(GeneratePhrasesOutEl {
+                language,
+                time,
+                phrase: language.spell(time),
+            });
         }
     }
+
+    serde_json::to_writer_pretty(file, &GeneratePhrasesOut { phrases })?;
 
     Ok(())
 }

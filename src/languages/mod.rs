@@ -3,32 +3,38 @@ use crate::models::time::Time;
 pub mod english;
 pub mod french;
 pub mod portuguese;
+use anyhow::anyhow;
+use anyhow::Error;
+use serde::{Deserialize, Serialize};
+use std::str::FromStr;
 
 /// Represents a possible language, that can spell out any valid time
-pub trait Language {
-    fn spell(&self, time: Time) -> String;
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+pub enum Language {
+    English,
+    French,
+    Portuguese,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::languages::english::English;
-    use crate::languages::french::French;
-    use crate::languages::portuguese::Portuguese;
+impl FromStr for Language {
+    type Err = Error;
 
-    #[test]
-    fn debug_languages() {
-        println!("English");
-        for time in Time::all_times() {
-            println!("{}: {}", time, English.spell(time));
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "English" => Ok(Language::English),
+            "French" => Ok(Language::French),
+            "Portuguese" => Ok(Language::Portuguese),
+            _ => Err(anyhow!("Language was not recognized: {}", s)),
         }
-        println!("French");
-        for time in Time::all_times() {
-            println!("{}: {}", time, French.spell(time));
-        }
-        println!("Portuguese");
-        for time in Time::all_times() {
-            println!("{}: {}", time, Portuguese.spell(time));
+    }
+}
+
+impl Language {
+    pub fn spell(self, time: Time) -> String {
+        match self {
+            Language::English => english::spell(time),
+            Language::French => french::spell(time),
+            Language::Portuguese => portuguese::spell(time),
         }
     }
 }

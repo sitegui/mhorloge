@@ -1,24 +1,19 @@
-use crate::languages::Language;
 use crate::models::time::Time;
 
-pub struct French;
-
-impl Language for French {
-    fn spell(&self, time: Time) -> String {
-        match (time.hours(), time.minutes()) {
-            (hours, 0) => spell_hours(hours),
-            (hours, 15) => format!("{} ET QUART", spell_hours(hours)),
-            (hours, 30) => format!("{} ET DEMIE", spell_hours(hours)),
-            (hours, 45) => format!("{} MOINS LE QUART", spell_hours((hours + 1) % 24)),
-            (hours, minutes) if minutes < 30 => {
-                format!("{} {}", spell_hours(hours), spell_number(minutes, false))
-            }
-            (hours, minutes) => format!(
-                "{} MOINS {}",
-                spell_hours((hours + 1) % 24),
-                spell_number(60 - minutes, false),
-            ),
+pub fn spell(time: Time) -> String {
+    match (time.hours(), time.minutes()) {
+        (hours, 0) => spell_hours(hours),
+        (hours, 15) => format!("{} ET QUART", spell_hours(hours)),
+        (hours, 30) => format!("{} ET DEMIE", spell_hours(hours)),
+        (hours, 45) => format!("{} MOINS LE QUART", spell_hours((hours + 1) % 24)),
+        (hours, minutes) if minutes < 30 => {
+            format!("{} {}", spell_hours(hours), spell_number(minutes, false))
         }
+        (hours, minutes) => format!(
+            "{} MOINS {}",
+            spell_hours((hours + 1) % 24),
+            spell_number(60 - minutes, false),
+        ),
     }
 }
 

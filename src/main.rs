@@ -1,6 +1,8 @@
 use crate::commands::generate_phrases::{generate_phrases, GeneratePhrases};
 use crate::commands::tokenize::{tokenize, Tokenize};
 use anyhow::Error;
+use std::env;
+use std::env::VarError;
 use structopt::StructOpt;
 
 mod commands;
@@ -20,14 +22,17 @@ enum Opt {
 }
 
 fn main() -> Result<(), Error> {
+    if let Err(VarError::NotPresent) = env::var("RUST_LOG") {
+        env::set_var("RUST_LOG", "INFO");
+    }
     env_logger::init();
     log::info!("Starting");
 
-    let opt = Opt::from_args();
-    println!("{:?}", opt);
+    match Opt::from_args() {
+        Opt::GeneratePhrases(cmd) => generate_phrases(cmd)?,
+        Opt::Tokenize(cmd) => tokenize(cmd)?,
+    };
 
-    match opt {
-        Opt::GeneratePhrases(cmd) => generate_phrases(cmd),
-        Opt::Tokenize(cmd) => tokenize(cmd),
-    }
+    log::info!("Done");
+    Ok(())
 }

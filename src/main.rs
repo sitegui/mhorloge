@@ -1,14 +1,15 @@
-use crate::commands::generate_phrases::{generate_phrases, GeneratePhrases};
-use crate::commands::tokenize::{tokenize, Tokenize};
-use anyhow::Error;
 use std::env;
 use std::env::VarError;
+
+use crate::generate_phrases::GeneratePhrases;
+use crate::tokenize::Tokenize;
+use anyhow::Error;
 use structopt::StructOpt;
 
-mod commands;
-mod languages;
+mod generate_phrases;
 mod models;
 mod optimizer;
+pub mod tokenize;
 mod utils;
 
 #[derive(Debug, StructOpt)]
@@ -29,8 +30,8 @@ fn main() -> Result<(), Error> {
     log::info!("Starting");
 
     match Opt::from_args() {
-        Opt::GeneratePhrases(cmd) => generate_phrases(cmd)?,
-        Opt::Tokenize(cmd) => tokenize(cmd)?,
+        Opt::GeneratePhrases(cmd) => generate_phrases::generate_phrases(cmd)?,
+        Opt::Tokenize(cmd) => tokenize::tokenize(cmd)?,
     };
 
     log::info!("Done");

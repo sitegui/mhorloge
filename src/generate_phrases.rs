@@ -1,11 +1,20 @@
-use crate::languages::Language;
-use crate::models::time::Time;
-use crate::utils::create_file;
-use anyhow::Error;
-use serde::{Deserialize, Serialize};
 use std::convert::TryInto;
 use std::path::PathBuf;
+
+use anyhow::Error;
+use serde::{Deserialize, Serialize};
 use structopt::StructOpt;
+
+use time::Time;
+
+use crate::generate_phrases::language::Language;
+use crate::utils::create_file;
+
+mod english;
+mod french;
+mod language;
+mod portuguese;
+pub mod time;
 
 /// Generate the time phrases for the given languages
 #[derive(Debug, StructOpt)]
@@ -31,11 +40,15 @@ pub struct GeneratePhrasesOut {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GeneratePhrasesOutEl {
-    pub id: u16,
+    pub id: PhraseId,
     pub language: Language,
     pub time: Time,
     pub phrase: String,
 }
+
+#[derive(Debug, Clone, Serialize, Deserialize, Copy)]
+#[serde(transparent)]
+pub struct PhraseId(u16);
 
 pub fn generate_phrases(cmd: GeneratePhrases) -> Result<(), Error> {
     let output = create_file(cmd.output)?;
@@ -54,7 +67,7 @@ pub fn generate_phrases(cmd: GeneratePhrases) -> Result<(), Error> {
         let language: Language = language_tag.parse()?;
 
         for time in Time::all_times().step_by(precision as usize) {
-            let next_id = phrases.len().try_into()?;
+            let next_id = PhraseId(phrases.len().try_into()?);
             phrases.push(GeneratePhrasesOutEl {
                 id: next_id,
                 language,

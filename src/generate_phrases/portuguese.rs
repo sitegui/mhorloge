@@ -1,4 +1,4 @@
-use crate::models::time::Time;
+use crate::generate_phrases::time::Time;
 
 pub fn spell(time: Time) -> String {
     match (time.hours(), time.minutes()) {

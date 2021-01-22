@@ -11,9 +11,12 @@ pub struct Texts {
 
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
 pub struct TextTag {
-    tag: u16,
+    id: TextTagId,
     len: u8,
 }
+
+#[derive(Debug, Copy, Clone, Ord, PartialOrd, Eq, PartialEq)]
+pub struct TextTagId(u16);
 
 impl Texts {
     pub fn new() -> Self {
@@ -26,7 +29,7 @@ impl Texts {
     pub fn encode(&mut self, text: &str) -> TextTag {
         self.tags.get(text).copied().unwrap_or_else(|| {
             let tag = TextTag {
-                tag: self.tags.len() as u16,
+                id: TextTagId(self.tags.len().try_into().unwrap()),
                 len: text.len().try_into().unwrap(),
             };
             self.tags.insert(text.to_owned(), tag);
@@ -36,7 +39,7 @@ impl Texts {
     }
 
     pub fn decode(&self, tag: TextTag) -> &str {
-        &self.texts[tag.tag as usize]
+        &self.texts[tag.id.0 as usize]
     }
 }
 
@@ -46,8 +49,15 @@ impl fmt::Display for Texts {
     }
 }
 
+#[allow(clippy::len_without_is_empty)]
 impl TextTag {
     pub fn len(&self) -> usize {
         self.len as usize
+    }
+}
+
+impl Default for Texts {
+    fn default() -> Self {
+        Self::new()
     }
 }

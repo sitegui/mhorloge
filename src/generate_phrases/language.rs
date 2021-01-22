@@ -1,8 +1,6 @@
-use crate::models::time::Time;
+use crate::generate_phrases::time::Time;
 
-pub mod english;
-pub mod french;
-pub mod portuguese;
+use crate::generate_phrases::{english, french, portuguese};
 use anyhow::anyhow;
 use anyhow::Error;
 use serde::{Deserialize, Serialize};

@@ -84,7 +84,7 @@ impl<V: Value> PopulationOptimizer<V> {
 
         let mut prev_weight = 0.;
         let mut repeated = 0;
-        let mut step = 0;
+        let mut step = 1;
         loop {
             let best = self.best();
             if prev_weight >= best.weight() {
@@ -97,7 +97,12 @@ impl<V: Value> PopulationOptimizer<V> {
             }
             prev_weight = best.weight();
 
-            log::info!(
+            log::log!(
+                if step % 100 == 0 {
+                    log::Level::Info
+                } else {
+                    log::Level::Debug
+                },
                 "Start step {} with {} individuals. Best weight = {}, patience {}/{}",
                 step,
                 self.values.len(),

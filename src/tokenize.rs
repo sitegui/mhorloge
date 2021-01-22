@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use anyhow::Error;
+use anyhow::{ensure, Error};
 use itertools::Itertools;
 use rand::rngs::SmallRng;
 use rand::SeedableRng;
@@ -15,7 +15,8 @@ use crate::tokenize::phrase::PhraseSpec;
 use crate::tokenize::token_graph::{TokenGraph, TokenSpecId};
 use crate::utils::{create_file, read_json};
 use rand::seq::SliceRandom;
-use std::fs;
+use std::io::Write;
+use std::process::{Command, Stdio};
 
 mod fast_collapse;
 pub mod phrase;
@@ -30,13 +31,19 @@ pub struct Tokenize {
     phrases: PathBuf,
     /// The output JSON file.
     output: PathBuf,
+    /// The visual output of the graph, in SVG format.
+    ///
+    /// This requires that a binary called `dot` be available. Tested with version 2.43.0.
+    /// You can install it with the `graphviz` package.
+    #[structopt(long)]
+    output_svg: Option<PathBuf>,
     #[structopt(long, default_value = "17")]
     seed: u64,
     #[structopt(long, default_value = "10")]
     initial_candidates: usize,
     #[structopt(long, default_value = "5")]
     grasp_size: usize,
-    #[structopt(long, default_value = "10")]
+    #[structopt(long, default_value = "3")]
     max_actions: usize,
     #[structopt(long, default_value = "3")]
     patience: usize,
@@ -83,6 +90,11 @@ pub fn tokenize(cmd: Tokenize) -> Result<(), Error> {
 
     // Build initial candidates
     let base = TokenGraph::new(&texts, &phrases);
+    log::info!(
+        "Base solution has {} tokens and {} letters",
+        base.tokens_len(),
+        base.letters_len()
+    );
     let mut rng = SmallRng::seed_from_u64(cmd.seed);
     let initial_candidates =
         fast_collapse::fast_collapse(&base, &mut rng, cmd.initial_candidates, cmd.grasp_size);
@@ -104,6 +116,13 @@ pub fn tokenize(cmd: Tokenize) -> Result<(), Error> {
             graph.check_point(initial_letters);
         }
 
+        let best = optimization.best();
+        log::info!(
+            "Best solution has {} tokens and {} letters",
+            best.tokens_len(),
+            best.letters_len()
+        );
+
         optimization.evolve_era(patience, max_actions, max_values);
         patience += cmd.era_delta;
         max_actions *= cmd.era_delta;
@@ -117,7 +136,25 @@ pub fn tokenize(cmd: Tokenize) -> Result<(), Error> {
         best.tokens_len(),
         best.letters_len()
     );
-    serde_json::to_writer_pretty(output, &best.into_output())?;
+    serde_json::to_writer_pretty(output, &best.to_output())?;
+
+    if let Some(output_svg) = &cmd.output_svg {
+        let mut command = Command::new("dot");
+        command
+            .args(&["-T", "svg", "-Gsplines=ortho", "-o"])
+            .arg(output_svg);
+        if log::log_enabled!(log::Level::Debug) {
+            command.arg("-v");
+        }
+        let mut dot = command.stdin(Stdio::piped()).spawn()?;
+
+        dot.stdin
+            .as_ref()
+            .unwrap()
+            .write_all(best.dot().as_bytes())?;
+
+        ensure!(dot.wait()?.success(), "Failed to generate SVG");
+    }
 
     Ok(())
 }

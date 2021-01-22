@@ -201,7 +201,7 @@ impl<'a> TokenGraph<'a> {
         })
     }
 
-    pub fn into_output(self) -> TokenizeOut {
+    pub fn to_output(&self) -> TokenizeOut {
         // IntelliJ need some help with type inference
         let graph = &self.graph;
 

@@ -1,4 +1,6 @@
-#!/bin/bash -ex
+#!/bin/bash
+
+set -ex
 
 cargo build --release
 for LANGUAGE in English French Portuguese; do

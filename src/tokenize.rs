@@ -1,27 +1,25 @@
+use std::io::Write;
 use std::path::PathBuf;
+use std::process::{Command, Stdio};
 
 use anyhow::{ensure, Error};
 use itertools::Itertools;
 use rand::rngs::SmallRng;
+use rand::seq::SliceRandom;
 use rand::SeedableRng;
 use serde::{Deserialize, Serialize};
 use structopt::StructOpt;
 
-use texts::Texts;
-
 use crate::generate_phrases::{GeneratePhrasesOut, PhraseId};
+use crate::models::texts::Texts;
 use crate::optimizer::population::{PopulationOptimizer, Value};
 use crate::tokenize::phrase::PhraseSpec;
-use crate::tokenize::token_graph::{TokenGraph, TokenSpecId};
+use crate::tokenize::token_graph::TokenGraph;
 use crate::utils::{create_file, read_json};
-use rand::seq::SliceRandom;
-use std::io::Write;
-use std::process::{Command, Stdio};
 
 mod fast_collapse;
-pub mod phrase;
-pub mod texts;
-pub mod token_graph;
+mod phrase;
+mod token_graph;
 
 /// Read the phrases from a file and define which tokens will need to be placed in the final puzzle
 /// and the position constraint between them.
@@ -73,7 +71,7 @@ pub struct TokenizeOutEl {
     pub followed_by: Vec<TokenId>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Copy, Eq, PartialEq)]
 #[serde(transparent)]
 pub struct TokenId(u16);
 
@@ -158,9 +156,6 @@ pub fn tokenize(cmd: Tokenize) -> Result<(), Error> {
 
     Ok(())
 }
-
-#[derive(Debug, Clone, Copy)]
-struct MergeTokens(TokenSpecId, TokenSpecId);
 
 impl<'a> Value for TokenGraph<'a> {
     fn evolve(&self, max_actions: usize, rng: &mut SmallRng) -> Vec<Self> {

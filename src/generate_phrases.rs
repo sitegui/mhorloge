@@ -14,7 +14,7 @@ mod english;
 mod french;
 mod language;
 mod portuguese;
-pub mod time;
+mod time;
 
 /// Generate the time phrases for the given languages
 #[derive(Debug, StructOpt)]

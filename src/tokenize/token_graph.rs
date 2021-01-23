@@ -1,5 +1,5 @@
+use crate::models::texts::{TextTag, Texts};
 use crate::tokenize::phrase::PhraseSpec;
-use crate::tokenize::texts::{TextTag, Texts};
 use crate::tokenize::{TokenId, TokenizeOut, TokenizeOutEl, TokenizeOutPhraseEl};
 use itertools::Itertools;
 use petgraph::algo;
@@ -92,10 +92,6 @@ impl<'a> TokenGraph<'a> {
             self.weight.set(Some(weight));
             weight
         })
-    }
-
-    pub fn get(&self, id: TokenSpecId) -> TokenSpec {
-        self.graph[id]
     }
 
     /// Merge the two given tokens

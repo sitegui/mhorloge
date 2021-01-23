@@ -1,5 +1,5 @@
+use crate::models::texts::TextTag;
 use crate::optimizer::grasp::Grasp;
-use crate::tokenize::texts::TextTag;
 use crate::tokenize::token_graph::TokenGraph;
 use itertools::Itertools;
 use rand::rngs::SmallRng;

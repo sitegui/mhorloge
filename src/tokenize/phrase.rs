@@ -1,5 +1,5 @@
 use crate::generate_phrases::PhraseId;
-use crate::tokenize::texts::{TextTag, Texts};
+use crate::models::texts::{TextTag, Texts};
 
 #[derive(Debug, Clone)]
 pub struct PhraseSpec {

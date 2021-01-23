@@ -48,7 +48,7 @@ pub struct GeneratePhrasesOutEl {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Copy)]
 #[serde(transparent)]
-pub struct PhraseId(u16);
+pub struct PhraseId(pub u16);
 
 pub fn generate_phrases(cmd: GeneratePhrases) -> Result<(), Error> {
     let output = create_file(cmd.output)?;

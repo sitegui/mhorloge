@@ -1,6 +1,7 @@
 use crate::clusterize::cluster::{Cluster, Direction};
 use crate::clusterize::position::Position;
 use crate::clusterize::token_in_cluster::TokenInCluster;
+use itertools::Itertools;
 
 #[derive(Debug, Copy, Clone)]
 pub struct RotatedCluster<'a> {
@@ -39,7 +40,7 @@ impl<'a> RotatedCluster<'a> {
 
     pub fn tokens(self) -> impl Iterator<Item = TokenInCluster> + Clone + ExactSizeIterator + 'a {
         self.cluster.tokens().iter().map(move |&el| TokenInCluster {
-            token: el.token,
+            id: el.id,
             text: el.text,
             direction: self.rotation.new_direction(el.direction),
             start: self.rotation.new_position(el.start),
@@ -63,6 +64,18 @@ impl<'a> RotatedCluster<'a> {
 
     pub fn transform(self, position: Position) -> Position {
         self.rotation.new_position(position)
+    }
+
+    /// Return whether this rotation respects all the constraints. While this is usually the case,
+    /// during the construction of a new cluster this "impossible" state can be observed.
+    pub fn is_valid(self) -> bool {
+        for (token_a, token_b) in self.tokens().tuple_combinations::<(_, _)>() {
+            let constraint = self.cluster.constraints().get(token_a.id, token_b.id);
+            if !token_a.respects(token_b, constraint) {
+                return false;
+            }
+        }
+        true
     }
 }
 

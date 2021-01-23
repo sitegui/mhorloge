@@ -1,12 +1,12 @@
 use crate::clusterize::cluster::Direction;
-use crate::clusterize::cluster_graph::{Constraint, Order};
+use crate::clusterize::constraints::{Constraint, Order};
 use crate::clusterize::position::Position;
 use crate::models::texts::{TextTag, Texts};
 use crate::tokenize::TokenId;
 
 #[derive(Debug, Copy, Clone)]
 pub struct TokenInCluster {
-    pub token: TokenId,
+    pub id: TokenId,
     pub text: TextTag,
     pub direction: Direction,
     pub start: Position,

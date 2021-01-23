@@ -73,7 +73,7 @@ pub struct TokenizeOutEl {
 
 #[derive(Debug, Clone, Serialize, Deserialize, Copy, Eq, PartialEq)]
 #[serde(transparent)]
-pub struct TokenId(u16);
+pub struct TokenId(pub u16);
 
 pub fn tokenize(cmd: Tokenize) -> Result<(), Error> {
     let input: GeneratePhrasesOut = read_json(cmd.phrases)?;

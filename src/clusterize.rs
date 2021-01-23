@@ -1,5 +1,6 @@
 mod cluster;
 mod cluster_graph;
+mod constraints;
 mod position;
 mod rotated_cluster;
 mod token_in_cluster;

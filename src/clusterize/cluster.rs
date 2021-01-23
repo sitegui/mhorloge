@@ -1,4 +1,4 @@
-use crate::clusterize::cluster_graph::Constraints;
+use crate::clusterize::constraints::{Constraints, Order};
 use crate::clusterize::position::Position;
 use crate::clusterize::rotated_cluster::RotatedCluster;
 use crate::clusterize::token_in_cluster::TokenInCluster;
@@ -47,7 +47,7 @@ impl<'a> Cluster<'a> {
             used_letters: RefCell::new(Some(used_letters)),
             letters,
             tokens: vec![TokenInCluster {
-                token: token_id,
+                id: token_id,
                 text,
                 direction: Direction::Horizontal,
                 start: Position::new(0, 0),
@@ -86,46 +86,26 @@ impl<'a> Cluster<'a> {
         let rotated_other = RotatedCluster::new(other);
 
         // No relative rotation
-        if let Some(result) =
-            self.superposed(rotated_other, pos_self, rotated_other.transform(pos_other))
-        {
-            results.push(result);
-        }
+        self.push_superposed(rotated_other, pos_self, pos_other, &mut results);
 
         if let Some(rotated_other) = rotated_other.rotated() {
             // `other` rotated once
-            if let Some(result) =
-                self.superposed(rotated_other, pos_self, rotated_other.transform(pos_other))
-            {
-                results.push(result);
-            }
+            self.push_superposed(rotated_other, pos_self, pos_other, &mut results);
 
             if let Some(rotated_other) = rotated_other.rotated() {
                 // `other` rotated twice
-                if let Some(result) =
-                    self.superposed(rotated_other, pos_self, rotated_other.transform(pos_other))
-                {
-                    results.push(result);
-                }
+                self.push_superposed(rotated_other, pos_self, pos_other, &mut results);
             }
         }
 
         let rotated_self = RotatedCluster::new(self);
         if let Some(rotated_self) = rotated_self.rotated() {
             // `self` rotated once
-            if let Some(result) =
-                other.superposed(rotated_self, pos_other, rotated_self.transform(pos_self))
-            {
-                results.push(result);
-            }
+            other.push_superposed(rotated_self, pos_other, pos_self, &mut results);
 
             // `self` rotated twice
             if let Some(rotated_self) = rotated_self.rotated() {
-                if let Some(result) =
-                    other.superposed(rotated_self, pos_other, rotated_self.transform(pos_self))
-                {
-                    results.push(result);
-                }
+                other.push_superposed(rotated_self, pos_other, pos_self, &mut results);
             }
         }
 
@@ -144,13 +124,19 @@ impl<'a> Cluster<'a> {
         &self.tokens
     }
 
-    pub fn superposed(
+    pub fn constraints(&self) -> &'a Constraints {
+        &self.constraints
+    }
+
+    fn push_superposed(
         &self,
         other: RotatedCluster<'a>,
         pos_self: Position,
-        pos_other: Position,
-    ) -> Option<Self> {
+        original_pos_other: Position,
+        results: &mut Vec<Self>,
+    ) {
         // Transform other tokens
+        let pos_other = other.transform(original_pos_other);
         let delta = pos_other - pos_self;
         let new_tokens = other.tokens().map(|mut token| {
             token.start -= delta;
@@ -159,10 +145,11 @@ impl<'a> Cluster<'a> {
         let new_tokens_len = new_tokens.len();
 
         // Check constraints
+        // TODO: maybe use `tuple_combinations()` instead of `cartesian_product()`?
         for (new_token, &self_token) in new_tokens.clone().cartesian_product(&self.tokens) {
-            let constraint = self.constraints.get(self_token.token, new_token.token);
+            let constraint = self.constraints.get(self_token.id, new_token.id);
             if !self_token.respects(new_token, constraint) {
-                return None;
+                return;
             }
         }
 
@@ -183,15 +170,27 @@ impl<'a> Cluster<'a> {
                 let old_letter = result.letters.insert(pos, letter);
                 if old_letter.is_some() && old_letter != Some(letter) {
                     // Tried to overwrite a different letter
-                    return None;
+                    return;
                 }
             }
             result.tokens.push(new_token);
         }
 
-        // TODO: constraint `can_rotate`
+        // Check if the rotated version respect the constraints
+        if let Some(rotated_once) = RotatedCluster::new(&result).rotated() {
+            let can_rotate_once = rotated_once.is_valid();
 
-        Some(result)
+            if let Some(rotated_twice) = rotated_once.rotated() {
+                if !rotated_twice.is_valid() {
+                    result.can_rotate_twice = false;
+                }
+            }
+
+            // Use a variable to workaround borrow checker
+            result.can_rotate_once = can_rotate_once;
+        }
+
+        results.push(result);
     }
 
     fn used_letters(&self) -> RefMut<BTreeSet<char>> {
@@ -203,7 +202,66 @@ impl<'a> Cluster<'a> {
 
 impl<'a> fmt::Display for Cluster<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "")
+        // Print letters
+        let (min_i, max_i) = self
+            .letters
+            .keys()
+            .map(|pos| pos.i)
+            .minmax()
+            .into_option()
+            .unwrap();
+        let (min_j, max_j) = self
+            .letters
+            .keys()
+            .map(|pos| pos.j)
+            .minmax()
+            .into_option()
+            .unwrap();
+        for i in min_i..=max_i {
+            for j in min_j..=max_j {
+                let pos = Position::new(i, j);
+                let letter = self.letters.get(&pos).copied().unwrap_or('.');
+                write!(f, "{}", letter)?;
+            }
+            writeln!(f)?;
+        }
+
+        // Print tokens info
+        writeln!(f, "Constraints:")?;
+        for (i, token_a) in self.tokens.iter().enumerate() {
+            let constraints = self
+                .tokens
+                .iter()
+                .skip(i + 1)
+                .filter_map(|token_b| {
+                    let constraint = self.constraints.get(token_a.id, token_b.id);
+                    if constraint.coexist || constraint.order != Order::None {
+                        Some((self.texts.decode(token_b.text), constraint))
+                    } else {
+                        None
+                    }
+                })
+                .collect_vec();
+
+            if !constraints.is_empty() {
+                writeln!(
+                    f,
+                    "\t{}: {}",
+                    self.texts.decode(token_a.text),
+                    constraints
+                        .into_iter()
+                        .format_with(", ", |(token_b, constraint), f| {
+                            f(&format_args!("{} {}", constraint, token_b))
+                        })
+                )?;
+            }
+        }
+
+        // Print rotation info
+        writeln!(f, "Can rotate once = {}", self.can_rotate_once)?;
+        writeln!(f, "Can rotate twice = {}", self.can_rotate_twice)?;
+
+        Ok(())
     }
 }
 
@@ -214,6 +272,36 @@ impl Direction {
             Direction::Horizontal => Position::new(0, 1),
             Direction::Diagonal => Position::new(1, 1),
             Direction::Vertical => Position::new(1, 0),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::clusterize::constraints::tests::tokenize_example;
+
+    #[test]
+    fn test() {
+        let tokenize = tokenize_example();
+        let constraints = Constraints::new(&tokenize);
+
+        let mut texts = Texts::new();
+        let text_tags = tokenize
+            .tokens
+            .iter()
+            .map(|token| texts.encode(&token.text))
+            .collect_vec();
+
+        let elephant = Cluster::new(&texts, &constraints, TokenId(1), text_tags[1]);
+        let spider = Cluster::new(&texts, &constraints, TokenId(3), text_tags[3]);
+
+        let superposed = elephant.all_superposed(&spider, Position::new(0, 3), Position::new(0, 1));
+
+        println!("{}", elephant);
+
+        for each in superposed {
+            println!("{}", each);
         }
     }
 }

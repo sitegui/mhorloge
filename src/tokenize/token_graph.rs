@@ -11,6 +11,7 @@ use petgraph::visit::{IntoNodeReferences, Visitable, Walker};
 use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::fmt;
+use std::fs;
 use std::io::Write;
 use std::path::Path;
 use std::process::{Command, Stdio};
@@ -152,10 +153,14 @@ impl<'a> TokenGraph<'a> {
     /// This requires that a binary called `dot` be available. Tested with version 2.43.0.
     /// You can install it with the `graphviz` package.
     pub fn svg(&self, path: impl AsRef<Path>) -> Result<()> {
+        let path = path.as_ref();
+        if let Some(parent) = path.parent() {
+            fs::create_dir_all(parent)?;
+        }
         let mut command = Command::new("dot");
         command
             .args(&["-T", "svg", "-Gsplines=ortho", "-o"])
-            .arg(path.as_ref());
+            .arg(path);
         if log::log_enabled!(log::Level::Debug) {
             command.arg("-v");
         }

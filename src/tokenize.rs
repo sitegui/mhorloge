@@ -99,7 +99,7 @@ pub fn tokenize(cmd: Tokenize) -> Result<()> {
         graph.tokens_len(),
         graph.letters_len()
     );
-    println!("{}", graph);
+    log::debug!("{}", graph);
 
     if let Some(output_svg) = cmd.output_svg {
         graph.svg(output_svg)?;

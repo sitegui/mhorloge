@@ -46,7 +46,7 @@ pub struct GeneratePhrasesOutEl {
     pub phrase: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Copy)]
+#[derive(Debug, Clone, Serialize, Deserialize, Copy, Ord, PartialOrd, Eq, PartialEq)]
 #[serde(transparent)]
 pub struct PhraseId(pub u16);
 

@@ -13,7 +13,7 @@ env_logger = "0.8.2"
 itertools = "0.10.0"
 log = "0.4.13"
 ordered-float = "2.0.1"
-petgraph = "0.5.1"
+petgraph = "0.6.0"
 rand = { version = "0.8.2", features = ["small_rng"] }
 serde = { version = "1.0.119", features = ["derive"] }
 serde_json = "1.0.61"

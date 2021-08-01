@@ -38,6 +38,10 @@ impl Texts {
         })
     }
 
+    pub fn encode_words(&mut self, text: &str) -> Vec<TextTag> {
+        text.split(' ').map(|word| self.encode(word)).collect()
+    }
+
     pub fn decode(&self, tag: TextTag) -> &str {
         &self.texts[tag.id.0 as usize]
     }

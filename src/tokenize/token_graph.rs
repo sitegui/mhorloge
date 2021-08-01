@@ -1,5 +1,5 @@
+use crate::models::phrase::Phrase;
 use crate::models::texts::{TextTag, Texts};
-use crate::tokenize::phrase::PhraseSpec;
 use crate::tokenize::{PhrasedWordId, WordId};
 use anyhow::{ensure, Result};
 use itertools::Itertools;
@@ -25,7 +25,7 @@ pub struct TokenGraph<'a> {
     /// Each edge `A -> B` says that `A` must happen *before* `B`.
     graph: StableDiGraph<TokenSpec, (), u16>,
     texts: &'a Texts,
-    phrases: &'a [PhraseSpec],
+    phrases: &'a [Phrase],
     /// Map each word location into the graph token that represents it.
     /// Multiple words with the same text can be mapped to the same token.
     word_locations: BTreeMap<PhrasedWordId, TokenSpecId>,
@@ -39,7 +39,7 @@ pub struct TokenSpec {
 }
 
 impl<'a> TokenGraph<'a> {
-    pub fn new(texts: &'a Texts, phrases: &'a [PhraseSpec]) -> Self {
+    pub fn new(texts: &'a Texts, phrases: &'a [Phrase]) -> Self {
         let mut graph = StableDiGraph::default();
         let mut word_locations = BTreeMap::new();
 

@@ -1,8 +1,7 @@
-use crate::generate_phrases::time::Time;
+use crate::models::time::Time;
 
 use crate::generate_phrases::{english, french, portuguese};
-use anyhow::anyhow;
-use anyhow::Error;
+use anyhow::{anyhow, Error};
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 

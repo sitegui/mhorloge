@@ -1,16 +1,13 @@
 use std::env;
 use std::env::VarError;
 
-use crate::clusterize::Clusterize;
 use crate::generate_phrases::GeneratePhrases;
 use crate::tokenize::Tokenize;
 use anyhow::Error;
 use structopt::StructOpt;
 
-mod clusterize;
 mod generate_phrases;
 mod models;
-mod optimizer;
 mod tokenize;
 mod utils;
 
@@ -22,7 +19,6 @@ mod utils;
 enum Opt {
     GeneratePhrases(GeneratePhrases),
     Tokenize(Tokenize),
-    Clusterize(Clusterize),
 }
 
 fn main() -> Result<(), Error> {
@@ -35,7 +31,6 @@ fn main() -> Result<(), Error> {
     match Opt::from_args() {
         Opt::GeneratePhrases(cmd) => generate_phrases::generate_phrases(cmd)?,
         Opt::Tokenize(cmd) => tokenize::tokenize(cmd)?,
-        Opt::Clusterize(cmd) => clusterize::clusterize(cmd)?,
     };
 
     log::info!("Done");

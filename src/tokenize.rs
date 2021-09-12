@@ -2,35 +2,14 @@ mod token_graph;
 
 use crate::generate_phrases::PhraseId;
 use crate::models::phrase::Phrase;
-use crate::models::texts::{TextTag, Texts};
+use crate::models::words::{WordTag, Words};
 use crate::tokenize::token_graph::TokenGraph;
-use anyhow::Result;
 use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 use std::path::Path;
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TokenizeOut {
-    pub phrases: Vec<TokenizeOutPhraseEl>,
-    pub tokens: Vec<TokenizeOutEl>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TokenizeOutPhraseEl {
-    pub id: PhraseId,
-    pub tokens: Vec<TokenId>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TokenizeOutEl {
-    pub id: TokenId,
-    pub text: String,
-    /// All concrete token ids that must be spatially placed **after** this one
-    pub followed_by: Vec<TokenId>,
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Copy, Eq, PartialEq)]
 #[serde(transparent)]
@@ -49,14 +28,18 @@ pub struct PhrasedWordId {
 
 #[derive(Debug)]
 pub struct RepeatedSequence {
-    text_tags: Vec<TextTag>,
+    word_tags: Vec<WordTag>,
     instances: Vec<Vec<PhrasedWordId>>,
 }
 
-pub fn tokenize(texts: &Texts, phrases: &[Phrase], output_svg: Option<&Path>) -> Result<()> {
-    let mut graph = TokenGraph::new(texts, phrases);
+pub fn tokenize<'a>(
+    words: &'a Words,
+    phrases: &'a [Phrase],
+    output_svg: Option<&Path>,
+) -> TokenGraph<'a> {
+    let mut graph = TokenGraph::new(words, phrases);
     log::info!(
-        "Base solution has {} tokens and {} letters",
+        "Initial token graph has {} tokens and {} letters",
         graph.tokens_len(),
         graph.letters_len()
     );
@@ -67,18 +50,13 @@ pub fn tokenize(texts: &Texts, phrases: &[Phrase], output_svg: Option<&Path>) ->
         merge_sequence(&mut graph, sequence);
     }
 
-    log::info!(
-        "Final solution has {} tokens and {} letters",
-        graph.tokens_len(),
-        graph.letters_len()
-    );
-    log::debug!("{}", graph);
-
     if let Some(output_svg) = output_svg {
-        graph.svg(output_svg)?;
+        if let Err(error) = graph.svg(output_svg) {
+            log::warn!("Failed to save {}: {}", output_svg.display(), error);
+        }
     }
 
-    Ok(())
+    graph
 }
 
 /// Extract all sequences of one or more words that repeat at least twice in the phrases.
@@ -87,16 +65,16 @@ pub fn tokenize(texts: &Texts, phrases: &[Phrase], output_svg: Option<&Path>) ->
 fn extract_sequences(phrases: &[Phrase]) -> Vec<RepeatedSequence> {
     let max_words_per_phrase = phrases
         .iter()
-        .map(|phrase| phrase.words().len())
+        .map(|phrase| phrase.word_tags().len())
         .max()
         .unwrap();
 
     (1..=max_words_per_phrase)
         .flat_map(|length| extract_sequences_with_length(&phrases, length))
         .sorted_by_key(|sequence| {
-            let letters_per_instance: usize = sequence.text_tags.iter().map(|tag| tag.len()).sum();
+            let letters_per_instance: usize = sequence.word_tags.iter().map(|tag| tag.len()).sum();
             let total_letters = letters_per_instance * sequence.instances.len();
-            Reverse((sequence.text_tags.len(), total_letters))
+            Reverse((sequence.word_tags.len(), total_letters))
         })
         .collect_vec()
 }
@@ -108,29 +86,29 @@ fn extract_sequences_with_length(phrases: &[Phrase], length: usize) -> Vec<Repea
     // Collect all sequences
     let mut sequences: BTreeMap<_, Vec<_>> = BTreeMap::new();
     for phrase in phrases {
-        let max_end = phrase.words().len().saturating_sub(length - 1);
+        let max_end = phrase.word_tags().len().saturating_sub(length - 1);
         for start_index in 0..max_end {
             let end_index = start_index + length;
-            let text_tags = phrase.words()[start_index..end_index].to_vec();
+            let word_tags = phrase.word_tags()[start_index..end_index].to_vec();
             let locations = (start_index..end_index)
                 .map(|index| PhrasedWordId {
                     phrase: phrase.id(),
                     word: WordId(index as u16),
                 })
                 .collect_vec();
-            sequences.entry(text_tags).or_default().push(locations);
+            sequences.entry(word_tags).or_default().push(locations);
         }
     }
 
     // Select the sequences of interest
     sequences
         .into_iter()
-        .filter_map(|(text_tags, instances)| {
+        .filter_map(|(word_tags, instances)| {
             if instances.len() == 1 {
                 None
             } else {
                 Some(RepeatedSequence {
-                    text_tags,
+                    word_tags,
                     instances,
                 })
             }
@@ -142,12 +120,12 @@ fn merge_sequence(graph: &mut TokenGraph, sequence: &RepeatedSequence) {
     log::debug!(
         "Will merge sequence: {}",
         sequence
-            .text_tags
+            .word_tags
             .iter()
-            .format_with(" ", |&tag, f| { f(&graph.texts().decode(tag)) })
+            .format_with(" ", |&tag, f| { f(&graph.words().decode(tag)) })
     );
 
-    for i in 0..sequence.text_tags.len() {
+    for i in 0..sequence.word_tags.len() {
         let locations = sequence.instances.iter().map(|loc| loc[i]).collect_vec();
         merge_locations(graph, &locations);
     }

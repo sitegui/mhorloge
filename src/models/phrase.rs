@@ -1,23 +1,23 @@
 use crate::generate_phrases::PhraseId;
 use crate::models::language::Language;
-use crate::models::texts::TextTag;
 use crate::models::time::Time;
+use crate::models::words::WordTag;
 
 #[derive(Debug, Clone)]
 pub struct Phrase {
     id: PhraseId,
     language: Language,
     time: Time,
-    words: Vec<TextTag>,
+    word_tags: Vec<WordTag>,
 }
 
 impl Phrase {
-    pub fn new(id: PhraseId, language: Language, time: Time, words: Vec<TextTag>) -> Self {
+    pub fn new(id: PhraseId, language: Language, time: Time, word_tags: Vec<WordTag>) -> Self {
         Phrase {
             id,
             language,
             time,
-            words,
+            word_tags,
         }
     }
 
@@ -25,7 +25,7 @@ impl Phrase {
         self.id
     }
 
-    pub fn words(&self) -> &[TextTag] {
-        &self.words
+    pub fn word_tags(&self) -> &[WordTag] {
+        &self.word_tags
     }
 }

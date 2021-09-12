@@ -1,5 +1,5 @@
 use crate::models::phrase::Phrase;
-use crate::models::texts::{TextTag, Texts};
+use crate::models::words::{WordTag, Words};
 use crate::tokenize::{PhrasedWordId, WordId};
 use anyhow::{ensure, Result};
 use itertools::Itertools;
@@ -24,7 +24,7 @@ pub struct TokenGraph<'a> {
     /// Each node represents a token in one or multiple phrases.
     /// Each edge `A -> B` says that `A` must happen *before* `B`.
     graph: StableDiGraph<TokenSpec, (), u16>,
-    texts: &'a Texts,
+    words: &'a Words,
     phrases: &'a [Phrase],
     /// Map each word location into the graph token that represents it.
     /// Multiple words with the same text can be mapped to the same token.
@@ -35,18 +35,18 @@ pub struct TokenGraph<'a> {
 /// A token that is not yet known to be present in the final puzzle, unlike [`Token`].
 #[derive(Debug, Clone)]
 pub struct TokenSpec {
-    text_tag: TextTag,
+    word_tag: WordTag,
 }
 
 impl<'a> TokenGraph<'a> {
-    pub fn new(texts: &'a Texts, phrases: &'a [Phrase]) -> Self {
+    pub fn new(words: &'a Words, phrases: &'a [Phrase]) -> Self {
         let mut graph = StableDiGraph::default();
         let mut word_locations = BTreeMap::new();
 
         for phrase in phrases {
             let mut prev_token = None;
-            for (word_index, &text_tag) in phrase.words().iter().enumerate() {
-                let token_spec = TokenSpec { text_tag };
+            for (word_index, &word_tag) in phrase.word_tags().iter().enumerate() {
+                let token_spec = TokenSpec { word_tag };
                 let next_token = graph.add_node(token_spec);
 
                 if let Some(prev_token) = prev_token {
@@ -65,7 +65,7 @@ impl<'a> TokenGraph<'a> {
         }
 
         TokenGraph {
-            texts,
+            words: words,
             graph,
             phrases,
             word_locations,
@@ -77,7 +77,7 @@ impl<'a> TokenGraph<'a> {
     pub fn letters_len(&self) -> usize {
         (&self.graph)
             .node_references()
-            .map(|(_, node)| node.text_tag.len())
+            .map(|(_, node)| node.word_tag.len())
             .sum()
     }
 
@@ -124,7 +124,7 @@ impl<'a> TokenGraph<'a> {
 
     /// Check if two tokens can be merged without creating a cycle
     pub fn can_merge_tokens(&self, a: TokenSpecId, b: TokenSpecId) -> bool {
-        if a == b || self.graph[a].text_tag != self.graph[b].text_tag {
+        if a == b || self.graph[a].word_tag != self.graph[b].word_tag {
             // Simple cases
             false
         } else {
@@ -135,13 +135,13 @@ impl<'a> TokenGraph<'a> {
         }
     }
 
-    pub fn texts(&self) -> &'a Texts {
-        self.texts
+    pub fn words(&self) -> &'a Words {
+        self.words
     }
 
     pub fn dot(&self) -> String {
         let debug_graph = self.graph.filter_map(
-            |_, node| Some(self.texts.decode(node.text_tag)),
+            |_, node| Some(self.words.decode(node.word_tag)),
             |_, _| Some(""),
         );
 
@@ -179,60 +179,6 @@ impl<'a> TokenGraph<'a> {
     pub fn find_token(&self, location: PhrasedWordId) -> TokenSpecId {
         *self.word_locations.get(&location).unwrap()
     }
-
-    // pub fn to_output(&self) -> TokenizeOut {
-    //     // IntelliJ need some help with type inference
-    //     let graph = &self.graph;
-    //
-    //     // Create the final tokens: each unmerged spec represents a final token
-    //     let tokens = graph
-    //         .node_references()
-    //         .filter(|(_, spec)| !spec.is_merged())
-    //         .map(|(id, spec)| {
-    //             // Collect all other ids reachable from this node
-    //             let followed_by: Vec<_> = Bfs::new(graph, id)
-    //                 .iter(graph)
-    //                 .filter_map(|node| if node != id { Some(node.into()) } else { None })
-    //                 .collect();
-    //
-    //             TokenizeOutEl {
-    //                 id: id.into(),
-    //                 text: self.texts.decode(spec.text).to_owned(),
-    //                 followed_by,
-    //             }
-    //         })
-    //         .collect();
-    //
-    //     // Map phrases to tokens: we will iterate over the words in the same sequence as when the
-    //     // graph was created in `new`, so we know the token's id.
-    //     let mut next_index = 0;
-    //     let phrases = self
-    //         .phrases
-    //         .iter()
-    //         .map(|phrase_spec| {
-    //             let tokens = phrase_spec
-    //                 .words()
-    //                 .iter()
-    //                 .map(|_| {
-    //                     // Find the "root" token id
-    //                     let mut token_id = TokenSpecId::new(next_index);
-    //                     while let Some(merged_with) = graph[token_id].merged_with {
-    //                         token_id = merged_with;
-    //                     }
-    //
-    //                     next_index += 1;
-    //                     token_id.into()
-    //                 })
-    //                 .collect();
-    //             TokenizeOutPhraseEl {
-    //                 id: phrase_spec.id(),
-    //                 tokens,
-    //             }
-    //         })
-    //         .collect();
-    //
-    //     TokenizeOut { phrases, tokens }
-    // }
 }
 
 impl fmt::Display for TokenGraph<'_> {
@@ -240,7 +186,7 @@ impl fmt::Display for TokenGraph<'_> {
         writeln!(f, "TokenGraph {{")?;
 
         let graph = &self.graph;
-        let texts = self.texts;
+        let words = self.words;
 
         for source in graph.externals(Direction::Incoming) {
             let mut bfs = Bfs::new(graph, source);
@@ -248,7 +194,7 @@ impl fmt::Display for TokenGraph<'_> {
             write!(
                 f,
                 "\t{}({}): ",
-                texts.decode(graph[first_id].text_tag),
+                words.decode(graph[first_id].word_tag),
                 first_id.index()
             )?;
             writeln!(
@@ -257,7 +203,7 @@ impl fmt::Display for TokenGraph<'_> {
                 bfs.iter(graph).format_with(", ", |node, f| {
                     f(&format_args!(
                         "{}({})",
-                        texts.decode(graph[node].text_tag),
+                        words.decode(graph[node].word_tag),
                         node.index()
                     ))
                 })

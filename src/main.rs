@@ -1,8 +1,8 @@
 use std::env;
 use std::env::VarError;
+use std::path::PathBuf;
 
 use anyhow::Result;
-use std::path::PathBuf;
 use structopt::StructOpt;
 
 mod arrange;
@@ -45,8 +45,20 @@ fn main() -> Result<()> {
     log::info!("Starting");
 
     let options = Opt::from_args();
-    let (texts, phrases) = generate_phrases::generate_phrases(&options.languages)?;
-    tokenize::tokenize(&texts, &phrases, options.output_svg.as_deref())?;
+    let (words, phrases) = generate_phrases::generate_phrases(&options.languages)?;
+    log::info!(
+        "Generated {} phrases with {} words",
+        phrases.len(),
+        words.num_distinct()
+    );
+
+    let token_graph = tokenize::tokenize(&words, &phrases, options.output_svg.as_deref());
+    log::info!(
+        "Formed token graph with {} tokens and {} letters",
+        token_graph.tokens_len(),
+        token_graph.letters_len()
+    );
+    log::debug!("{}", token_graph);
 
     log::info!("Done");
     Ok(())

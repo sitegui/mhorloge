@@ -6,6 +6,7 @@ use anyhow::Result;
 use structopt::StructOpt;
 
 mod arrange;
+mod build_grid;
 mod generate_phrases;
 mod models;
 mod tokenize;
@@ -59,6 +60,8 @@ fn main() -> Result<()> {
         token_graph.letters_len()
     );
     log::debug!("{}", token_graph);
+
+    build_grid::build_grid(&token_graph);
 
     log::info!("Done");
     Ok(())

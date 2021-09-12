@@ -1,4 +1,4 @@
-mod token_graph;
+pub mod token_graph;
 
 use crate::generate_phrases::PhraseId;
 use crate::models::phrase::Phrase;

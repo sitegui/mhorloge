@@ -17,25 +17,19 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 
 pub type TokenSpecId = NodeIndex<u16>;
-type TokenGraphDfsSpace = DfsSpace<TokenSpecId, <DiGraph<TokenSpec, (), u16> as Visitable>::Map>;
+type TokenGraphDfsSpace = DfsSpace<TokenSpecId, <DiGraph<WordTag, (), u16> as Visitable>::Map>;
 
 #[derive(Debug, Clone)]
 pub struct TokenGraph<'a> {
     /// Each node represents a token in one or multiple phrases.
     /// Each edge `A -> B` says that `A` must happen *before* `B`.
-    graph: StableDiGraph<TokenSpec, (), u16>,
+    graph: StableDiGraph<WordTag, (), u16>,
     words: &'a Words,
     phrases: &'a [Phrase],
     /// Map each word location into the graph token that represents it.
     /// Multiple words with the same text can be mapped to the same token.
     word_locations: BTreeMap<PhrasedWordId, TokenSpecId>,
     dfs_space: RefCell<Option<TokenGraphDfsSpace>>,
-}
-
-/// A token that is not yet known to be present in the final puzzle, unlike [`Token`].
-#[derive(Debug, Clone)]
-pub struct TokenSpec {
-    word_tag: WordTag,
 }
 
 impl<'a> TokenGraph<'a> {
@@ -46,8 +40,7 @@ impl<'a> TokenGraph<'a> {
         for phrase in phrases {
             let mut prev_token = None;
             for (word_index, &word_tag) in phrase.word_tags().iter().enumerate() {
-                let token_spec = TokenSpec { word_tag };
-                let next_token = graph.add_node(token_spec);
+                let next_token = graph.add_node(word_tag);
 
                 if let Some(prev_token) = prev_token {
                     graph.add_edge(prev_token, next_token, ());
@@ -65,7 +58,7 @@ impl<'a> TokenGraph<'a> {
         }
 
         TokenGraph {
-            words: words,
+            words,
             graph,
             phrases,
             word_locations,
@@ -77,7 +70,7 @@ impl<'a> TokenGraph<'a> {
     pub fn letters_len(&self) -> usize {
         (&self.graph)
             .node_references()
-            .map(|(_, node)| node.word_tag.len())
+            .map(|(_, word_tag)| word_tag.len())
             .sum()
     }
 
@@ -124,7 +117,7 @@ impl<'a> TokenGraph<'a> {
 
     /// Check if two tokens can be merged without creating a cycle
     pub fn can_merge_tokens(&self, a: TokenSpecId, b: TokenSpecId) -> bool {
-        if a == b || self.graph[a].word_tag != self.graph[b].word_tag {
+        if a == b || self.graph[a] != self.graph[b] {
             // Simple cases
             false
         } else {
@@ -141,7 +134,7 @@ impl<'a> TokenGraph<'a> {
 
     pub fn dot(&self) -> String {
         let debug_graph = self.graph.filter_map(
-            |_, node| Some(self.words.decode(node.word_tag)),
+            |_, &word_tag| Some(self.words.decode(word_tag)),
             |_, _| Some(""),
         );
 
@@ -179,6 +172,14 @@ impl<'a> TokenGraph<'a> {
     pub fn find_token(&self, location: PhrasedWordId) -> TokenSpecId {
         *self.word_locations.get(&location).unwrap()
     }
+
+    pub fn graph(&self) -> &StableDiGraph<WordTag, (), u16> {
+        &self.graph
+    }
+
+    pub fn remove_token(&mut self, id: TokenSpecId) {
+        self.graph.remove_node(id);
+    }
 }
 
 impl fmt::Display for TokenGraph<'_> {
@@ -194,7 +195,7 @@ impl fmt::Display for TokenGraph<'_> {
             write!(
                 f,
                 "\t{}({}): ",
-                words.decode(graph[first_id].word_tag),
+                words.decode(graph[first_id]),
                 first_id.index()
             )?;
             writeln!(
@@ -203,7 +204,7 @@ impl fmt::Display for TokenGraph<'_> {
                 bfs.iter(graph).format_with(", ", |node, f| {
                     f(&format_args!(
                         "{}({})",
-                        words.decode(graph[node].word_tag),
+                        words.decode(graph[node]),
                         node.index()
                     ))
                 })

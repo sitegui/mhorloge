@@ -1,7 +1,6 @@
 use crate::models::word::{Letter, Word};
 use std::collections::HashSet;
 use std::fmt;
-use std::ops::Range;
 use std::{iter, mem};
 
 /// Initial grid size is `2 * INITIAL + 1` rows and columns, centered at zero
@@ -35,9 +34,9 @@ pub struct Position {
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct WriteStats {
-    reused_letters: i32,
-    new_letters: i32,
-    empty_neighbors: i32,
+    pub reused_letters: i32,
+    pub new_letters: i32,
+    pub empty_neighbors: i32,
 }
 
 impl WordGrid {
@@ -57,14 +56,6 @@ impl WordGrid {
             columns: side,
             grow_padding,
         }
-    }
-
-    pub fn row_range(&self) -> Range<i32> {
-        -self.row_offset..(self.rows - self.row_offset)
-    }
-
-    pub fn column_range(&self) -> Range<i32> {
-        -self.column_offset..(self.columns - self.column_offset)
     }
 
     /// Return the letter at the position, if any. Out of bounds will return `None`.
@@ -245,6 +236,7 @@ impl Position {
     }
 }
 
+// TODO: maybe don't display empty padding?
 impl fmt::Display for WordGrid {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for row in self.grid.chunks(self.columns as usize) {
@@ -257,6 +249,12 @@ impl fmt::Display for WordGrid {
             writeln!(f)?;
         }
         Ok(())
+    }
+}
+
+impl fmt::Display for Position {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}:{}", self.row, self.column)
     }
 }
 

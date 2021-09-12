@@ -3,11 +3,13 @@ use itertools::Itertools;
 use std::convert::TryFrom;
 use std::fmt;
 
+/// Represents a non-empty list of letters
 #[derive(Debug, Clone, Ord, PartialOrd, Eq, PartialEq)]
 pub struct Word {
     letters: Vec<Letter>,
 }
 
+/// Represents a letter than can be put in a word grid
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
 pub enum Letter {
     A,
@@ -42,6 +44,10 @@ pub enum Letter {
 impl Word {
     pub fn len(&self) -> usize {
         self.letters.len()
+    }
+
+    pub fn letters(&self) -> &[Letter] {
+        &self.letters
     }
 }
 

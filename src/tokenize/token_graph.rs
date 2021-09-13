@@ -17,13 +17,14 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 
 pub type TokenSpecId = NodeIndex<u16>;
+pub type InnerGraph = StableDiGraph<WordTag, (), u16>;
 type TokenGraphDfsSpace = DfsSpace<TokenSpecId, <DiGraph<WordTag, (), u16> as Visitable>::Map>;
 
 #[derive(Debug, Clone)]
 pub struct TokenGraph<'a> {
     /// Each node represents a token in one or multiple phrases.
     /// Each edge `A -> B` says that `A` must happen *before* `B`.
-    graph: StableDiGraph<WordTag, (), u16>,
+    graph: InnerGraph,
     words: &'a Words,
     phrases: &'a [Phrase],
     /// Map each word location into the graph token that represents it.
@@ -34,7 +35,7 @@ pub struct TokenGraph<'a> {
 
 impl<'a> TokenGraph<'a> {
     pub fn new(words: &'a Words, phrases: &'a [Phrase]) -> Self {
-        let mut graph = StableDiGraph::default();
+        let mut graph = InnerGraph::default();
         let mut word_locations = BTreeMap::new();
 
         for phrase in phrases {
@@ -173,7 +174,7 @@ impl<'a> TokenGraph<'a> {
         *self.word_locations.get(&location).unwrap()
     }
 
-    pub fn graph(&self) -> &StableDiGraph<WordTag, (), u16> {
+    pub fn graph(&self) -> &InnerGraph {
         &self.graph
     }
 

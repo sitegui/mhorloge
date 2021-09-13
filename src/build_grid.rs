@@ -1,9 +1,15 @@
 use crate::models::word::Word;
 use crate::models::word_grid::{Orientation, Position, WordGrid, WriteStats};
+use crate::tokenize::token_graph::InnerGraph;
 use crate::tokenize::token_graph::{TokenGraph, TokenSpecId};
 use itertools::Itertools;
+use log::Level::Debug;
+use petgraph::prelude::Dfs;
+use petgraph::visit::IntoNodeIdentifiers;
+use petgraph::visit::Reversed;
 use petgraph::Direction;
 use std::cell::RefCell;
+use std::collections::BTreeMap;
 use std::rc::Rc;
 
 #[derive(Debug, Clone)]
@@ -20,6 +26,26 @@ pub fn build_grid(token_graph: &TokenGraph) {
     let mut remaining = token_graph.clone();
     let mut grids: Vec<Rc<RefCell<WordGrid>>> = vec![];
 
+    // For each token, list all tokens that must happen before it
+    let mut upstream_by_token = BTreeMap::new();
+    for node_id in token_graph.graph().node_identifiers() {
+        upstream_by_token.insert(node_id, tokens_before(token_graph.graph(), node_id));
+    }
+    if log::log_enabled!(Debug) {
+        log::debug!("Upstream by token:");
+        for (&start, upstream) in &upstream_by_token {
+            let start_word = token_graph.graph()[start];
+            let upstream_words = upstream
+                .iter()
+                .map(|&node| token_graph.words().decode(token_graph.graph()[node]));
+            log::debug!(
+                "\t{}: {}",
+                token_graph.words().decode(start_word),
+                upstream_words.format(", ")
+            );
+        }
+    }
+
     loop {
         let free_nodes = remaining
             .graph()
@@ -35,6 +61,8 @@ pub fn build_grid(token_graph: &TokenGraph) {
         for node_id in free_nodes {
             let word_tag = remaining.graph()[node_id];
             let word = remaining.words().decode(word_tag);
+
+            let tokens_before = &upstream_by_token[&node_id];
 
             for grid in &grids {
                 best_insert_word(&mut best, node_id, grid, word);
@@ -56,6 +84,7 @@ pub fn build_grid(token_graph: &TokenGraph) {
                 grid.write(
                     Position { row: 0, column: 0 },
                     Orientation::Horizontal,
+                    node_id,
                     word,
                 );
                 grids.push(Rc::new(RefCell::new(grid)));
@@ -72,7 +101,7 @@ pub fn build_grid(token_graph: &TokenGraph) {
                 );
                 best.grid
                     .borrow_mut()
-                    .write(best.base, best.orientation, best.word);
+                    .write(best.base, best.orientation, best.node_id, best.word);
                 remaining.remove_token(best.node_id);
             }
         }
@@ -82,6 +111,17 @@ pub fn build_grid(token_graph: &TokenGraph) {
             log::debug!("\n{}", grid.borrow());
         }
     }
+}
+
+fn tokens_before(graph: &InnerGraph, start: TokenSpecId) -> Vec<TokenSpecId> {
+    let graph = Reversed(graph);
+    let mut dfs = Dfs::new(graph, start);
+    assert_eq!(dfs.next(graph), Some(start));
+    let mut before = vec![];
+    while let Some(node) = dfs.next(graph) {
+        before.push(node);
+    }
+    before
 }
 
 fn best_insert_word<'a>(

@@ -1,4 +1,6 @@
 use crate::models::word::{Letter, Word};
+use crate::tokenize::token_graph::TokenSpecId;
+use std::collections::BTreeMap;
 use std::collections::HashSet;
 use std::fmt;
 use std::{iter, mem};
@@ -17,6 +19,7 @@ pub struct WordGrid {
     rows: i32,
     columns: i32,
     grow_padding: i32,
+    tokens: BTreeMap<TokenSpecId, (Position, Orientation)>,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -55,6 +58,7 @@ impl WordGrid {
             rows: side,
             columns: side,
             grow_padding,
+            tokens: BTreeMap::new(),
         }
     }
 
@@ -149,11 +153,18 @@ impl WordGrid {
         Some(stats)
     }
 
-    pub fn write(&mut self, base: Position, orientation: Orientation, word: &Word) {
+    pub fn write(
+        &mut self,
+        base: Position,
+        orientation: Orientation,
+        token: TokenSpecId,
+        word: &Word,
+    ) {
         for (i, &letter) in word.letters().iter().enumerate() {
             let position = base.advance(orientation, i as i32);
             self.set(position, letter);
         }
+        self.tokens.insert(token, (base, orientation));
     }
 
     fn extend_top(&mut self, new_rows: i32) {
@@ -286,6 +297,7 @@ mod tests {
             grid.write(
                 Position { row: 0, column: 0 },
                 orientation,
+                TokenSpecId::new(0),
                 &Word::try_from("WORD").unwrap(),
             );
         }
@@ -323,6 +335,7 @@ mod tests {
                 column: -4,
             },
             Orientation::Diagonal,
+            TokenSpecId::new(0),
             &Word::try_from("WORD").unwrap(),
         );
         assert_eq!(

@@ -1,5 +1,6 @@
 use crate::models::word::{Letter, Word};
 use crate::tokenize::token_graph::TokenSpecId;
+use itertools::min;
 use std::collections::BTreeMap;
 use std::collections::HashSet;
 use std::fmt;
@@ -247,11 +248,36 @@ impl Position {
     }
 }
 
-// TODO: maybe don't display empty padding?
 impl fmt::Display for WordGrid {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for row in self.grid.chunks(self.columns as usize) {
-            for cell in row {
+        // Detect bounding box
+        let mut min_r2 = self.rows as usize;
+        let mut min_c2 = self.columns as usize;
+        let mut max_r2 = 0;
+        let mut max_c2 = 0;
+        for (r2, row) in self.grid.chunks(self.columns as usize).enumerate() {
+            for (c2, cell) in row.iter().enumerate() {
+                if cell.is_some() {
+                    min_r2 = min_r2.min(r2);
+                    min_c2 = min_c2.min(c2);
+                    max_r2 = max_r2.max(r2);
+                    max_c2 = max_c2.max(c2);
+                }
+            }
+        }
+
+        if min_r2 > max_r2 {
+            // Empty grid
+            return Ok(());
+        }
+
+        for row in self
+            .grid
+            .chunks(self.columns as usize)
+            .skip(min_r2)
+            .take(max_r2 + 1 - min_r2)
+        {
+            for cell in row.iter().skip(min_c2).take(max_c2 + 1 - min_c2) {
                 match cell {
                     None => write!(f, "."),
                     Some(letter) => write!(f, "{}", letter),
@@ -278,15 +304,7 @@ mod tests {
     #[test]
     fn test() {
         let mut grid = WordGrid::with_grow_padding(2);
-        assert_eq!(
-            grid.to_string(),
-            "\
-            .....\n\
-            .....\n\
-            .....\n\
-            .....\n\
-            .....\n"
-        );
+        assert_eq!(grid.to_string(), "");
         assert_eq!(grid.letters().collect_vec(), vec![]);
 
         for orientation in [
@@ -301,18 +319,7 @@ mod tests {
                 &Word::try_from("WORD").unwrap(),
             );
         }
-        assert_eq!(
-            grid.to_string(),
-            "\
-            ........\n\
-            ........\n\
-            ..WORD..\n\
-            ..OO....\n\
-            ..R.R...\n\
-            ..D..D..\n\
-            ........\n\
-            ........\n"
-        );
+        assert_eq!(grid.to_string(), "WORD\nOO..\nR.R.\nD..D\n");
         assert_eq!(
             grid.letters().collect_vec(),
             [
@@ -340,19 +347,7 @@ mod tests {
         );
         assert_eq!(
             grid.to_string(),
-            "\
-            ............\n\
-            ............\n\
-            ..W.........\n\
-            ...O........\n\
-            ....R.......\n\
-            .....D......\n\
-            ......WORD..\n\
-            ......OO....\n\
-            ......R.R...\n\
-            ......D..D..\n\
-            ............\n\
-            ............\n"
+            "W.......\n.O......\n..R.....\n...D....\n....WORD\n....OO..\n....R.R.\n....D..D\n"
         );
 
         assert_eq!(

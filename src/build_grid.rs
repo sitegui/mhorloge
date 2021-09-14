@@ -35,14 +35,8 @@ pub fn build_grid(token_graph: &TokenGraph) {
         log::debug!("Upstream by token:");
         for (&start, upstream) in &upstream_by_token {
             let start_word = token_graph.graph()[start];
-            let upstream_words = upstream
-                .iter()
-                .map(|&node| token_graph.words().decode(token_graph.graph()[node]));
-            log::debug!(
-                "\t{}: {}",
-                token_graph.words().decode(start_word),
-                upstream_words.format(", ")
-            );
+            let upstream_words = upstream.iter().map(|&node| token_graph.graph()[node]);
+            log::debug!("\t{}: {}", start_word, upstream_words.format(", "));
         }
     }
 
@@ -59,8 +53,7 @@ pub fn build_grid(token_graph: &TokenGraph) {
 
         let mut best = None;
         for node_id in free_nodes {
-            let word_tag = remaining.graph()[node_id];
-            let word = remaining.words().decode(word_tag);
+            let word = remaining.graph()[node_id];
 
             let tokens_before = &upstream_by_token[&node_id];
 
@@ -77,8 +70,7 @@ pub fn build_grid(token_graph: &TokenGraph) {
                     .externals(Direction::Incoming)
                     .next()
                     .unwrap();
-                let word_tag = remaining.graph()[node_id];
-                let word = remaining.words().decode(word_tag);
+                let word = remaining.graph()[node_id];
                 log::debug!("No best, will simply create new grid with {}", word);
                 let mut grid = WordGrid::new();
                 grid.write(

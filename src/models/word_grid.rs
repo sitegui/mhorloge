@@ -1,6 +1,5 @@
 use crate::models::word::{Letter, Word};
 use crate::tokenize::token_graph::TokenSpecId;
-use itertools::min;
 use std::collections::BTreeMap;
 use std::collections::HashSet;
 use std::fmt;

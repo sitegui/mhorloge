@@ -1,5 +1,5 @@
 use crate::models::phrase::Phrase;
-use crate::models::words::{WordTag, Words};
+use crate::models::word::Word;
 use crate::tokenize::{PhrasedWordId, WordId};
 use anyhow::{ensure, Result};
 use itertools::Itertools;
@@ -7,8 +7,8 @@ use petgraph::algo;
 use petgraph::algo::DfsSpace;
 use petgraph::dot::{Config, Dot};
 use petgraph::prelude::*;
-use petgraph::visit::{IntoNodeReferences, Visitable, Walker};
-use std::cell::RefCell;
+use petgraph::visit::IntoNodeReferences;
+use petgraph::visit::Walker;
 use std::collections::BTreeMap;
 use std::fmt;
 use std::fs;
@@ -17,31 +17,28 @@ use std::path::Path;
 use std::process::{Command, Stdio};
 
 pub type TokenSpecId = NodeIndex<u16>;
-pub type InnerGraph = StableDiGraph<WordTag, (), u16>;
-type TokenGraphDfsSpace = DfsSpace<TokenSpecId, <DiGraph<WordTag, (), u16> as Visitable>::Map>;
+pub type InnerGraph<'a> = StableDiGraph<&'a Word, (), u16>;
 
 #[derive(Debug, Clone)]
 pub struct TokenGraph<'a> {
     /// Each node represents a token in one or multiple phrases.
     /// Each edge `A -> B` says that `A` must happen *before* `B`.
-    graph: InnerGraph,
-    words: &'a Words,
+    graph: InnerGraph<'a>,
     phrases: &'a [Phrase],
     /// Map each word location into the graph token that represents it.
     /// Multiple words with the same text can be mapped to the same token.
     word_locations: BTreeMap<PhrasedWordId, TokenSpecId>,
-    dfs_space: RefCell<Option<TokenGraphDfsSpace>>,
 }
 
 impl<'a> TokenGraph<'a> {
-    pub fn new(words: &'a Words, phrases: &'a [Phrase]) -> Self {
+    pub fn new(phrases: &'a [Phrase]) -> Self {
         let mut graph = InnerGraph::default();
         let mut word_locations = BTreeMap::new();
 
         for phrase in phrases {
             let mut prev_token = None;
-            for (word_index, &word_tag) in phrase.word_tags().iter().enumerate() {
-                let next_token = graph.add_node(word_tag);
+            for (word_index, word) in phrase.words().iter().enumerate() {
+                let next_token = graph.add_node(word);
 
                 if let Some(prev_token) = prev_token {
                     graph.add_edge(prev_token, next_token, ());
@@ -59,11 +56,9 @@ impl<'a> TokenGraph<'a> {
         }
 
         TokenGraph {
-            words,
             graph,
             phrases,
             word_locations,
-            dfs_space: RefCell::new(None),
         }
     }
 
@@ -71,7 +66,7 @@ impl<'a> TokenGraph<'a> {
     pub fn letters_len(&self) -> usize {
         (&self.graph)
             .node_references()
-            .map(|(_, word_tag)| word_tag.len())
+            .map(|(_, word)| word.len())
             .sum()
     }
 
@@ -122,22 +117,16 @@ impl<'a> TokenGraph<'a> {
             // Simple cases
             false
         } else {
-            let mut space = self.dfs_space.borrow_mut();
-            let space = space.get_or_insert_with(|| DfsSpace::new(&self.graph));
+            let space = &mut DfsSpace::new(&self.graph);
             !algo::has_path_connecting(&self.graph, a, b, Some(space))
                 && !algo::has_path_connecting(&self.graph, b, a, Some(space))
         }
     }
 
-    pub fn words(&self) -> &'a Words {
-        self.words
-    }
-
     pub fn dot(&self) -> String {
-        let debug_graph = self.graph.filter_map(
-            |_, &word_tag| Some(self.words.decode(word_tag)),
-            |_, _| Some(""),
-        );
+        let debug_graph = self
+            .graph
+            .filter_map(|_, &word| Some(word), |_, _| Some(""));
 
         Dot::with_config(&debug_graph, &[Config::EdgeNoLabel]).to_string()
     }
@@ -188,26 +177,16 @@ impl fmt::Display for TokenGraph<'_> {
         writeln!(f, "TokenGraph {{")?;
 
         let graph = &self.graph;
-        let words = self.words;
 
         for source in graph.externals(Direction::Incoming) {
             let mut bfs = Bfs::new(graph, source);
             let first_id = bfs.next(graph).unwrap();
-            write!(
-                f,
-                "\t{}({}): ",
-                words.decode(graph[first_id]),
-                first_id.index()
-            )?;
+            write!(f, "\t{}({}): ", graph[first_id], first_id.index())?;
             writeln!(
                 f,
                 "{}",
                 bfs.iter(graph).format_with(", ", |node, f| {
-                    f(&format_args!(
-                        "{}({})",
-                        words.decode(graph[node]),
-                        node.index()
-                    ))
+                    f(&format_args!("{}({})", graph[node], node.index()))
                 })
             )?;
         }

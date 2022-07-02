@@ -1,10 +1,10 @@
 // pub mod token_graph;
 
-use crate::models::merge_dag::{Group, MergeDag, Node};
+use crate::models::merge_dag::MergeDag;
 use crate::models::phrase_book::PhraseBook;
 use crate::models::text::Text;
-use crate::models::token::{Token, TokenId};
-use crate::models::word::{Word, WordId};
+use crate::models::token::Token;
+use crate::models::word::WordId;
 use itertools::Itertools;
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet};
@@ -16,12 +16,13 @@ pub struct RepeatedSequence<'a> {
     instances: Vec<&'a [WordId]>,
 }
 
-pub fn tokenize<'a>(book: &'a PhraseBook, output_svg: Option<&Path>) -> MergeDag<&'a Word, Token> {
-    let mut words = vec![];
+pub fn tokenize(book: &PhraseBook, output_svg: Option<&Path>) -> MergeDag<WordId, Token> {
+    let mut seed_tokens = vec![];
     let mut edges = vec![];
     for phrase in book.phrases() {
         for &word_id in &phrase.words {
-            words.push(&book[word_id]);
+            let token = Token::new(&book[word_id]);
+            seed_tokens.push((word_id, token));
         }
 
         for (&before, &after) in phrase.words.iter().tuple_windows::<(_, _)>() {
@@ -29,7 +30,7 @@ pub fn tokenize<'a>(book: &'a PhraseBook, output_svg: Option<&Path>) -> MergeDag
         }
     }
 
-    let mut graph = MergeDag::new(words, &edges);
+    let mut graph = MergeDag::new(seed_tokens, &edges);
     log::info!("Initial token graph has {} words", graph.nodes_len(),);
 
     let sequences = extract_sequences(book);
@@ -98,7 +99,7 @@ fn extract_sequences_with_length(book: &PhraseBook, length: usize) -> Vec<Repeat
         .collect_vec()
 }
 
-fn merge_sequence(graph: &mut MergeDag<&Word, Token>, sequence: &RepeatedSequence) {
+fn merge_sequence(graph: &mut MergeDag<WordId, Token>, sequence: &RepeatedSequence) {
     log::debug!("Will merge sequence: {}", sequence.texts.iter().format(" "));
 
     for i in 0..sequence.texts.len() {
@@ -112,7 +113,7 @@ fn merge_sequence(graph: &mut MergeDag<&Word, Token>, sequence: &RepeatedSequenc
 /// its own. The following locations will try to merge with the first group. When not possible, it
 /// will try with the second, and so on until no group accepts it. In this case, a new group will
 /// created again.
-fn merge_locations(graph: &mut MergeDag<&Word, Token>, words: &[WordId]) {
+fn merge_locations(graph: &mut MergeDag<WordId, Token>, words: &[WordId]) {
     let mut group_roots = Vec::new();
 
     let unique_tokens_before: BTreeSet<_> = words
@@ -126,14 +127,20 @@ fn merge_locations(graph: &mut MergeDag<&Word, Token>, words: &[WordId]) {
 
     for &word in words {
         let mut merged = false;
+        let word_group = graph.group(word).0;
+
         for &root in &group_roots {
-            if graph.merge_groups(root, word).is_ok() {
+            if !graph.has_path(root, word_group) {
+                graph.merge_groups(root, word_group, |base_token, new_token| {
+                    base_token.words.extend(new_token.words);
+                });
                 merged = true;
                 break;
             }
         }
+
         if !merged {
-            group_roots.push(word);
+            group_roots.push(word_group);
         }
     }
 

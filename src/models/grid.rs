@@ -5,7 +5,7 @@ use itertools::Itertools;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 use std::fmt::Write;
-use std::ops::{Add, AddAssign, Mul, SubAssign};
+use std::ops::{Add, AddAssign, Mul};
 
 #[derive(Debug, Clone)]
 pub struct Grid {
@@ -48,6 +48,10 @@ impl Grid {
         grid
     }
 
+    pub fn num_letters(&self) -> i32 {
+        self.letter_by_pos.len() as i32
+    }
+
     pub fn enumerate_insertions(&self, relations: &TokenRelations, token: &Token) -> Vec<Grid> {
         // Enumerate all insertions that use a valid pivot. A `BTreeSet` is used to deduplicate
         // them, in case a single insertion covers multiple pivots simultaneously
@@ -56,7 +60,7 @@ impl Grid {
         for (letter_index, letter) in token.text.letters().iter().enumerate() {
             let n = letter_index as i32;
 
-            if let Some(pivots) = self.pos_by_letter.get(&letter) {
+            if let Some(pivots) = self.pos_by_letter.get(letter) {
                 for &pivot in pivots {
                     let mut consider_direction = |direction| {
                         let base = match direction {

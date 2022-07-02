@@ -9,6 +9,7 @@ use crate::models::time::Time;
 
 pub mod english;
 pub mod french;
+pub mod german;
 pub mod portuguese;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Copy, Ord, PartialOrd, Eq, PartialEq)]

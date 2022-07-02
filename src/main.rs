@@ -18,9 +18,9 @@ mod utils;
     about = "CLI for problems related to the mhorloge project."
 )]
 struct Opt {
-    /// Determine the languages to use. Available languages are: "English", "French" and
-    /// "Portuguese". Multiple languages can be requested by separating them by comma. By
-    /// default, all time phrases will be generated, that is, from 00:00 to 23:59 with 1-minute
+    /// Determine the languages to use. Available languages are: "English", "French", "Portuguese"
+    /// and "German". Multiple languages can be requested by separating them by comma. By
+    /// default, all time phrases will be generated, that is, from 00:00 to 12:00 with 1-minute
     /// precision. To change the precision, append ":" followed by an integer representing the
     /// desired precision after each language name. Each language can determine their own
     /// precision.

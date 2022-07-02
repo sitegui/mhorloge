@@ -1,6 +1,6 @@
 use crate::models::time::Time;
 
-use crate::generate_phrases::{english, french, portuguese};
+use crate::generate_phrases::{english, french, german, portuguese};
 use crate::models::word::Word;
 use anyhow::{anyhow, Error};
 use serde::{Deserialize, Serialize};
@@ -13,6 +13,7 @@ pub enum Language {
     English,
     French,
     Portuguese,
+    German,
 }
 
 impl FromStr for Language {
@@ -23,6 +24,7 @@ impl FromStr for Language {
             "English" => Ok(Language::English),
             "French" => Ok(Language::French),
             "Portuguese" => Ok(Language::Portuguese),
+            "German" => Ok(Language::German),
             _ => Err(anyhow!("Language was not recognized: {}", s)),
         }
     }
@@ -34,6 +36,7 @@ impl Language {
             Language::English => english::spell(time),
             Language::French => french::spell(time),
             Language::Portuguese => portuguese::spell(time),
+            Language::German => german::spell(time),
         };
 
         text.split(' ')

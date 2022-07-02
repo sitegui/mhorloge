@@ -1,10 +1,7 @@
-use std::convert::TryInto;
-
 use anyhow::Result;
-use serde::{Deserialize, Serialize};
 
 use crate::models::language::Language;
-use crate::models::phrase::Phrase;
+use crate::models::phrase_book::PhraseBook;
 use crate::models::time::Time;
 
 pub mod english;
@@ -12,12 +9,8 @@ pub mod french;
 pub mod german;
 pub mod portuguese;
 
-#[derive(Debug, Clone, Serialize, Deserialize, Copy, Ord, PartialOrd, Eq, PartialEq)]
-#[serde(transparent)]
-pub struct PhraseId(pub u16);
-
-pub fn generate_phrases(languages_spec: &str) -> Result<Vec<Phrase>> {
-    let mut phrases = vec![];
+pub fn generate_phrases(languages_spec: &str) -> Result<PhraseBook> {
+    let mut phrases = PhraseBook::default();
 
     for mut language_tag in languages_spec.split(',') {
         let precision;
@@ -32,9 +25,7 @@ pub fn generate_phrases(languages_spec: &str) -> Result<Vec<Phrase>> {
         let language: Language = language_tag.parse()?;
 
         for time in Time::all_times().step_by(precision as usize) {
-            let next_id = PhraseId(phrases.len().try_into()?);
-            let word_tags = language.spell(time).into_iter().collect();
-            phrases.push(Phrase::new(next_id, language, time, word_tags));
+            phrases.insert_phrase(language, time, &language.spell(time));
         }
     }
 

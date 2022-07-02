@@ -1,46 +1,61 @@
-pub mod token_graph;
+// pub mod token_graph;
 
-use crate::generate_phrases::PhraseId;
-use crate::models::phrase::Phrase;
-use crate::models::word::Word;
-use crate::tokenize::token_graph::TokenGraph;
+use crate::models::merge_dag::{Group, MergeDag, Node};
+use crate::models::phrase_book::PhraseBook;
+use crate::models::text::Text;
+use crate::models::token::{Token, TokenId};
+use crate::models::word::{Word, WordId};
 use itertools::Itertools;
-use serde::{Deserialize, Serialize};
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet};
-use std::fmt;
 use std::path::Path;
-
-#[derive(Debug, Clone, Serialize, Deserialize, Copy, Eq, PartialEq)]
-#[serde(transparent)]
-pub struct TokenId(pub u16);
-
-/// Represents the index of a word in a given phrase
-#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
-pub struct WordId(pub u16);
-
-/// Indexes a word globally (phrase and its word)
-#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
-pub struct PhrasedWordId {
-    phrase: PhraseId,
-    word: WordId,
-}
 
 #[derive(Debug)]
 pub struct RepeatedSequence<'a> {
-    words: Vec<&'a Word>,
-    instances: Vec<Vec<PhrasedWordId>>,
+    texts: Vec<&'a Text>,
+    instances: Vec<&'a [WordId]>,
 }
 
-pub fn tokenize<'a>(phrases: &'a [Phrase], output_svg: Option<&Path>) -> TokenGraph<'a> {
-    let mut graph = TokenGraph::new(phrases);
-    log::info!(
-        "Initial token graph has {} tokens and {} letters",
-        graph.tokens_len(),
-        graph.letters_len()
-    );
+impl Node for &'_ Word {
+    type Id = WordId;
 
-    let sequences = extract_sequences(phrases);
+    fn id(&self) -> Self::Id {
+        self.id
+    }
+}
+
+impl Group<&'_ Word> for Token {
+    fn new(word: &Word) -> Self {
+        Token {
+            id: TokenId(word.id.0),
+            text: word.text.clone(),
+            words: vec![word.id],
+        }
+    }
+
+    fn merge(&mut self, other: Self) {
+        assert_eq!(self.text, other.text);
+        self.words.extend(other.words);
+    }
+}
+
+pub fn tokenize<'a>(book: &'a PhraseBook, output_svg: Option<&Path>) -> MergeDag<&'a Word, Token> {
+    let mut words = vec![];
+    let mut edges = vec![];
+    for phrase in book.phrases() {
+        for &word_id in &phrase.words {
+            words.push(&book[word_id]);
+        }
+
+        for (&before, &after) in phrase.words.iter().tuple_windows::<(_, _)>() {
+            edges.push((before, after));
+        }
+    }
+
+    let mut graph = MergeDag::new(words, &edges);
+    log::info!("Initial token graph has {} words", graph.nodes_len(),);
+
+    let sequences = extract_sequences(book);
     log::info!("Will try to merge {} sequences", sequences.len());
     for sequence in &sequences {
         merge_sequence(&mut graph, sequence);
@@ -58,19 +73,21 @@ pub fn tokenize<'a>(phrases: &'a [Phrase], output_svg: Option<&Path>) -> TokenGr
 /// Extract all sequences of one or more words that repeat at least twice in the phrases.
 /// The sequences are sorted by descending word length first and then total number of letters in all
 /// instances.
-fn extract_sequences(phrases: &[Phrase]) -> Vec<RepeatedSequence> {
-    let max_words_per_phrase = phrases
+fn extract_sequences(book: &PhraseBook) -> Vec<RepeatedSequence> {
+    let max_words_per_phrase = book
+        .phrases()
         .iter()
-        .map(|phrase| phrase.words().len())
+        .map(|phrase| phrase.words.len())
         .max()
         .unwrap();
 
     (1..=max_words_per_phrase)
-        .flat_map(|length| extract_sequences_with_length(phrases, length))
+        .flat_map(|length| extract_sequences_with_length(book, length))
         .sorted_by_key(|sequence| {
-            let letters_per_instance: usize = sequence.words.iter().map(|tag| tag.len()).sum();
+            let letters_per_instance: usize =
+                sequence.texts.iter().map(|text| text.letters().len()).sum();
             let total_letters = letters_per_instance * sequence.instances.len();
-            Reverse((sequence.words.len(), total_letters))
+            Reverse((sequence.texts.len(), total_letters))
         })
         .collect_vec()
 }
@@ -78,41 +95,36 @@ fn extract_sequences(phrases: &[Phrase]) -> Vec<RepeatedSequence> {
 /// Extract sequences of `length` words from all phrases and collect all those that repeat more than
 /// once. For each sequence, it will regroup all the word locations that compose each instance of
 /// the repeated sequence.
-fn extract_sequences_with_length(phrases: &[Phrase], length: usize) -> Vec<RepeatedSequence> {
+fn extract_sequences_with_length(book: &PhraseBook, length: usize) -> Vec<RepeatedSequence> {
     // Collect all sequences
     let mut sequences: BTreeMap<_, Vec<_>> = BTreeMap::new();
-    for phrase in phrases {
-        let max_end = phrase.words().len().saturating_sub(length - 1);
-        for start_index in 0..max_end {
-            let end_index = start_index + length;
-            let word_tags = phrase.words()[start_index..end_index].iter().collect_vec();
-            let locations = (start_index..end_index)
-                .map(|index| PhrasedWordId {
-                    phrase: phrase.id(),
-                    word: WordId(index as u16),
-                })
+    for phrase in book.phrases() {
+        for words in phrase.words.windows(length) {
+            let texts = words
+                .iter()
+                .map(|&word_id| &book[word_id].text)
                 .collect_vec();
-            sequences.entry(word_tags).or_default().push(locations);
+            sequences.entry(texts).or_default().push(words);
         }
     }
 
     // Select the sequences of interest
     sequences
         .into_iter()
-        .filter_map(|(words, instances)| {
+        .filter_map(|(texts, instances)| {
             if instances.len() == 1 {
                 None
             } else {
-                Some(RepeatedSequence { words, instances })
+                Some(RepeatedSequence { texts, instances })
             }
         })
         .collect_vec()
 }
 
-fn merge_sequence(graph: &mut TokenGraph, sequence: &RepeatedSequence) {
-    log::debug!("Will merge sequence: {}", sequence.words.iter().format(" "));
+fn merge_sequence(graph: &mut MergeDag<&Word, Token>, sequence: &RepeatedSequence) {
+    log::debug!("Will merge sequence: {}", sequence.texts.iter().format(" "));
 
-    for i in 0..sequence.words.len() {
+    for i in 0..sequence.texts.len() {
         let locations = sequence.instances.iter().map(|loc| loc[i]).collect_vec();
         merge_locations(graph, &locations);
     }
@@ -123,41 +135,40 @@ fn merge_sequence(graph: &mut TokenGraph, sequence: &RepeatedSequence) {
 /// its own. The following locations will try to merge with the first group. When not possible, it
 /// will try with the second, and so on until no group accepts it. In this case, a new group will
 /// created again.
-fn merge_locations(graph: &mut TokenGraph, locations: &[PhrasedWordId]) {
+fn merge_locations(graph: &mut MergeDag<&Word, Token>, words: &[WordId]) {
     let mut group_roots = Vec::new();
-    let mut visited_tokens = BTreeSet::new();
-    let mut num_merges = 0;
 
-    for &location in locations {
-        let token = graph.find_token(location);
-        if !visited_tokens.insert(token) {
-            continue;
-        }
+    let unique_tokens_before: BTreeSet<_> = words
+        .iter()
+        .map(|&word_id| graph.group(word_id).0)
+        .collect();
 
+    if unique_tokens_before.len() < 2 {
+        return;
+    }
+
+    for &word in words {
         let mut merged = false;
         for &root in &group_roots {
-            if graph.merge_tokens(root, token).is_ok() {
+            if graph.merge_groups(root, word).is_ok() {
                 merged = true;
-                num_merges += 1;
                 break;
             }
         }
         if !merged {
-            group_roots.push(token);
+            group_roots.push(word);
         }
     }
 
-    log::debug!(
-        "Merged {} locations, {} unique tokens: {} merges into {} groups",
-        locations.len(),
-        visited_tokens.len(),
-        num_merges,
-        group_roots.len(),
-    );
-}
+    let unique_tokens_after: BTreeSet<_> = words
+        .iter()
+        .map(|&word_id| graph.group(word_id).0)
+        .collect();
 
-impl fmt::Display for PhrasedWordId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}:{}", self.phrase.0, self.word.0)
-    }
+    log::debug!(
+        "Merged {} words, from {} tokens into {} tokens",
+        words.len(),
+        unique_tokens_before.len(),
+        unique_tokens_after.len(),
+    );
 }

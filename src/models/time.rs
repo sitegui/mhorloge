@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt;
 
+/// Represent an instant the day, from 00:00 to 23:59
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 pub struct Time {
     hours: u8,

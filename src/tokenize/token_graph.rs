@@ -1,6 +1,5 @@
 use crate::models::phrase::Phrase;
 use crate::models::word::Word;
-use crate::tokenize::{PhrasedWordId, WordId};
 use anyhow::{ensure, Result};
 use itertools::Itertools;
 use petgraph::algo;
@@ -160,7 +159,7 @@ impl<'a> TokenGraph<'a> {
     }
 
     pub fn find_token(&self, location: PhrasedWordId) -> TokenSpecId {
-        *self.word_locations.get(&location).unwrap()
+        self.word_locations[&location]
     }
 
     pub fn graph(&self) -> &InnerGraph {

@@ -1,10 +1,8 @@
 use crate::models::time::Time;
 
 use crate::generate_phrases::{english, french, german, portuguese};
-use crate::models::word::Word;
 use anyhow::{anyhow, Error};
 use serde::{Deserialize, Serialize};
-use std::convert::TryFrom;
 use std::str::FromStr;
 
 /// Represents a possible language, that can spell out any valid time
@@ -31,16 +29,12 @@ impl FromStr for Language {
 }
 
 impl Language {
-    pub fn spell(self, time: Time) -> Vec<Word> {
-        let text = match self {
+    pub fn spell(self, time: Time) -> String {
+        match self {
             Language::English => english::spell(time),
             Language::French => french::spell(time),
             Language::Portuguese => portuguese::spell(time),
             Language::German => german::spell(time),
-        };
-
-        text.split(' ')
-            .map(|word| Word::try_from(word).unwrap())
-            .collect()
+        }
     }
 }

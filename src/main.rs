@@ -6,7 +6,7 @@ use anyhow::Result;
 use structopt::StructOpt;
 
 mod arrange;
-mod build_grid;
+// mod build_grid;
 mod generate_phrases;
 mod models;
 mod tokenize;
@@ -46,18 +46,16 @@ fn main() -> Result<()> {
     log::info!("Starting");
 
     let options = Opt::from_args();
-    let phrases = generate_phrases::generate_phrases(&options.languages)?;
-    log::info!("Generated {} phrases", phrases.len());
+    let phrase_book = generate_phrases::generate_phrases(&options.languages)?;
+    log::info!("Generated {} phrases", phrase_book.phrases().len());
 
-    let token_graph = tokenize::tokenize(&phrases, options.output_svg.as_deref());
+    let token_graph = tokenize::tokenize(&phrase_book, options.output_svg.as_deref());
     log::info!(
-        "Formed token graph with {} tokens and {} letters",
-        token_graph.tokens_len(),
-        token_graph.letters_len()
+        "Formed token graph with {} tokens",
+        token_graph.groups_len(),
     );
-    log::debug!("{}", token_graph);
 
-    build_grid::build_grid(&token_graph);
+    // build_grid::build_grid(&token_graph);
 
     log::info!("Done");
     Ok(())

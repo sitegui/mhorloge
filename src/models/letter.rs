@@ -1,6 +1,7 @@
 use anyhow::Error;
 use std::convert::TryFrom;
 use std::fmt;
+use std::fmt::Write;
 
 /// Represents a letter than can be put in a word grid
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
@@ -31,6 +32,39 @@ pub enum Letter {
     X,
     Y,
     Z,
+}
+
+impl Letter {
+    pub fn as_char(self) -> char {
+        match self {
+            Letter::A => 'A',
+            Letter::B => 'B',
+            Letter::C => 'C',
+            Letter::D => 'D',
+            Letter::E => 'E',
+            Letter::F => 'F',
+            Letter::G => 'G',
+            Letter::H => 'H',
+            Letter::I => 'I',
+            Letter::J => 'J',
+            Letter::K => 'K',
+            Letter::L => 'L',
+            Letter::M => 'M',
+            Letter::N => 'N',
+            Letter::O => 'O',
+            Letter::P => 'P',
+            Letter::Q => 'Q',
+            Letter::R => 'R',
+            Letter::S => 'S',
+            Letter::T => 'T',
+            Letter::U => 'U',
+            Letter::V => 'V',
+            Letter::W => 'W',
+            Letter::X => 'X',
+            Letter::Y => 'Y',
+            Letter::Z => 'Z',
+        }
+    }
 }
 
 impl TryFrom<char> for Letter {
@@ -74,37 +108,6 @@ impl TryFrom<char> for Letter {
 
 impl fmt::Display for Letter {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "{}",
-            match *self {
-                Letter::A => 'A',
-                Letter::B => 'B',
-                Letter::C => 'C',
-                Letter::D => 'D',
-                Letter::E => 'E',
-                Letter::F => 'F',
-                Letter::G => 'G',
-                Letter::H => 'H',
-                Letter::I => 'I',
-                Letter::J => 'J',
-                Letter::K => 'K',
-                Letter::L => 'L',
-                Letter::M => 'M',
-                Letter::N => 'N',
-                Letter::O => 'O',
-                Letter::P => 'P',
-                Letter::Q => 'Q',
-                Letter::R => 'R',
-                Letter::S => 'S',
-                Letter::T => 'T',
-                Letter::U => 'U',
-                Letter::V => 'V',
-                Letter::W => 'W',
-                Letter::X => 'X',
-                Letter::Y => 'Y',
-                Letter::Z => 'Z',
-            }
-        )
+        f.write_char(self.as_char())
     }
 }

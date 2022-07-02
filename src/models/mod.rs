@@ -1,3 +1,5 @@
+pub mod grid;
+pub mod grid_bag;
 pub mod language;
 pub mod letter;
 pub mod merge_dag;
@@ -6,5 +8,5 @@ pub mod phrase_book;
 pub mod text;
 pub mod time;
 pub mod token;
+pub mod token_relations;
 pub mod word;
-// pub mod word_grid;

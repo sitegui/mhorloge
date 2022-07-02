@@ -16,29 +16,6 @@ pub struct RepeatedSequence<'a> {
     instances: Vec<&'a [WordId]>,
 }
 
-impl Node for &'_ Word {
-    type Id = WordId;
-
-    fn id(&self) -> Self::Id {
-        self.id
-    }
-}
-
-impl Group<&'_ Word> for Token {
-    fn new(word: &Word) -> Self {
-        Token {
-            id: TokenId(word.id.0),
-            text: word.text.clone(),
-            words: vec![word.id],
-        }
-    }
-
-    fn merge(&mut self, other: Self) {
-        assert_eq!(self.text, other.text);
-        self.words.extend(other.words);
-    }
-}
-
 pub fn tokenize<'a>(book: &'a PhraseBook, output_svg: Option<&Path>) -> MergeDag<&'a Word, Token> {
     let mut words = vec![];
     let mut edges = vec![];

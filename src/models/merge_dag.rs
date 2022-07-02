@@ -1,14 +1,14 @@
 use anyhow::{ensure, Result};
 use petgraph::algo::DfsSpace;
 use petgraph::dot::{Config, Dot};
-use petgraph::prelude::{NodeIndex, StableDiGraph};
-use petgraph::stable_graph::NodeReferences;
-use petgraph::visit::IntoNodeReferences;
+use petgraph::prelude::{EdgeRef, NodeIndex, StableDiGraph};
+use petgraph::visit::{Dfs, IntoEdgeReferences, IntoNodeReferences, Walker};
 use petgraph::{algo, Direction};
 use std::collections::BTreeMap;
 use std::fmt::Display;
 use std::fs;
 use std::io::Write;
+use std::ops::Index;
 use std::path::Path;
 use std::process::{Command, Stdio};
 
@@ -103,12 +103,20 @@ impl<N: Node, G: Group<N>> MergeDag<N, G> {
         (group, &self.merged_graph[group])
     }
 
-    pub fn groups(&self) -> NodeReferences<G, u16> {
+    pub fn groups(&self) -> impl Iterator<Item = (NodeIndex<u16>, &G)> {
         self.merged_graph.node_references()
     }
 
     pub fn groups_len(&self) -> usize {
         self.merged_graph.node_count()
+    }
+
+    pub fn group_edges(&self) -> impl Iterator<Item = (&G, &G)> {
+        self.merged_graph.edge_references().map(move |edge| {
+            let source = &self.merged_graph[edge.source()];
+            let target = &self.merged_graph[edge.target()];
+            (source, target)
+        })
     }
 
     pub fn dot(&self) -> String
@@ -153,6 +161,10 @@ impl<N: Node, G: Group<N>> MergeDag<N, G> {
         Ok(())
     }
 
+    pub fn reachable(&self, start: NodeIndex<u16>) -> impl Iterator<Item = NodeIndex<u16>> + '_ {
+        Dfs::new(&self.merged_graph, start).iter(&self.merged_graph)
+    }
+
     /// Check if two tokens can be merged without creating a cycle
     fn can_merge_groups(&self, a: NodeIndex<u16>, b: NodeIndex<u16>) -> bool {
         if a == b {
@@ -163,5 +175,13 @@ impl<N: Node, G: Group<N>> MergeDag<N, G> {
             !algo::has_path_connecting(&self.merged_graph, a, b, Some(space))
                 && !algo::has_path_connecting(&self.merged_graph, b, a, Some(space))
         }
+    }
+}
+
+impl<N: Node, G> Index<NodeIndex<u16>> for MergeDag<N, G> {
+    type Output = G;
+
+    fn index(&self, index: NodeIndex<u16>) -> &Self::Output {
+        &self.merged_graph[index]
     }
 }

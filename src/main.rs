@@ -6,7 +6,7 @@ use anyhow::Result;
 use structopt::StructOpt;
 
 mod arrange;
-// mod build_grid;
+mod build_grid;
 mod generate_phrases;
 mod models;
 mod tokenize;
@@ -55,7 +55,7 @@ fn main() -> Result<()> {
         token_graph.groups_len(),
     );
 
-    // build_grid::build_grid(&token_graph);
+    build_grid::build_grid(&token_graph);
 
     log::info!("Done");
     Ok(())

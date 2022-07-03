@@ -79,13 +79,17 @@ impl<NodeId: Copy + Ord, Group> MergeDag<NodeId, Group> {
             .neighbors_directed(group_b, Direction::Incoming)
             .detach();
         while let Some(neighbor) = neighbors.next_node(graph) {
-            graph.update_edge(neighbor, group_a, ());
+            if neighbor != group_a {
+                graph.update_edge(neighbor, group_a, ());
+            }
         }
         let mut neighbors = graph
             .neighbors_directed(group_b, Direction::Outgoing)
             .detach();
         while let Some(neighbor) = neighbors.next_node(graph) {
-            graph.update_edge(group_a, neighbor, ());
+            if neighbor != group_a {
+                graph.update_edge(group_a, neighbor, ());
+            }
         }
 
         // Merge groups

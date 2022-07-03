@@ -1,19 +1,19 @@
 use crate::models::grid::{Direction, Grid};
-use crate::models::token::{Token, TokenId};
+use crate::models::token::Token;
 use crate::models::token_relations::TokenRelations;
 use itertools::Itertools;
 use std::fmt;
 
 #[derive(Debug, Clone)]
 pub struct GridBag {
-    tokens: Vec<TokenId>,
+    tokens: Vec<Token>,
     grids: Vec<Grid>,
 }
 
 impl GridBag {
     pub fn new(token: &Token) -> Self {
         GridBag {
-            tokens: vec![token.id],
+            tokens: vec![token.clone()],
             grids: vec![
                 Grid::new(token, Direction::Horizontal),
                 Grid::new(token, Direction::Vertical),
@@ -22,18 +22,45 @@ impl GridBag {
         }
     }
 
-    pub fn with_inserted(&self, relations: &TokenRelations, token: &Token) -> Option<Self> {
-        let new_grids = self
+    pub fn with_inserted(
+        &self,
+        relations: &TokenRelations,
+        token: &Token,
+        trim_size: usize,
+    ) -> Option<Self> {
+        let mut new_grids = self
             .grids
             .iter()
             .flat_map(|grid| grid.enumerate_insertions(relations, token))
             .collect_vec();
 
+        if new_grids.len() > trim_size {
+            // Take the grid with the least amount of letters, because they're usually more
+            // interesting
+            let weights = new_grids
+                .iter()
+                .map(|grid| grid.weight())
+                .sorted()
+                .collect_vec();
+            let cutoff = weights[trim_size - 1];
+
+            let initial_size = new_grids.len();
+            new_grids.retain(|grid| grid.weight() <= cutoff);
+            let final_size = new_grids.len();
+
+            log::debug!(
+                "Trimmed grid bag {} -> {} (weight <= {:?})",
+                initial_size,
+                final_size,
+                cutoff
+            );
+        }
+
         if new_grids.is_empty() {
             None
         } else {
             let mut new_tokens = self.tokens.clone();
-            new_tokens.push(token.id);
+            new_tokens.push(token.clone());
             Some(GridBag {
                 tokens: new_tokens,
                 grids: new_grids,
@@ -41,12 +68,16 @@ impl GridBag {
         }
     }
 
-    pub fn tokens(&self) -> &[TokenId] {
+    pub fn tokens(&self) -> &[Token] {
         &self.tokens
     }
 
     pub fn grids(&self) -> &[Grid] {
         &self.grids
+    }
+
+    pub fn best_grid(&self) -> &Grid {
+        self.grids.iter().min_by_key(|grid| grid.weight()).unwrap()
     }
 }
 

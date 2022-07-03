@@ -36,6 +36,9 @@ struct Opt {
     /// You can install it with the `graphviz` package.
     #[structopt(long)]
     output_svg: Option<PathBuf>,
+    /// TODO
+    #[structopt(long, default_value = "1000")]
+    trim_grid_bag_size: usize,
 }
 
 fn main() -> Result<()> {
@@ -55,7 +58,7 @@ fn main() -> Result<()> {
         token_graph.groups_len(),
     );
 
-    build_grid::build_grid(&token_graph);
+    build_grid::build_grid(&token_graph, options.trim_grid_bag_size);
 
     log::info!("Done");
     Ok(())

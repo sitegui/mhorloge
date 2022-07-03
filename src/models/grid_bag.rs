@@ -12,13 +12,18 @@ pub struct GridBag {
 
 impl GridBag {
     pub fn new(token: &Token) -> Self {
-        GridBag {
-            tokens: vec![token.clone()],
-            grids: vec![
+        let grids = if token.text.letters().len() == 1 {
+            vec![Grid::new(token, Direction::Horizontal)]
+        } else {
+            vec![
                 Grid::new(token, Direction::Horizontal),
                 Grid::new(token, Direction::Vertical),
                 Grid::new(token, Direction::Diagonal),
-            ],
+            ]
+        };
+        GridBag {
+            tokens: vec![token.clone()],
+            grids,
         }
     }
 
@@ -83,9 +88,10 @@ impl GridBag {
 
 impl fmt::Display for GridBag {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for (i, grid) in self.grids.iter().enumerate() {
-            writeln!(f, "Grid {}/{}:\n{}", i, self.grids.len(), grid)?;
-        }
-        Ok(())
+        // for (i, grid) in self.grids.iter().enumerate() {
+        //     writeln!(f, "Grid {}/{}:\n{}", i, self.grids.len(), grid)?;
+        // }
+        // Ok(())
+        write!(f, "{}", self.tokens.iter().format("\n"))
     }
 }

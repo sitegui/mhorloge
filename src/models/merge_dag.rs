@@ -203,34 +203,29 @@ impl<NodeId: Copy + Ord, Group> MergeDag<NodeId, Group> {
 
     /// Return all groups with their depths. `0` means that this group has no "parent".
     pub fn group_depths(&self) -> Vec<(GroupId, usize)> {
-        let mut depths: BTreeMap<NodeIndex<u16>, usize> = BTreeMap::new();
+        let mut result = vec![];
 
-        let roots = self
-            .merged_graph
-            .externals(Direction::Incoming)
-            .collect_vec();
-        for &root in &roots {
-            depths.insert(root, 0);
+        // Create a new graph with the same topology
+        let mut simple_graph = self.merged_graph.map(|_, _| (), |_, _| ());
+        let mut depth = 0;
+
+        // Detect and remove source nodes
+        loop {
+            let roots = simple_graph.externals(Direction::Incoming).collect_vec();
+
+            for &root in &roots {
+                result.push((GroupId(root), depth));
+                simple_graph.remove_node(root);
+            }
+
+            if roots.is_empty() {
+                break;
+            }
+
+            depth += 1;
         }
 
-        visit::depth_first_search(
-            &self.merged_graph,
-            roots,
-            |event: DfsEvent<_>| match event {
-                DfsEvent::TreeEdge(source, target) | DfsEvent::CrossForwardEdge(source, target) => {
-                    let source_depth = depths[&source];
-                    let target_depth = depths.entry(target).or_insert(usize::MAX);
-                    *target_depth = (*target_depth).min(source_depth + 1);
-                }
-                DfsEvent::Discover(_, _) | DfsEvent::Finish(_, _) => {}
-                DfsEvent::BackEdge(_, _) => unreachable!(),
-            },
-        );
-
-        depths
-            .into_iter()
-            .map(|(id, depth)| (GroupId(id), depth))
-            .collect()
+        result
     }
 }
 

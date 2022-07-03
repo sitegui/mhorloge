@@ -24,6 +24,9 @@ pub fn generate_phrases(languages_spec: &str) -> Result<PhraseBook> {
 
         let language: Language = language_tag.parse()?;
 
+        let gui = Time::new(21, 55);
+        println!("{}", language.spell(gui));
+
         for time in Time::all_times().step_by(precision as usize) {
             phrases.insert_phrase(language, time, &language.spell(time));
         }

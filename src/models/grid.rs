@@ -62,7 +62,7 @@ impl Grid {
 
         for token in &self.tokens {
             let start = token.base;
-            let end = token.base + token.direction.as_xy() * token.size;
+            let end = token.base + token.direction.as_xy() * (token.size - 1);
 
             min_x = min_x.min(start.x);
             min_y = min_y.min(start.y);
@@ -102,9 +102,13 @@ impl Grid {
                         insertions.insert((base, direction));
                     };
 
-                    consider_direction(Direction::Horizontal);
-                    consider_direction(Direction::Vertical);
-                    consider_direction(Direction::Diagonal);
+                    if token.text.letters().len() == 1 {
+                        consider_direction(Direction::Horizontal);
+                    } else {
+                        consider_direction(Direction::Horizontal);
+                        consider_direction(Direction::Vertical);
+                        consider_direction(Direction::Diagonal);
+                    }
                 }
             }
         }
@@ -199,7 +203,7 @@ impl Grid {
 
         // If they share the same direction, then `b` must be readable as a separate word.
         // That is, `b` must not start in the middle of `a` or immediately after it.
-        let end_a = base_a + direction_a.as_xy() * size_a;
+        let end_a = base_a + direction_a.as_xy() * (size_a - 1);
         let is_readable_at_the_same_time = match (direction_a, direction_b) {
             (Direction::Horizontal, Direction::Horizontal) => {
                 base_a.y != base_b.y || base_b.x > end_a.x + 1
@@ -292,10 +296,6 @@ impl Mul<i32> for XY {
 
 impl fmt::Display for Grid {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        if self.letter_by_pos.is_empty() {
-            return Ok(());
-        }
-
         let (x_limits, y_limits) = self.space();
 
         for y in y_limits {

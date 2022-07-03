@@ -24,12 +24,23 @@ impl TokenRelations {
         let mut relations = vec![];
         relations.resize_with(length, || vec![TokenRelation::None; length]);
 
-        for (a_index, _) in graph.groups() {
-            let a_id = graph[a_index].id;
-            for b_index in graph.reachable_groups(a_index) {
-                let b_id = graph[b_index].id;
-                relations[a_id.0 as usize][b_id.0 as usize] = TokenRelation::IsBefore;
-                relations[b_id.0 as usize][a_id.0 as usize] = TokenRelation::IsAfter;
+        for (index_a, _) in graph.groups() {
+            let token_a = &graph[index_a];
+            for index_b in graph.reachable_groups(index_a) {
+                if index_a == index_b {
+                    continue;
+                }
+
+                let token_b = &graph[index_b];
+                log::debug!(
+                    "{}({}) is before {}({})",
+                    token_a,
+                    token_a.id.0,
+                    token_b,
+                    token_b.id.0
+                );
+                relations[token_a.id.0 as usize][token_b.id.0 as usize] = TokenRelation::IsBefore;
+                relations[token_b.id.0 as usize][token_a.id.0 as usize] = TokenRelation::IsAfter;
             }
         }
 

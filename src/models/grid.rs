@@ -31,7 +31,8 @@ pub enum Direction {
 struct PositionedToken {
     token: TokenId,
     base: XY,
-    middle: XY,
+    direction: Direction,
+    size: i32,
 }
 
 impl Grid {
@@ -92,12 +93,25 @@ impl Grid {
         base: XY,
         direction: Direction,
     ) -> Option<Self> {
+        let size = token.text.letters().len() as i32;
+
         // Check relative positioning constraints
-        let middle = base + direction.as_xy() * ((token.text.letters().len() + 1) / 2) as i32;
         for existing_token in &self.tokens {
             let is_valid = match relations.get(token.id, existing_token.token) {
-                TokenRelation::IsBefore => middle < existing_token.base,
-                TokenRelation::IsAfter => base > existing_token.middle,
+                TokenRelation::IsBefore => Self::is_token_after(
+                    base,
+                    size,
+                    direction,
+                    existing_token.base,
+                    existing_token.direction,
+                ),
+                TokenRelation::IsAfter => Self::is_token_after(
+                    existing_token.base,
+                    existing_token.size,
+                    existing_token.direction,
+                    base,
+                    direction,
+                ),
                 TokenRelation::None => true,
             };
 
@@ -122,8 +136,41 @@ impl Grid {
         Some(inserted)
     }
 
+    /// Returns whether a token positioned like `b` is considered "after" another positioned like
+    /// `a`
+    fn is_token_after(
+        base_a: XY,
+        size_a: i32,
+        direction_a: Direction,
+        base_b: XY,
+        direction_b: Direction,
+    ) -> bool {
+        // `b` must start at or after the middle of `a`
+        let middle_a = base_a + direction_a.as_xy() * (size_a / 2);
+        let is_readable_as_after = base_b >= middle_a;
+
+        // If they share the same direction, then `b` must be readable as a separate word.
+        // That is, `b` must not start in the middle of `a` or immediately after it.
+        let end_a = base_a + direction_a.as_xy() * size_a;
+        let is_readable_at_the_same_time = match (direction_a, direction_b) {
+            (Direction::Horizontal, Direction::Horizontal) => {
+                base_a.y != base_b.y || base_b.x > end_a.x + 1
+            }
+            (Direction::Vertical, Direction::Vertical) => {
+                base_a.x != base_b.x || base_b.y > end_a.y + 1
+            }
+            (Direction::Diagonal, Direction::Diagonal) => {
+                let line_a = base_a.x - base_a.y;
+                let line_b = base_b.x - base_b.y;
+                line_a != line_b || base_b.x > end_a.x + 1
+            }
+            _ => true,
+        };
+
+        is_readable_as_after && is_readable_at_the_same_time
+    }
+
     fn insert(&mut self, token: &Token, base: XY, direction: Direction) {
-        let middle = base + direction.as_xy() * ((token.text.letters().len() + 1) / 2) as i32;
         let mut pos = base;
         for &letter in token.text.letters() {
             self.letter_by_pos.insert(pos, letter);
@@ -133,7 +180,8 @@ impl Grid {
         self.tokens.push(PositionedToken {
             token: token.id,
             base,
-            middle,
+            direction,
+            size: token.text.letters().len() as i32,
         });
     }
 }

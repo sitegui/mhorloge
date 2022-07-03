@@ -102,5 +102,9 @@ pub fn build_grid(token_graph: &MergeDag<WordId, Token>) -> MergeDag<TokenId, Gr
         }
     }
 
+    for (_, bag) in graph.groups() {
+        println!("{}", bag.grids()[0]);
+    }
+
     todo!()
 }

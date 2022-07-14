@@ -1,37 +1,17 @@
 use crate::models::letter::Letter;
-use crate::models::token::{Token, TokenId};
+use crate::models::positioned_token::{Direction, PositionedToken, XY};
+use crate::models::token::Token;
 use crate::models::token_relations::{TokenRelation, TokenRelations};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 use std::fmt::Write;
-use std::ops::{Add, AddAssign, Mul, RangeInclusive, Sub};
+use std::ops::RangeInclusive;
 
 #[derive(Debug, Clone)]
 pub struct Grid {
     letter_by_pos: BTreeMap<XY, Letter>,
     pos_by_letter: BTreeMap<Letter, Vec<XY>>,
     tokens: Vec<PositionedToken>,
-}
-
-#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
-pub struct XY {
-    pub y: i32,
-    pub x: i32,
-}
-
-#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
-pub enum Direction {
-    Horizontal,
-    Vertical,
-    Diagonal,
-}
-
-#[derive(Debug, Clone, Copy)]
-struct PositionedToken {
-    token: TokenId,
-    base: XY,
-    direction: Direction,
-    size: i32,
 }
 
 impl Grid {
@@ -61,8 +41,8 @@ impl Grid {
         let mut max_y = i32::MIN;
 
         for token in &self.tokens {
-            let start = token.base;
-            let end = token.base + token.direction.as_xy() * (token.size - 1);
+            let start = token.start();
+            let end = token.end();
 
             min_x = min_x.min(start.x);
             min_y = min_y.min(start.y);
@@ -100,8 +80,8 @@ impl Grid {
             if let Some(pivots) = self.pos_by_letter.get(letter) {
                 for &pivot in pivots {
                     let mut consider_direction = |direction: Direction| {
-                        let base = pivot - direction.as_xy() * n;
-                        insertions.insert((base, direction));
+                        let start = pivot - direction.as_xy() * n;
+                        insertions.insert((start, direction));
                     };
 
                     if token.text.letters().len() == 1 {
@@ -118,56 +98,48 @@ impl Grid {
         // Collect the valid insertions
         insertions
             .into_iter()
-            .filter_map(|(base, direction)| self.try_inserted(relations, token, base, direction))
+            .filter_map(|(start, direction)| self.try_inserted(relations, token, start, direction))
             .collect()
     }
 
-    // Add a grid to this one, starting it's top left corner at the given position
-    pub fn add_grid(&mut self, other: &Grid, base: XY) {
+    /// Add a grid to this one, starting it's top left corner at the given position
+    pub fn add_grid(&mut self, other: &Grid, start: XY) {
         let (other_x, other_y) = other.space();
         let other_top_left = XY::new(*other_x.start(), *other_y.start());
 
         for (&other_pos, &letter) in &other.letter_by_pos {
-            self.set_letter(letter, other_pos - other_top_left + base);
+            self.set_letter(letter, other_pos - other_top_left + start);
         }
 
-        self.tokens
-            .extend(other.tokens.iter().map(|token| PositionedToken {
-                token: token.token,
-                base: token.base - other_top_left + base,
-                direction: token.direction,
-                size: token.size,
-            }));
+        self.tokens.extend(
+            other
+                .tokens
+                .iter()
+                .map(|&token| token - other_top_left + start),
+        );
+    }
+
+    pub fn tokens(&self) -> &[PositionedToken] {
+        &self.tokens
+    }
+    
+    pub fn get(&self, at: XY) -> Option<Letter> {
+        self.letter_by_pos.get(&at).copied()
     }
 
     fn try_inserted(
         &self,
         relations: &TokenRelations,
         token: &Token,
-        base: XY,
+        start: XY,
         direction: Direction,
     ) -> Option<Self> {
-        let size = token.text.letters().len() as i32;
-
         // Check relative positioning constraints
-        for existing_token in &self.tokens {
-            let is_valid = match relations.get(token.id, existing_token.token) {
-                TokenRelation::IsBefore => Self::is_token_after(
-                    base,
-                    size,
-                    direction,
-                    existing_token.base,
-                    existing_token.size,
-                    existing_token.direction,
-                ),
-                TokenRelation::IsAfter => Self::is_token_after(
-                    existing_token.base,
-                    existing_token.size,
-                    existing_token.direction,
-                    base,
-                    size,
-                    direction,
-                ),
+        for &existing_token in &self.tokens {
+            let inserting_token = PositionedToken::new(token, start, direction);
+            let is_valid = match relations.get(token.id, existing_token.token_id()) {
+                TokenRelation::IsBefore => Self::is_token_after(inserting_token, existing_token),
+                TokenRelation::IsAfter => Self::is_token_after(existing_token, inserting_token),
                 TokenRelation::None => true,
             };
 
@@ -177,7 +149,7 @@ impl Grid {
         }
 
         // Check letters
-        let mut pos = base;
+        let mut pos = start;
         for &letter in token.text.letters() {
             let prev_letter = self.letter_by_pos.get(&pos).copied();
             if prev_letter != None && prev_letter != Some(letter) {
@@ -188,39 +160,32 @@ impl Grid {
 
         // Insert
         let mut inserted = self.clone();
-        inserted.insert(token, base, direction);
+        inserted.insert(token, start, direction);
         Some(inserted)
     }
 
     /// Returns whether a token positioned like `b` is considered "after" another positioned like
     /// `a`
-    fn is_token_after(
-        base_a: XY,
-        size_a: i32,
-        direction_a: Direction,
-        base_b: XY,
-        size_b: i32,
-        direction_b: Direction,
-    ) -> bool {
+    fn is_token_after(a: PositionedToken, b: PositionedToken) -> bool {
         // `b` must centered after the middle of `a`
-        let middle_a = base_a + direction_a.as_xy() * (size_a / 2);
-        let middle_b = base_b + direction_b.as_xy() * (size_b / 2);
+        let middle_a = a.middle();
+        let middle_b = b.middle();
         let is_readable_as_after = middle_b > middle_a;
 
         // If they share the same direction, then `b` must be readable as a separate word.
         // That is, `b` must not start in the middle of `a` or immediately after it.
-        let end_a = base_a + direction_a.as_xy() * (size_a - 1);
-        let is_readable_at_the_same_time = match (direction_a, direction_b) {
+        let end_a = a.end();
+        let is_readable_at_the_same_time = match (a.direction(), b.direction()) {
             (Direction::Horizontal, Direction::Horizontal) => {
-                base_a.y != base_b.y || base_b.x > end_a.x + 1
+                a.start().y != b.start().y || b.start().x > end_a.x + 1
             }
             (Direction::Vertical, Direction::Vertical) => {
-                base_a.x != base_b.x || base_b.y > end_a.y + 1
+                a.start().x != b.start().x || b.start().y > end_a.y + 1
             }
             (Direction::Diagonal, Direction::Diagonal) => {
-                let line_a = base_a.x - base_a.y;
-                let line_b = base_b.x - base_b.y;
-                line_a != line_b || base_b.x > end_a.x + 1
+                let line_a = a.start().x - a.start().y;
+                let line_b = b.start().x - b.start().y;
+                line_a != line_b || b.start().x > end_a.x + 1
             }
             _ => true,
         };
@@ -228,18 +193,14 @@ impl Grid {
         is_readable_as_after && is_readable_at_the_same_time
     }
 
-    fn insert(&mut self, token: &Token, base: XY, direction: Direction) {
-        let mut pos = base;
+    fn insert(&mut self, token: &Token, start: XY, direction: Direction) {
+        let mut pos = start;
         for &letter in token.text.letters() {
             self.set_letter(letter, pos);
             pos += direction.as_xy();
         }
-        self.tokens.push(PositionedToken {
-            token: token.id,
-            base,
-            direction,
-            size: token.text.letters().len() as i32,
-        });
+        self.tokens
+            .push(PositionedToken::new(token, start, direction));
     }
 
     fn set_letter(&mut self, letter: Letter, pos: XY) {
@@ -248,55 +209,6 @@ impl Grid {
         if prev_letter.is_none() {
             self.pos_by_letter.entry(letter).or_default().push(pos);
         }
-    }
-}
-
-impl XY {
-    pub const ORIGIN: XY = XY { x: 0, y: 0 };
-
-    pub fn new(x: i32, y: i32) -> Self {
-        XY { x, y }
-    }
-}
-
-impl Direction {
-    fn as_xy(self) -> XY {
-        match self {
-            Direction::Horizontal => XY::new(1, 0),
-            Direction::Vertical => XY::new(0, 1),
-            Direction::Diagonal => XY::new(1, 1),
-        }
-    }
-}
-
-impl Add for XY {
-    type Output = XY;
-
-    fn add(self, rhs: Self) -> Self::Output {
-        XY::new(self.x + rhs.x, self.y + rhs.y)
-    }
-}
-
-impl Sub for XY {
-    type Output = XY;
-
-    fn sub(self, rhs: Self) -> Self::Output {
-        XY::new(self.x - rhs.x, self.y - rhs.y)
-    }
-}
-
-impl AddAssign for XY {
-    fn add_assign(&mut self, rhs: Self) {
-        self.x += rhs.x;
-        self.y += rhs.y;
-    }
-}
-
-impl Mul<i32> for XY {
-    type Output = XY;
-
-    fn mul(self, rhs: i32) -> Self::Output {
-        XY::new(self.x * rhs, self.y * rhs)
     }
 }
 

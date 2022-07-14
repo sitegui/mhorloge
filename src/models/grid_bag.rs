@@ -1,4 +1,5 @@
-use crate::models::grid::{Direction, Grid};
+use crate::models::grid::Grid;
+use crate::models::positioned_token::Direction;
 use crate::models::token::Token;
 use crate::models::token_relations::TokenRelations;
 use itertools::Itertools;

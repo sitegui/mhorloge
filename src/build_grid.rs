@@ -1,9 +1,10 @@
-use crate::models::grid::XY;
+use crate::models::grid::Grid;
 use crate::models::grid_bag::GridBag;
 use crate::models::merge_dag::MergeDag;
 use crate::models::token::{Token, TokenId};
 use crate::models::token_relations::TokenRelations;
 use crate::models::word::WordId;
+use crate::XY;
 use itertools::Itertools;
 use std::cmp::Reverse;
 
@@ -12,7 +13,7 @@ pub fn build_grid(
     trim_grid_bag_size: usize,
     max_grid_width: i32,
     max_grid_height: i32,
-) -> MergeDag<TokenId, GridBag> {
+) -> Grid {
     let relations = TokenRelations::new(token_graph);
 
     // List in which order the tokens will be merged into the grid bags: start from the "outer"
@@ -43,9 +44,8 @@ pub fn build_grid(
     let mut graph = MergeDag::new(seed_grid_bags, &edges);
 
     // Regroup tokens into grids
-    let mut n = 0;
     for inserting_token in tokens_to_insert {
-        let inserted = insert_token(
+        insert_token(
             trim_grid_bag_size,
             max_grid_width,
             max_grid_height,
@@ -53,11 +53,6 @@ pub fn build_grid(
             &mut graph,
             inserting_token,
         );
-
-        if inserted {
-            graph.svg(format!("data/grid-bag-{}.svg", n)).unwrap();
-            n += 1;
-        }
     }
 
     // Take the best grid from each back, in topological order
@@ -65,27 +60,17 @@ pub fn build_grid(
         .group_depths()
         .into_iter()
         .sorted_by_key(|&(_, depth)| depth)
-        .map(|(group_id, _)| {
-            let bag = &graph[group_id];
-            let best_grid = bag.best_grid();
-
-            println!("Tokens: {}", bag.tokens().iter().format(" "));
-            println!("{}", best_grid);
-
-            best_grid
-        })
+        .map(|(group_id, _)| graph[group_id].best_grid())
         .collect_vec();
 
     // Put all grids together
-    let mut result = best_grids[0].clone();
+    let mut final_grid = best_grids[0].clone();
     for &grid in &best_grids[1..] {
-        let (x, y) = result.space();
-        result.add_grid(grid, XY::new(*x.end() + 2, *y.start()));
+        let (x, y) = final_grid.space();
+        final_grid.add_grid(grid, XY::new(*x.end() + 2, *y.start()));
     }
 
-    println!("{}", result);
-
-    todo!()
+    final_grid
 }
 
 fn insert_token(
@@ -95,14 +80,14 @@ fn insert_token(
     relations: &TokenRelations,
     graph: &mut MergeDag<TokenId, GridBag>,
     inserting_token: &Token,
-) -> bool {
+) {
     let inserting_group = graph.group(inserting_token.id);
     if inserting_group.1.tokens().len() > 1 {
         log::debug!(
             "Skip {} because it is already part of a non-trivial grid",
             inserting_token
         );
-        return false;
+        return;
     }
 
     // Find all possible candidates
@@ -154,8 +139,5 @@ fn insert_token(
         graph.merge_groups(inserting_group.0, target_group, |receiving_bag, _| {
             *receiving_bag = new_bag;
         });
-        true
-    } else {
-        false
     }
 }

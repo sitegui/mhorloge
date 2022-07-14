@@ -157,6 +157,7 @@ impl Grid {
                     size,
                     direction,
                     existing_token.base,
+                    existing_token.size,
                     existing_token.direction,
                 ),
                 TokenRelation::IsAfter => Self::is_token_after(
@@ -164,6 +165,7 @@ impl Grid {
                     existing_token.size,
                     existing_token.direction,
                     base,
+                    size,
                     direction,
                 ),
                 TokenRelation::None => true,
@@ -197,11 +199,13 @@ impl Grid {
         size_a: i32,
         direction_a: Direction,
         base_b: XY,
+        size_b: i32,
         direction_b: Direction,
     ) -> bool {
-        // `b` must start at or after the middle of `a`
+        // `b` must centered after the middle of `a`
         let middle_a = base_a + direction_a.as_xy() * (size_a / 2);
-        let is_readable_as_after = base_b >= middle_a;
+        let middle_b = base_b + direction_b.as_xy() * (size_b / 2);
+        let is_readable_as_after = middle_b > middle_a;
 
         // If they share the same direction, then `b` must be readable as a separate word.
         // That is, `b` must not start in the middle of `a` or immediately after it.

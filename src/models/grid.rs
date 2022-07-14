@@ -73,17 +73,19 @@ impl Grid {
         (min_x..=max_x, min_y..=max_y)
     }
 
-    /// Return the total area of this grid
-    pub fn area(&self) -> i32 {
+    pub fn size(&self) -> (i32, i32) {
         let (x, y) = self.space();
         let width = x.end() - x.start();
         let height = y.end() - y.start();
-        width * height
+        (width, height)
     }
 
     /// A grid with lower weight is deemed more interesting
-    pub fn weight(&self) -> (i32, i32) {
-        (self.num_letters(), self.area())
+    pub fn weight(&self) -> (i32, i32, i32) {
+        let (width, height) = self.size();
+        let square_side = width.max(height);
+        let area = width * height;
+        (self.num_letters(), square_side, area)
     }
 
     /// Return all resulting grids for the valid insertions of the given token

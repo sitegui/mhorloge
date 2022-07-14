@@ -4,10 +4,8 @@ use petgraph::algo::DfsSpace;
 use petgraph::dot::{Config, Dot};
 use petgraph::prelude::{EdgeRef, NodeIndex, StableDiGraph};
 use petgraph::stable_graph::EdgeReference;
-use petgraph::visit::{
-    Dfs, DfsEvent, EdgeFiltered, IntoEdgeReferences, IntoNodeReferences, Walker,
-};
-use petgraph::{algo, visit, Direction};
+use petgraph::visit::{Dfs, EdgeFiltered, IntoEdgeReferences, IntoNodeReferences, Walker};
+use petgraph::{algo, Direction};
 use std::collections::BTreeMap;
 use std::fmt::Display;
 use std::fs;

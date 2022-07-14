@@ -39,6 +39,12 @@ struct Opt {
     /// TODO
     #[structopt(long, default_value = "1000")]
     trim_grid_bag_size: usize,
+    /// TODO
+    #[structopt(long, default_value = "20")]
+    max_grid_width: i32,
+    /// TODO
+    #[structopt(long, default_value = "20")]
+    max_grid_height: i32,
 }
 
 fn main() -> Result<()> {
@@ -58,7 +64,12 @@ fn main() -> Result<()> {
         token_graph.groups_len(),
     );
 
-    build_grid::build_grid(&token_graph, options.trim_grid_bag_size);
+    build_grid::build_grid(
+        &token_graph,
+        options.trim_grid_bag_size,
+        options.max_grid_width,
+        options.max_grid_height,
+    );
 
     log::info!("Done");
     Ok(())

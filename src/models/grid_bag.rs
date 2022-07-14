@@ -32,11 +32,17 @@ impl GridBag {
         relations: &TokenRelations,
         token: &Token,
         trim_size: usize,
+        max_width: i32,
+        max_height: i32,
     ) -> Option<Self> {
         let mut new_grids = self
             .grids
             .iter()
             .flat_map(|grid| grid.enumerate_insertions(relations, token))
+            .filter(|grid| {
+                let (width, height) = grid.size();
+                width <= max_width && height <= max_height
+            })
             .collect_vec();
 
         if new_grids.len() > trim_size {

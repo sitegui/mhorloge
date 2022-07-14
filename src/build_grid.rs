@@ -10,6 +10,8 @@ use std::cmp::Reverse;
 pub fn build_grid(
     token_graph: &MergeDag<WordId, Token>,
     trim_grid_bag_size: usize,
+    max_grid_width: i32,
+    max_grid_height: i32,
 ) -> MergeDag<TokenId, GridBag> {
     let relations = TokenRelations::new(token_graph);
 
@@ -43,7 +45,14 @@ pub fn build_grid(
     // Regroup tokens into grids
     let mut n = 0;
     for inserting_token in tokens_to_insert {
-        let inserted = insert_token(trim_grid_bag_size, &relations, &mut graph, inserting_token);
+        let inserted = insert_token(
+            trim_grid_bag_size,
+            max_grid_width,
+            max_grid_height,
+            &relations,
+            &mut graph,
+            inserting_token,
+        );
 
         if inserted {
             graph.svg(format!("data/grid-bag-{}.svg", n)).unwrap();
@@ -81,6 +90,8 @@ pub fn build_grid(
 
 fn insert_token(
     trim_grid_bag_size: usize,
+    max_grid_width: i32,
+    max_grid_height: i32,
     relations: &TokenRelations,
     graph: &mut MergeDag<TokenId, GridBag>,
     inserting_token: &Token,
@@ -109,11 +120,13 @@ fn insert_token(
                 target_group.1.grids().len()
             );
 
-            if let Some(merged_bag) =
-                target_group
-                    .1
-                    .with_inserted(relations, inserting_token, trim_grid_bag_size)
-            {
+            if let Some(merged_bag) = target_group.1.with_inserted(
+                relations,
+                inserting_token,
+                trim_grid_bag_size,
+                max_grid_width,
+                max_grid_height,
+            ) {
                 candidates.push((target_group.0, merged_bag));
             }
         }

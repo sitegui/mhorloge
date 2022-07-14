@@ -75,6 +75,7 @@ fn main() -> Result<()> {
     );
 
     let final_grid = build_grid::build_grid(
+        phrase_book.phrases(),
         &token_graph,
         options.trim_grid_bag_size,
         options.max_grid_width,

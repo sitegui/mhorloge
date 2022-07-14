@@ -1,6 +1,8 @@
 use crate::models::merge_dag::MergeDag;
 use crate::models::token::{Token, TokenId};
 use crate::models::word::WordId;
+use crate::Phrase;
+use itertools::Itertools;
 
 /// Represents the relative positioning constraint between any pair of tokens
 #[derive(Debug, Clone)]
@@ -16,7 +18,7 @@ pub enum TokenRelation {
 }
 
 impl TokenRelations {
-    pub fn new(graph: &MergeDag<WordId, Token>) -> Self {
+    pub fn new(graph: &MergeDag<WordId, Token>, phrases: &[Phrase]) -> Self {
         let max_token_id = graph.groups().map(|(_, token)| token.id).max().unwrap();
         let length = max_token_id.0 as usize + 1;
 
@@ -24,23 +26,13 @@ impl TokenRelations {
         let mut relations = vec![];
         relations.resize_with(length, || vec![TokenRelation::None; length]);
 
-        for (index_a, _) in graph.groups() {
-            let token_a = &graph[index_a];
-            for index_b in graph.reachable_groups(index_a) {
-                if index_a == index_b {
-                    continue;
-                }
-
-                let token_b = &graph[index_b];
-                log::debug!(
-                    "{}({}) is before {}({})",
-                    token_a,
-                    token_a.id.0,
-                    token_b,
-                    token_b.id.0
-                );
-                relations[token_a.id.0 as usize][token_b.id.0 as usize] = TokenRelation::IsBefore;
-                relations[token_b.id.0 as usize][token_a.id.0 as usize] = TokenRelation::IsAfter;
+        for phrase in phrases {
+            for (&word_before, &word_after) in phrase.words.iter().tuple_windows::<(_, _)>() {
+                let token_before = graph.group(word_before).1.id;
+                let token_after = graph.group(word_after).1.id;
+                relations[token_before.0 as usize][token_after.0 as usize] =
+                    TokenRelation::IsBefore;
+                relations[token_after.0 as usize][token_before.0 as usize] = TokenRelation::IsAfter;
             }
         }
 

@@ -4,17 +4,18 @@ use crate::models::merge_dag::MergeDag;
 use crate::models::token::{Token, TokenId};
 use crate::models::token_relations::TokenRelations;
 use crate::models::word::WordId;
-use crate::XY;
+use crate::{Phrase, XY};
 use itertools::Itertools;
 use std::cmp::Reverse;
 
 pub fn build_grid(
+    phrases: &[Phrase],
     token_graph: &MergeDag<WordId, Token>,
     trim_grid_bag_size: usize,
     max_grid_width: i32,
     max_grid_height: i32,
 ) -> Grid {
-    let relations = TokenRelations::new(token_graph);
+    let relations = TokenRelations::new(token_graph, phrases);
 
     // List in which order the tokens will be merged into the grid bags: start from the "outer"
     // tokens, that is, the tokens with the least depth.

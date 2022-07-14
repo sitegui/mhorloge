@@ -122,7 +122,7 @@ impl Grid {
     pub fn tokens(&self) -> &[PositionedToken] {
         &self.tokens
     }
-    
+
     pub fn get(&self, at: XY) -> Option<Letter> {
         self.letter_by_pos.get(&at).copied()
     }
@@ -167,30 +167,7 @@ impl Grid {
     /// Returns whether a token positioned like `b` is considered "after" another positioned like
     /// `a`
     fn is_token_after(a: PositionedToken, b: PositionedToken) -> bool {
-        // `b` must centered after the middle of `a`
-        let middle_a = a.middle();
-        let middle_b = b.middle();
-        let is_readable_as_after = middle_b > middle_a;
-
-        // If they share the same direction, then `b` must be readable as a separate word.
-        // That is, `b` must not start in the middle of `a` or immediately after it.
-        let end_a = a.end();
-        let is_readable_at_the_same_time = match (a.direction(), b.direction()) {
-            (Direction::Horizontal, Direction::Horizontal) => {
-                a.start().y != b.start().y || b.start().x > end_a.x + 1
-            }
-            (Direction::Vertical, Direction::Vertical) => {
-                a.start().x != b.start().x || b.start().y > end_a.y + 1
-            }
-            (Direction::Diagonal, Direction::Diagonal) => {
-                let line_a = a.start().x - a.start().y;
-                let line_b = b.start().x - b.start().y;
-                line_a != line_b || b.start().x > end_a.x + 1
-            }
-            _ => true,
-        };
-
-        is_readable_as_after && is_readable_at_the_same_time
+        b.start() > a.end()
     }
 
     fn insert(&mut self, token: &Token, start: XY, direction: Direction) {

@@ -1,60 +1,122 @@
+use crate::models::letter::Letter;
 use crate::models::token::TokenId;
 use crate::Token;
 use std::ops::{Add, AddAssign, Mul, Sub};
 
-#[derive(Debug, Clone, Copy)]
-pub struct PositionedToken {
+/// Represent a token with a given [`Direction`]
+#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
+pub struct OrientedToken {
     token: TokenId,
-    start: XY,
     direction: Direction,
     size: i32,
 }
 
+/// Represent a token positioned in a grid
+#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
+pub struct PositionedToken {
+    start: XY,
+    oriented: OrientedToken,
+}
+
+/// Represent a given position in the grid
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
 pub struct XY {
     pub y: i32,
     pub x: i32,
 }
 
+/// Represent a possible orientation
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
 pub enum Direction {
+    /// A token with a single letter has no determined direction
+    Point,
     Horizontal,
     Vertical,
     Diagonal,
 }
 
-impl PositionedToken {
-    pub fn new(token: &Token, start: XY, direction: Direction) -> Self {
-        PositionedToken {
+impl OrientedToken {
+    pub fn orientations(token: &Token, allow_diagonal: bool) -> Vec<Self> {
+        let size = token.text.letters().len() as i32;
+        let with_direction = |direction| OrientedToken {
             token: token.id,
-            start,
             direction,
-            size: token.text.letters().len() as i32,
+            size,
+        };
+
+        match (size, allow_diagonal) {
+            (1, _) => vec![with_direction(Direction::Point)],
+            (_, false) => vec![
+                with_direction(Direction::Horizontal),
+                with_direction(Direction::Vertical),
+            ],
+            (_, true) => vec![
+                with_direction(Direction::Horizontal),
+                with_direction(Direction::Vertical),
+                with_direction(Direction::Diagonal),
+            ],
         }
     }
 
-    pub fn token_id(&self) -> TokenId {
+    pub fn token_id(self) -> TokenId {
         self.token
     }
 
-    pub fn start(&self) -> XY {
-        self.start
-    }
-
-    pub fn middle(&self) -> XY {
-        self.start + self.direction.as_xy() * (self.size / 2)
-    }
-
-    pub fn end(&self) -> XY {
-        self.start + self.direction.as_xy() * (self.size - 1)
-    }
-
-    pub fn direction(&self) -> Direction {
+    pub fn direction(self) -> Direction {
         self.direction
     }
 
-    pub fn positions(self) -> impl Iterator<Item = XY> {
-        (0..self.size).map(move |i| self.start + self.direction.as_xy() * i)
+    pub fn size(self) -> i32 {
+        self.size
+    }
+}
+
+impl PositionedToken {
+    pub fn new(oriented: OrientedToken, start: XY) -> Self {
+        PositionedToken { oriented, start }
+    }
+
+    pub fn token_id(self) -> TokenId {
+        self.oriented.token_id()
+    }
+
+    pub fn start(self) -> XY {
+        self.start
+    }
+
+    pub fn middle(self) -> XY {
+        self.start + self.direction().as_xy() * (self.size() / 2)
+    }
+
+    pub fn end(self) -> XY {
+        self.start + self.direction().as_xy() * (self.size() - 1)
+    }
+
+    pub fn direction(self) -> Direction {
+        self.oriented.direction()
+    }
+
+    pub fn size(self) -> i32 {
+        self.oriented.size()
+    }
+
+    /// Iterate over all letters of this positioned token
+    pub fn iter(self, token: &Token) -> impl Iterator<Item = (XY, Letter)> + '_ {
+        assert_eq!(self.token_id(), token.id);
+        token
+            .text
+            .letters()
+            .iter()
+            .enumerate()
+            .map(move |(i, &letter)| {
+                let pos = self.start + self.direction().as_xy() * i as i32;
+                (pos, letter)
+            })
+    }
+
+    /// Iterate over all letters of this positioned token
+    pub fn iter_pos(self) -> impl Iterator<Item = XY> {
+        (0..self.size()).map(move |i| self.start + self.direction().as_xy() * i)
     }
 }
 
@@ -72,6 +134,7 @@ impl Direction {
             Direction::Horizontal => XY::new(1, 0),
             Direction::Vertical => XY::new(0, 1),
             Direction::Diagonal => XY::new(1, 1),
+            Direction::Point => XY::new(0, 0),
         }
     }
 }
@@ -112,10 +175,8 @@ impl Add<XY> for PositionedToken {
 
     fn add(self, rhs: XY) -> Self::Output {
         PositionedToken {
-            token: self.token,
             start: self.start + rhs,
-            direction: self.direction,
-            size: self.size,
+            oriented: self.oriented,
         }
     }
 }
@@ -125,10 +186,8 @@ impl Sub<XY> for PositionedToken {
 
     fn sub(self, rhs: XY) -> Self::Output {
         PositionedToken {
-            token: self.token,
             start: self.start - rhs,
-            direction: self.direction,
-            size: self.size,
+            oriented: self.oriented,
         }
     }
 }

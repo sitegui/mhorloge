@@ -5,6 +5,7 @@ pub mod letter;
 pub mod merge_dag;
 pub mod phrase;
 pub mod phrase_book;
+pub mod position_restriction;
 pub mod positioned_token;
 pub mod text;
 pub mod time;

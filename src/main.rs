@@ -50,11 +50,8 @@ struct Opt {
     #[structopt(long, default_value = "1000")]
     trim_grid_bag_size: usize,
     /// TODO
-    #[structopt(long, default_value = "20")]
-    max_grid_width: i32,
-    /// TODO
-    #[structopt(long, default_value = "20")]
-    max_grid_height: i32,
+    #[structopt(long)]
+    allow_diagonal: bool,
 }
 
 fn main() -> Result<()> {
@@ -78,8 +75,7 @@ fn main() -> Result<()> {
         phrase_book.phrases(),
         &token_graph,
         options.trim_grid_bag_size,
-        options.max_grid_width,
-        options.max_grid_height,
+        options.allow_diagonal,
     );
 
     let mut all_html = r#"<!doctype html>
@@ -155,7 +151,7 @@ fn grid_to_html(
         .filter(|positioned_token| phrase_tokens.contains(&positioned_token.token_id()));
 
     let highlights: BTreeSet<_> = positioned_tokens
-        .flat_map(|positioned_token| positioned_token.positions())
+        .flat_map(|positioned_token| positioned_token.iter_pos())
         .collect();
 
     let (dx, dy) = grid.space();

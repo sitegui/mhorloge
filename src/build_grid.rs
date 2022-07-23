@@ -34,11 +34,14 @@ pub fn build_grid(
 
     // Regroup tokens into grids
     let mut grid_bag = GridBag::new();
-    for inserting_token in tokens_to_insert {
+    let num_tokens = tokens_to_insert.len();
+    for (i, inserting_token) in tokens_to_insert.into_iter().enumerate() {
         log::info!(
-            "Insert {} into bag with {} grids",
+            "Insert {} into bag with {} grids ({}/{})",
             inserting_token,
-            grid_bag.grids().len()
+            grid_bag.grids().len(),
+            i,
+            num_tokens
         );
 
         grid_bag.insert(&relations, inserting_token, allow_diagonal);

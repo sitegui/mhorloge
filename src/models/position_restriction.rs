@@ -51,7 +51,7 @@ impl PositionRestriction {
                     }
                 },
             )
-            .min();
+            .max();
 
         PositionRestriction {
             min_start,

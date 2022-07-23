@@ -2,7 +2,7 @@ use crate::models::grid::Grid;
 use crate::models::token::Token;
 use crate::models::token_relations::TokenRelations;
 use itertools::Itertools;
-use std::fmt;
+use std::{fmt, mem};
 
 #[derive(Debug, Clone)]
 pub struct GridBag {
@@ -30,26 +30,16 @@ impl GridBag {
 
     pub fn trim(&mut self, trim_size: usize) {
         if self.grids.len() > trim_size {
-            // Take the grid with the least amount of letters, because they're usually more
-            // interesting
-            let weights = self
-                .grids
-                .iter()
-                .map(|grid| grid.weight())
-                .sorted()
-                .collect_vec();
-            let cutoff = weights[trim_size - 1];
-
             let initial_size = self.grids.len();
-            self.grids.retain(|grid| grid.weight() <= cutoff);
+
+            let mut grids = mem::take(&mut self.grids);
+            grids.sort_by_key(|grid| grid.weight());
+            grids.truncate(trim_size);
+            self.grids = grids;
+
             let final_size = self.grids.len();
 
-            log::debug!(
-                "Trimmed grid bag {} -> {} (weight <= {:?})",
-                initial_size,
-                final_size,
-                cutoff
-            );
+            log::debug!("Trimmed grid bag {} -> {}", initial_size, final_size,);
         }
     }
 

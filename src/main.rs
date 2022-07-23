@@ -47,7 +47,7 @@ struct Opt {
     #[structopt(long)]
     output_svg: Option<PathBuf>,
     /// TODO
-    #[structopt(long, default_value = "1000")]
+    #[structopt(long, default_value = "10000")]
     trim_grid_bag_size: usize,
     /// TODO
     #[structopt(long)]
@@ -92,7 +92,7 @@ fn main() -> Result<()> {
             font-family: monospace;
             border: thin black solid;
             display: inline-block;
-            color: gray;
+            color: #ccc;
             font-size: 16px;
             margin: 5px;
             padding: 3px;

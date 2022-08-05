@@ -3,6 +3,7 @@ use crate::models::token::Token;
 use crate::models::token_relations::TokenRelations;
 use crate::AspectRatio;
 use itertools::Itertools;
+use rayon::prelude::*;
 use std::{fmt, mem};
 
 #[derive(Debug, Clone)]
@@ -25,9 +26,9 @@ impl GridBag {
     pub fn insert(&mut self, relations: &TokenRelations, token: &Token, allow_diagonal: bool) {
         self.grids = self
             .grids
-            .iter()
+            .par_iter()
             .flat_map(|grid| grid.enumerate_insertions(relations, token, allow_diagonal))
-            .collect_vec();
+            .collect();
 
         self.tokens.push(token.clone());
     }
@@ -37,13 +38,13 @@ impl GridBag {
             let initial_size = self.grids.len();
 
             let mut grids = mem::take(&mut self.grids);
-            grids.sort_by_key(|grid| self.weight_for_grid(grid));
+            grids.par_sort_by_key(|grid| self.weight_for_grid(grid));
             grids.truncate(trim_size);
             self.grids = grids;
 
             let final_size = self.grids.len();
 
-            log::debug!("Trimmed grid bag {} -> {}", initial_size, final_size,);
+            log::debug!("Trimmed grid bag {} -> {}", initial_size, final_size);
         }
     }
 

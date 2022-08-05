@@ -1,10 +1,12 @@
 use crate::models::aspect_ratio::AspectRatio;
 use anyhow::Result;
 use itertools::Itertools;
+use jemallocator::Jemalloc;
 use std::collections::BTreeSet;
 use std::env::VarError;
 use std::fmt::Write;
 use std::path::PathBuf;
+use std::time::Instant;
 use std::{env, fs};
 use structopt::StructOpt;
 
@@ -22,6 +24,9 @@ mod generate_phrases;
 mod models;
 mod tokenize;
 mod utils;
+
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
 
 #[derive(Debug, StructOpt)]
 #[structopt(
@@ -59,6 +64,8 @@ struct Opt {
 }
 
 fn main() -> Result<()> {
+    let start = Instant::now();
+
     if let Err(VarError::NotPresent) = env::var("RUST_LOG") {
         env::set_var("RUST_LOG", "INFO");
     }
@@ -130,7 +137,8 @@ fn main() -> Result<()> {
 
     fs::write("data/grid.html", all_html).unwrap();
 
-    log::info!("Done");
+    log::info!("Done in {:?}", start.elapsed());
+
     Ok(())
 }
 

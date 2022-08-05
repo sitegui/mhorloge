@@ -3,6 +3,7 @@ use crate::models::position_restriction::PositionRestriction;
 use crate::models::positioned_token::{Direction, OrientedToken, PositionedToken, XY};
 use crate::models::token::Token;
 use crate::models::token_relations::TokenRelations;
+use rayon::prelude::*;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 use std::fmt::Write;
@@ -112,7 +113,7 @@ impl Grid {
 
         // Collect the valid insertions
         insertions
-            .into_iter()
+            .into_par_iter()
             .map(|positioned| {
                 let mut grid = self.clone();
                 grid.insert(token, positioned);
@@ -136,13 +137,13 @@ impl Grid {
             if prev_letter.is_none() {
                 self.pos_by_letter.entry(letter).or_default().push(pos);
             }
-            
-            self.top_left.x = self.top_left.x.min(pos.x); 
-            self.top_left.y = self.top_left.y.min(pos.y); 
-            self.bottom_right.x = self.bottom_right.x.max(pos.x); 
-            self.bottom_right.y = self.bottom_right.y.max(pos.y); 
+
+            self.top_left.x = self.top_left.x.min(pos.x);
+            self.top_left.y = self.top_left.y.min(pos.y);
+            self.bottom_right.x = self.bottom_right.x.max(pos.x);
+            self.bottom_right.y = self.bottom_right.y.max(pos.y);
         }
-        
+
         self.tokens.push(positioned);
     }
 

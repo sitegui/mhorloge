@@ -19,7 +19,7 @@ pub struct PositionedToken {
 }
 
 /// Represent a given position in the grid
-#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub struct XY {
     pub y: i32,
     pub x: i32,

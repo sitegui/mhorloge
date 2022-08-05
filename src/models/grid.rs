@@ -4,15 +4,14 @@ use crate::models::positioned_token::{Direction, OrientedToken, PositionedToken,
 use crate::models::token::Token;
 use crate::models::token_relations::TokenRelations;
 use rayon::prelude::*;
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{BTreeSet, HashMap};
 use std::fmt;
 use std::fmt::Write;
 use std::ops::RangeInclusive;
 
 #[derive(Debug, Clone)]
 pub struct Grid {
-    letter_by_pos: BTreeMap<XY, Letter>,
-    pos_by_letter: BTreeMap<Letter, Vec<XY>>,
+    letter_by_pos: HashMap<XY, Letter>,
     tokens: Vec<PositionedToken>,
     /// The extremes of the bounding rectangle of the inserted letters. This rectangle does not
     /// depend on the desired aspect ratio.
@@ -23,8 +22,7 @@ pub struct Grid {
 impl Grid {
     pub fn new() -> Self {
         Self {
-            letter_by_pos: BTreeMap::new(),
-            pos_by_letter: BTreeMap::new(),
+            letter_by_pos: HashMap::new(),
             tokens: Vec::new(),
             top_left: XY::new(i32::MAX, i32::MAX),
             bottom_right: XY::new(i32::MIN, i32::MIN),
@@ -52,6 +50,18 @@ impl Grid {
         (width, height)
     }
 
+    fn pos_by_letter(&self, letter: Letter) -> impl Iterator<Item = XY> + '_ {
+        self.letter_by_pos
+            .iter()
+            .filter_map(move |(&pos, &some_letter)| {
+                if some_letter == letter {
+                    Some(pos)
+                } else {
+                    None
+                }
+            })
+    }
+
     /// Return all resulting grids for the valid insertions of the given token
     pub fn enumerate_insertions(
         &self,
@@ -67,18 +77,14 @@ impl Grid {
             let restrictions = PositionRestriction::new(relations, &self.tokens, oriented);
 
             // Test insertions that use a pivot
-            for (letter_index, letter) in token.text.letters().iter().enumerate() {
+            for (letter_index, &letter) in token.text.letters().iter().enumerate() {
                 let n = letter_index as i32;
 
-                if let Some(pivots) = self.pos_by_letter.get(letter) {
-                    for &pivot in pivots {
-                        let start = pivot - oriented.direction().as_xy() * n;
-                        let positioned = PositionedToken::new(oriented, start);
-                        if restrictions.is_valid_start(start)
-                            && self.check_letters(token, positioned)
-                        {
-                            insertions.insert(positioned);
-                        }
+                for pivot in self.pos_by_letter(letter) {
+                    let start = pivot - oriented.direction().as_xy() * n;
+                    let positioned = PositionedToken::new(oriented, start);
+                    if restrictions.is_valid_start(start) && self.check_letters(token, positioned) {
+                        insertions.insert(positioned);
                     }
                 }
             }
@@ -134,9 +140,6 @@ impl Grid {
         for (pos, letter) in positioned.iter(token) {
             let prev_letter = self.letter_by_pos.insert(pos, letter);
             assert!(prev_letter == None || prev_letter == Some(letter));
-            if prev_letter.is_none() {
-                self.pos_by_letter.entry(letter).or_default().push(pos);
-            }
 
             self.top_left.x = self.top_left.x.min(pos.x);
             self.top_left.y = self.top_left.y.min(pos.y);

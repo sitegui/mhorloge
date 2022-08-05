@@ -8,7 +8,7 @@ use std::ops::{Add, AddAssign, Mul, Sub};
 pub struct OrientedToken {
     token: TokenId,
     direction: Direction,
-    size: i32,
+    size: i16,
 }
 
 /// Represent a token positioned in a grid
@@ -21,12 +21,13 @@ pub struct PositionedToken {
 /// Represent a given position in the grid
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub struct XY {
-    pub y: i32,
-    pub x: i32,
+    pub y: i16,
+    pub x: i16,
 }
 
 /// Represent a possible orientation
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
+#[repr(u8)]
 pub enum Direction {
     /// A token with a single letter has no determined direction
     Point,
@@ -37,7 +38,7 @@ pub enum Direction {
 
 impl OrientedToken {
     pub fn orientations(token: &Token, allow_diagonal: bool) -> Vec<Self> {
-        let size = token.text.letters().len() as i32;
+        let size = token.text.letters().len() as i16;
         let with_direction = |direction| OrientedToken {
             token: token.id,
             direction,
@@ -66,7 +67,7 @@ impl OrientedToken {
         self.direction
     }
 
-    pub fn size(self) -> i32 {
+    pub fn size(self) -> i16 {
         self.size
     }
 }
@@ -96,7 +97,7 @@ impl PositionedToken {
         self.oriented.direction()
     }
 
-    pub fn size(self) -> i32 {
+    pub fn size(self) -> i16 {
         self.oriented.size()
     }
 
@@ -109,7 +110,7 @@ impl PositionedToken {
             .iter()
             .enumerate()
             .map(move |(i, &letter)| {
-                let pos = self.start + self.direction().as_xy() * i as i32;
+                let pos = self.start + self.direction().as_xy() * i as i16;
                 (pos, letter)
             })
     }
@@ -123,7 +124,7 @@ impl PositionedToken {
 impl XY {
     pub const ORIGIN: XY = XY { x: 0, y: 0 };
 
-    pub fn new(x: i32, y: i32) -> Self {
+    pub fn new(x: i16, y: i16) -> Self {
         XY { x, y }
     }
 }
@@ -162,10 +163,10 @@ impl AddAssign for XY {
     }
 }
 
-impl Mul<i32> for XY {
+impl Mul<i16> for XY {
     type Output = XY;
 
-    fn mul(self, rhs: i32) -> Self::Output {
+    fn mul(self, rhs: i16) -> Self::Output {
         XY::new(self.x * rhs, self.y * rhs)
     }
 }

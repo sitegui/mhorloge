@@ -24,18 +24,18 @@ impl Grid {
         Self {
             letter_by_pos: HashMap::new(),
             tokens: Vec::new(),
-            top_left: XY::new(i32::MAX, i32::MAX),
-            bottom_right: XY::new(i32::MIN, i32::MIN),
+            top_left: XY::new(i16::MAX, i16::MAX),
+            bottom_right: XY::new(i16::MIN, i16::MIN),
         }
     }
 
     /// Return the number of determined letters of this grid
-    pub fn num_letters(&self) -> i32 {
-        self.letter_by_pos.len() as i32
+    pub fn num_letters(&self) -> i16 {
+        self.letter_by_pos.len() as i16
     }
 
     /// Return the bounding box of this grid
-    pub fn space(&self) -> (RangeInclusive<i32>, RangeInclusive<i32>) {
+    pub fn space(&self) -> (RangeInclusive<i16>, RangeInclusive<i16>) {
         (
             self.top_left.x..=self.bottom_right.x,
             self.top_left.y..=self.bottom_right.y,
@@ -43,7 +43,7 @@ impl Grid {
     }
 
     /// Returns `(width, height)` of the bounding box of the grid
-    pub fn size(&self) -> (i32, i32) {
+    pub fn size(&self) -> (i16, i16) {
         let (x, y) = self.space();
         let width = x.end() - x.start();
         let height = y.end() - y.start();
@@ -78,7 +78,7 @@ impl Grid {
 
             // Test insertions that use a pivot
             for (letter_index, &letter) in token.text.letters().iter().enumerate() {
-                let n = letter_index as i32;
+                let n = letter_index as i16;
 
                 for pivot in self.pos_by_letter(letter) {
                     let start = pivot - oriented.direction().as_xy() * n;

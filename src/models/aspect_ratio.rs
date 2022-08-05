@@ -3,12 +3,12 @@ use std::str::FromStr;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct AspectRatio {
-    horizontal: i32,
-    vertical: i32,
+    horizontal: i16,
+    vertical: i16,
 }
 
 impl AspectRatio {
-    pub fn new(horizontal: i32, vertical: i32) -> Self {
+    pub fn new(horizontal: i16, vertical: i16) -> Self {
         Self {
             horizontal,
             vertical,
@@ -17,9 +17,9 @@ impl AspectRatio {
 
     /// Return the sides of a rectangle that covers the given rectangle while closely respecting
     /// this ratio.
-    pub fn cover(self, width: i32, height: i32) -> (i32, i32) {
-        fn ceil_div(a: i32, b: i32) -> i32 {
-            (a as f64 / b as f64).ceil() as i32
+    pub fn cover(self, width: i16, height: i16) -> (i16, i16) {
+        fn ceil_div(a: i16, b: i16) -> i16 {
+            (a as f64 / b as f64).ceil() as i16
         }
 
         // Prefer covering horizontally

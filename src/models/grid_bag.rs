@@ -64,7 +64,7 @@ impl GridBag {
     }
 
     /// A grid with lower weight is deemed more interesting
-    fn weight_for_grid(&self, grid: &Grid) -> (i32, i32, i32) {
+    fn weight_for_grid(&self, grid: &Grid) -> (i16, i16, i16) {
         let (width, height) = grid.size();
         let area = width * height;
 

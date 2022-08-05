@@ -5,6 +5,7 @@ use std::fmt::Write;
 
 /// Represents a letter than can be put in a word grid
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq, Hash)]
+#[repr(u8)]
 pub enum Letter {
     A,
     B,

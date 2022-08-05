@@ -1,7 +1,5 @@
-use anyhow::Result;
-
 use crate::models::language::Language;
-use crate::models::phrase_book::PhraseBook;
+use crate::models::phrase::TimePhrase;
 use crate::models::time::Time;
 
 pub mod english;
@@ -9,25 +7,18 @@ pub mod french;
 pub mod german;
 pub mod portuguese;
 
-pub fn generate_phrases(languages_spec: &str) -> Result<PhraseBook> {
-    let mut phrases = PhraseBook::default();
+pub fn generate_phrases(language_specs: &[(Language, i32)]) -> Vec<TimePhrase> {
+    let mut phrases = vec![];
 
-    for mut language_tag in languages_spec.split(',') {
-        let precision;
-        match language_tag.find(':') {
-            None => precision = 1,
-            Some(pos) => {
-                precision = language_tag[pos + 1..].parse()?;
-                language_tag = &language_tag[..pos];
-            }
-        }
-
-        let language: Language = language_tag.parse()?;
-
+    for &(language, precision) in language_specs {
         for time in Time::all_times().step_by(precision as usize) {
-            phrases.insert_phrase(language, time, &language.spell(time));
+            phrases.push(TimePhrase {
+                language,
+                time,
+                phrase: language.spell(time),
+            });
         }
     }
 
-    Ok(phrases)
+    phrases
 }

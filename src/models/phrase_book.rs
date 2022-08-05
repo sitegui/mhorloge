@@ -1,7 +1,5 @@
-use crate::models::language::Language;
 use crate::models::phrase::{Phrase, PhraseId};
 use crate::models::text::Text;
-use crate::models::time::Time;
 use crate::models::word::{Word, WordId};
 use std::ops::Index;
 
@@ -13,19 +11,14 @@ pub struct PhraseBook {
 }
 
 impl PhraseBook {
-    pub fn insert_phrase(&mut self, language: Language, time: Time, phrase: &str) -> PhraseId {
+    pub fn insert_phrase(&mut self, phrase: &str) -> PhraseId {
         let mut words = vec![];
         for word in phrase.split(' ') {
             words.push(self.insert_word(Text::new(word)));
         }
 
         let id = PhraseId(self.phrases.len() as u16);
-        self.phrases.push(Phrase {
-            id,
-            language,
-            time,
-            words,
-        });
+        self.phrases.push(Phrase { id, words });
         id
     }
 

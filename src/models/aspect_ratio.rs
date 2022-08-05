@@ -8,13 +8,6 @@ pub struct AspectRatio {
 }
 
 impl AspectRatio {
-    pub fn new(horizontal: i16, vertical: i16) -> Self {
-        Self {
-            horizontal,
-            vertical,
-        }
-    }
-
     /// Return the sides of a rectangle that covers the given rectangle while closely respecting
     /// this ratio.
     pub fn cover(self, width: i16, height: i16) -> (i16, i16) {
@@ -66,7 +59,10 @@ mod tests {
 
     #[test]
     fn cover() {
-        let ratio = AspectRatio::new(16, 9);
+        let ratio = AspectRatio {
+            horizontal: 16,
+            vertical: 9,
+        };
 
         assert_eq!(ratio.cover(16, 9), (16, 9));
 

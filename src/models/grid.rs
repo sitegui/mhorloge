@@ -1,8 +1,11 @@
 use crate::models::letter::Letter;
 use crate::models::position_restriction::PositionRestriction;
 use crate::models::positioned_token::{Direction, OrientedToken, PositionedToken, XY};
-use crate::models::token::Token;
+use crate::models::token::{Token, TokenId};
 use crate::models::token_relations::TokenRelations;
+use anyhow::ensure;
+use anyhow::Result;
+use rand::Rng;
 use std::collections::{BTreeSet, HashMap};
 use std::fmt;
 use std::fmt::Write;
@@ -133,6 +136,68 @@ impl Grid {
 
     pub fn get(&self, at: XY) -> Option<Letter> {
         self.letter_by_pos.get(&at).copied()
+    }
+
+    /// Return a "rectangular" representation with the letters that are present
+    pub fn to_letters(&self) -> Vec<Vec<Option<Letter>>> {
+        let (dx, dy) = self.space();
+
+        let mut grid = Vec::with_capacity(dy.len());
+        for y in dy {
+            let mut row = Vec::with_capacity(dx.len());
+            for x in dx.clone() {
+                row.push(self.get(XY::new(x, y)));
+            }
+            grid.push(row);
+        }
+
+        grid
+    }
+
+    /// Fill this instance with letters so that it has at least the given size.
+    ///
+    /// # Error
+    /// Returns an error if the given size is smaller than the current grid
+    pub fn fill_to_size(&mut self, width: i16, height: i16, random: &mut impl Rng) -> Result<()> {
+        let (current_width, current_height) = self.size();
+
+        ensure!(width >= current_width);
+        ensure!(height >= current_height);
+
+        let padding_x = width - current_width;
+        let padding_y = height - current_height;
+
+        let start_x = self.top_left.x - (padding_x + 1) / 2;
+        let end_x = self.bottom_right.x + padding_x / 2;
+        let start_y = self.top_left.y - (padding_y + 1) / 2;
+        let end_y = self.bottom_right.y + padding_y / 2;
+
+        for y in start_y..=end_y {
+            for x in start_x..=end_x {
+                let pos = XY::new(x, y);
+                self.letter_by_pos
+                    .entry(pos)
+                    .or_insert_with(|| random.gen());
+            }
+        }
+
+        self.top_left = XY::new(start_x, start_y);
+        self.bottom_right = XY::new(end_x, end_y);
+
+        Ok(())
+    }
+
+    pub fn positions_for_token(&self, token: TokenId) -> Option<impl Iterator<Item = XY> + '_> {
+        let positioned = self
+            .tokens
+            .iter()
+            .find(|positioned| positioned.token_id() == token)?;
+
+        Some(positioned.iter_pos())
+    }
+
+    pub fn top_left(&self) -> XY {
+        self.top_left
     }
 
     fn insert(&mut self, token: &Token, positioned: PositionedToken) {

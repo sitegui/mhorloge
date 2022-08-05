@@ -33,13 +33,13 @@ impl GridBag {
         self.tokens.push(token.clone());
     }
 
-    pub fn trim(&mut self, trim_size: usize) {
-        if self.grids.len() > trim_size {
+    pub fn trim(&mut self, max_size: usize) {
+        if self.grids.len() > max_size {
             let initial_size = self.grids.len();
 
             let mut grids = mem::take(&mut self.grids);
             grids.par_sort_by_key(|grid| self.weight_for_grid(grid));
-            grids.truncate(trim_size);
+            grids.truncate(max_size);
             self.grids = grids;
 
             let final_size = self.grids.len();

@@ -8,7 +8,6 @@ use crate::models::word::WordId;
 use itertools::Itertools;
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet};
-use std::path::Path;
 
 #[derive(Debug)]
 pub struct RepeatedSequence<'a> {
@@ -16,7 +15,7 @@ pub struct RepeatedSequence<'a> {
     instances: Vec<&'a [WordId]>,
 }
 
-pub fn tokenize(book: &PhraseBook, output_svg: Option<&Path>) -> MergeDag<WordId, Token> {
+pub fn tokenize(book: &PhraseBook) -> MergeDag<WordId, Token> {
     let mut seed_tokens = vec![];
     let mut edges = vec![];
     for phrase in book.phrases() {
@@ -37,12 +36,6 @@ pub fn tokenize(book: &PhraseBook, output_svg: Option<&Path>) -> MergeDag<WordId
     log::info!("Will try to merge {} sequences", sequences.len());
     for sequence in &sequences {
         merge_sequence(&mut graph, sequence);
-    }
-
-    if let Some(output_svg) = output_svg {
-        if let Err(error) = graph.svg(output_svg) {
-            log::warn!("Failed to save {}: {}", output_svg.display(), error);
-        }
     }
 
     graph

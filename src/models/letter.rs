@@ -1,10 +1,14 @@
 use anyhow::Error;
-use std::convert::TryFrom;
+use rand::distributions::Standard;
+use rand::prelude::Distribution;
+use rand::Rng;
+use serde::{Deserialize, Serialize};
+use std::convert::{TryFrom, TryInto};
 use std::fmt;
 use std::fmt::Write;
 
 /// Represents a letter than can be put in a word grid
-#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq, Hash, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum Letter {
     A,
@@ -110,5 +114,12 @@ impl TryFrom<char> for Letter {
 impl fmt::Display for Letter {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.write_char(self.as_char())
+    }
+}
+
+impl Distribution<Letter> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Letter {
+        let c = rng.gen_range('A'..='Z');
+        c.try_into().expect("Must be a valid letter")
     }
 }

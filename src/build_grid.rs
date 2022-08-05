@@ -11,7 +11,7 @@ use std::cmp::Reverse;
 pub fn build_grid(
     phrases: &[Phrase],
     token_graph: &MergeDag<WordId, Token>,
-    trim_grid_bag_size: usize,
+    max_grid_bag_size: usize,
     allow_diagonal: bool,
     aspect_ratio: AspectRatio,
 ) -> Grid {
@@ -46,7 +46,7 @@ pub fn build_grid(
         );
 
         grid_bag.insert(&relations, inserting_token, allow_diagonal);
-        grid_bag.trim(trim_grid_bag_size);
+        grid_bag.trim(max_grid_bag_size);
     }
 
     grid_bag.best_grid().clone()

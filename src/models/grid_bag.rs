@@ -1,6 +1,7 @@
 use crate::models::grid::Grid;
 use crate::models::token::Token;
 use crate::models::token_relations::TokenRelations;
+use crate::AspectRatio;
 use itertools::Itertools;
 use std::{fmt, mem};
 
@@ -8,13 +9,16 @@ use std::{fmt, mem};
 pub struct GridBag {
     tokens: Vec<Token>,
     grids: Vec<Grid>,
+    /// The target aspect ratio of this grid
+    target_aspect: AspectRatio,
 }
 
 impl GridBag {
-    pub fn new() -> Self {
+    pub fn new(target_aspect: AspectRatio) -> Self {
         GridBag {
             tokens: vec![],
-            grids: vec![Grid::default()],
+            grids: vec![Grid::new()],
+            target_aspect,
         }
     }
 
@@ -33,7 +37,7 @@ impl GridBag {
             let initial_size = self.grids.len();
 
             let mut grids = mem::take(&mut self.grids);
-            grids.sort_by_key(|grid| grid.weight());
+            grids.sort_by_key(|grid| self.weight_for_grid(grid));
             grids.truncate(trim_size);
             self.grids = grids;
 
@@ -52,7 +56,21 @@ impl GridBag {
     }
 
     pub fn best_grid(&self) -> &Grid {
-        self.grids.iter().min_by_key(|grid| grid.weight()).unwrap()
+        self.grids
+            .iter()
+            .min_by_key(|grid| self.weight_for_grid(grid))
+            .unwrap()
+    }
+
+    /// A grid with lower weight is deemed more interesting
+    fn weight_for_grid(&self, grid: &Grid) -> (i32, i32, i32) {
+        let (width, height) = grid.size();
+        let area = width * height;
+
+        let (aspect_width, aspect_height) = self.target_aspect.cover(width, height);
+        let aspect_area = aspect_width * aspect_height;
+
+        (aspect_area, grid.num_letters(), area)
     }
 }
 

@@ -1,3 +1,4 @@
+use crate::models::aspect_ratio::AspectRatio;
 use anyhow::Result;
 use itertools::Itertools;
 use std::collections::BTreeSet;
@@ -52,6 +53,9 @@ struct Opt {
     /// TODO
     #[structopt(long)]
     allow_diagonal: bool,
+    /// TODO
+    #[structopt(long, default_value = "16:9")]
+    aspect_ratio: AspectRatio,
 }
 
 fn main() -> Result<()> {
@@ -76,6 +80,7 @@ fn main() -> Result<()> {
         &token_graph,
         options.trim_grid_bag_size,
         options.allow_diagonal,
+        options.aspect_ratio,
     );
 
     let mut all_html = r#"<!doctype html>

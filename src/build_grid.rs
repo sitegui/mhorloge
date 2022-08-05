@@ -4,7 +4,7 @@ use crate::models::merge_dag::MergeDag;
 use crate::models::token::Token;
 use crate::models::token_relations::TokenRelations;
 use crate::models::word::WordId;
-use crate::Phrase;
+use crate::{AspectRatio, Phrase};
 use itertools::Itertools;
 use std::cmp::Reverse;
 
@@ -13,6 +13,7 @@ pub fn build_grid(
     token_graph: &MergeDag<WordId, Token>,
     trim_grid_bag_size: usize,
     allow_diagonal: bool,
+    aspect_ratio: AspectRatio,
 ) -> Grid {
     let relations = TokenRelations::new(token_graph, phrases);
 
@@ -33,7 +34,7 @@ pub fn build_grid(
     );
 
     // Regroup tokens into grids
-    let mut grid_bag = GridBag::new();
+    let mut grid_bag = GridBag::new(aspect_ratio);
     let num_tokens = tokens_to_insert.len();
     for (i, inserting_token) in tokens_to_insert.into_iter().enumerate() {
         log::info!(

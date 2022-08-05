@@ -8,14 +8,28 @@ use std::fmt;
 use std::fmt::Write;
 use std::ops::RangeInclusive;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct Grid {
     letter_by_pos: BTreeMap<XY, Letter>,
     pos_by_letter: BTreeMap<Letter, Vec<XY>>,
     tokens: Vec<PositionedToken>,
+    /// The extremes of the bounding rectangle of the inserted letters. This rectangle does not
+    /// depend on the desired aspect ratio.
+    top_left: XY,
+    bottom_right: XY,
 }
 
 impl Grid {
+    pub fn new() -> Self {
+        Self {
+            letter_by_pos: BTreeMap::new(),
+            pos_by_letter: BTreeMap::new(),
+            tokens: Vec::new(),
+            top_left: XY::new(i32::MAX, i32::MAX),
+            bottom_right: XY::new(i32::MIN, i32::MIN),
+        }
+    }
+
     /// Return the number of determined letters of this grid
     pub fn num_letters(&self) -> i32 {
         self.letter_by_pos.len() as i32
@@ -23,37 +37,18 @@ impl Grid {
 
     /// Return the bounding box of this grid
     pub fn space(&self) -> (RangeInclusive<i32>, RangeInclusive<i32>) {
-        let mut min_x = i32::MAX;
-        let mut max_x = i32::MIN;
-        let mut min_y = i32::MAX;
-        let mut max_y = i32::MIN;
-
-        for token in &self.tokens {
-            let start = token.start();
-            let end = token.end();
-
-            min_x = min_x.min(start.x);
-            min_y = min_y.min(start.y);
-            max_x = max_x.max(end.x);
-            max_y = max_y.max(end.y);
-        }
-
-        (min_x..=max_x, min_y..=max_y)
+        (
+            self.top_left.x..=self.bottom_right.x,
+            self.top_left.y..=self.bottom_right.y,
+        )
     }
 
+    /// Returns `(width, height)` of the bounding box of the grid
     pub fn size(&self) -> (i32, i32) {
         let (x, y) = self.space();
         let width = x.end() - x.start();
         let height = y.end() - y.start();
         (width, height)
-    }
-
-    /// A grid with lower weight is deemed more interesting
-    pub fn weight(&self) -> (i32, i32, i32) {
-        let (width, height) = self.size();
-        let square_side = width.max(height);
-        let area = width * height;
-        (self.num_letters(), square_side, area)
     }
 
     /// Return all resulting grids for the valid insertions of the given token
@@ -141,7 +136,13 @@ impl Grid {
             if prev_letter.is_none() {
                 self.pos_by_letter.entry(letter).or_default().push(pos);
             }
+            
+            self.top_left.x = self.top_left.x.min(pos.x); 
+            self.top_left.y = self.top_left.y.min(pos.y); 
+            self.bottom_right.x = self.bottom_right.x.max(pos.x); 
+            self.bottom_right.y = self.bottom_right.y.max(pos.y); 
         }
+        
         self.tokens.push(positioned);
     }
 

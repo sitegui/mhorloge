@@ -3,13 +3,16 @@ use std::path::PathBuf;
 use std::time::Instant;
 use std::{env, fs};
 
-use anyhow::Result;
+use anyhow::{ensure, Result};
 use jemallocator::Jemalloc;
 use structopt::StructOpt;
 
 use crate::models::aspect_ratio::AspectRatio;
 use crate::models::grid::Grid;
-use crate::models::io::{GridInput, GridOutput, GridOutputPhrase, TimePhrasesOutput};
+use crate::models::io::{
+    GridInput, GridOutput, GridOutputPhrase, LyricsPhrase, LyricsPhraseStop, LyricsPhrasesInput,
+    LyricsPhrasesOutput, TimePhrasesOutput, WordOrSpace,
+};
 use crate::models::language::Language;
 use crate::models::merge_dag::MergeDag;
 use crate::models::phrase::Phrase;
@@ -45,6 +48,13 @@ enum Options {
         /// precision for French and 5-minute precision for English.
         languages: String,
         /// The path to a file where to write the output as JSON, represented by `TimePhrasesOutput`.
+        phrases_output: PathBuf,
+    },
+    /// Generate phrases from the format produced by `web/sync-lyrics.html` tool
+    LyricsPhrases {
+        /// The path to the input JSON file, represented by `LyricsPhrasesInput`.
+        lyrics_input: PathBuf,
+        /// The path to a file where to write the output as JSON, represented by `LyricsPhrasesOutput`.
         phrases_output: PathBuf,
     },
     /// Generate a grid for a given set of phrases
@@ -89,7 +99,12 @@ fn main() -> Result<()> {
         } => {
             time_phrases(languages, phrases_output)?;
         }
-
+        Options::LyricsPhrases {
+            lyrics_input,
+            phrases_output,
+        } => {
+            lyrics_phrases(lyrics_input, phrases_output)?;
+        }
         Options::Grid {
             phrases_input,
             grid_output,
@@ -140,6 +155,55 @@ fn time_phrases(languages: String, phrases_output: PathBuf) -> Result<()> {
     fs::write(
         &phrases_output,
         serde_json::to_string_pretty(&TimePhrasesOutput { phrases })?,
+    )?;
+
+    Ok(())
+}
+
+fn lyrics_phrases(lyrics_input: PathBuf, phrases_output: PathBuf) -> Result<()> {
+    let lyrics_input: LyricsPhrasesInput =
+        serde_json::from_str(&fs::read_to_string(&lyrics_input)?)?;
+
+    let lines = lyrics_input.0.split(|element| match element {
+        WordOrSpace::Word { .. } => false,
+        WordOrSpace::Space(text) => text.contains('\n'),
+    });
+
+    let mut phrases = vec![];
+
+    for line in lines {
+        let mut phrase = LyricsPhrase {
+            phrase: String::new(),
+            stops: vec![],
+        };
+        let mut word_index = 0;
+
+        for element in line {
+            match element {
+                WordOrSpace::Word { word, times } => {
+                    phrase.phrase += word;
+                    phrase.phrase.push(' ');
+                    for time in times {
+                        phrase.stops.push(LyricsPhraseStop {
+                            word_index,
+                            time: time.round() as i32,
+                        });
+                    }
+                    word_index += 1;
+                }
+                WordOrSpace::Space(_) => {}
+            }
+        }
+
+        if !phrase.phrase.is_empty() {
+            ensure!(phrase.phrase.pop() == Some(' '));
+            phrases.push(phrase);
+        }
+    }
+
+    fs::write(
+        &phrases_output,
+        serde_json::to_string_pretty(&LyricsPhrasesOutput { phrases })?,
     )?;
 
     Ok(())

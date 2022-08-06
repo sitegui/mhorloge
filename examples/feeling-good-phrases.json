@@ -1,0 +1,628 @@
+{
+  "phrases": [
+    {
+      "phrase": "BIRDS FLYING HIGH",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 5
+        },
+        {
+          "word_index": 2,
+          "time": 6
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW HOW I FEEL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 6
+        },
+        {
+          "word_index": 4,
+          "time": 7
+        }
+      ]
+    },
+    {
+      "phrase": "SUN IN THE SKY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 10
+        },
+        {
+          "word_index": 3,
+          "time": 11
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW HOW I FEEL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 12
+        },
+        {
+          "word_index": 4,
+          "time": 13
+        }
+      ]
+    },
+    {
+      "phrase": "BREEZE DRIFTIN ON BY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 17
+        },
+        {
+          "word_index": 3,
+          "time": 18
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW HOW I FEEL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 19
+        },
+        {
+          "word_index": 4,
+          "time": 20
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW DAWN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 23
+        },
+        {
+          "word_index": 3,
+          "time": 24
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW DAY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 25
+        },
+        {
+          "word_index": 3,
+          "time": 26
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW LIFE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 28
+        },
+        {
+          "word_index": 3,
+          "time": 29
+        }
+      ]
+    },
+    {
+      "phrase": "FOR ME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 30
+        },
+        {
+          "word_index": 1,
+          "time": 30
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW DAWN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 31
+        },
+        {
+          "word_index": 3,
+          "time": 32
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW DAY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 33
+        },
+        {
+          "word_index": 3,
+          "time": 33
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW LIFE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 34
+        },
+        {
+          "word_index": 3,
+          "time": 34
+        }
+      ]
+    },
+    {
+      "phrase": "FOR ME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 35
+        },
+        {
+          "word_index": 1,
+          "time": 35
+        }
+      ]
+    },
+    {
+      "phrase": "AND IM FEELING GOOD",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 42
+        },
+        {
+          "word_index": 3,
+          "time": 43
+        }
+      ]
+    },
+    {
+      "phrase": "FISH IN THE SEA",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 51
+        },
+        {
+          "word_index": 3,
+          "time": 51
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW HOW I FEEL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 53
+        },
+        {
+          "word_index": 4,
+          "time": 54
+        }
+      ]
+    },
+    {
+      "phrase": "RIVER RUNNING FREE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 57
+        },
+        {
+          "word_index": 2,
+          "time": 58
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW HOW I FEEL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 59
+        },
+        {
+          "word_index": 4,
+          "time": 60
+        }
+      ]
+    },
+    {
+      "phrase": "BLOSSOM ON A TREE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 63
+        },
+        {
+          "word_index": 3,
+          "time": 64
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW HOW I FEEL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 65
+        },
+        {
+          "word_index": 4,
+          "time": 66
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW DAWN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 68
+        },
+        {
+          "word_index": 3,
+          "time": 69
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW DAY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 70
+        },
+        {
+          "word_index": 3,
+          "time": 70
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW LIFE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 71
+        },
+        {
+          "word_index": 3,
+          "time": 72
+        }
+      ]
+    },
+    {
+      "phrase": "FOR ME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 74
+        },
+        {
+          "word_index": 1,
+          "time": 75
+        }
+      ]
+    },
+    {
+      "phrase": "AND IM FEELING GOOD",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 77
+        },
+        {
+          "word_index": 3,
+          "time": 78
+        }
+      ]
+    },
+    {
+      "phrase": "DRAGONFLY OUT IN THE SUN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 85
+        },
+        {
+          "word_index": 4,
+          "time": 86
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW WHAT I MEAN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 87
+        },
+        {
+          "word_index": 4,
+          "time": 88
+        }
+      ]
+    },
+    {
+      "phrase": "DONT YOU KNOW",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 88
+        },
+        {
+          "word_index": 2,
+          "time": 89
+        }
+      ]
+    },
+    {
+      "phrase": "BUTTERFLIES ALL HAVIN FUN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 92
+        },
+        {
+          "word_index": 3,
+          "time": 93
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW WHAT I MEAN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 94
+        },
+        {
+          "word_index": 4,
+          "time": 95
+        }
+      ]
+    },
+    {
+      "phrase": "SLEEP IN PEACE WHEN DAY IS DONE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 98
+        },
+        {
+          "word_index": 6,
+          "time": 100
+        }
+      ]
+    },
+    {
+      "phrase": "THATS WHAT I MEAN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 101
+        },
+        {
+          "word_index": 3,
+          "time": 101
+        }
+      ]
+    },
+    {
+      "phrase": "AND THIS OLD WORLD",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 103
+        },
+        {
+          "word_index": 3,
+          "time": 104
+        }
+      ]
+    },
+    {
+      "phrase": "IS A NEW WORLD",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 105
+        },
+        {
+          "word_index": 3,
+          "time": 106
+        }
+      ]
+    },
+    {
+      "phrase": "AND A BOLD WORLD",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 107
+        },
+        {
+          "word_index": 3,
+          "time": 107
+        }
+      ]
+    },
+    {
+      "phrase": "FOR ME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 109
+        },
+        {
+          "word_index": 1,
+          "time": 110
+        }
+      ]
+    },
+    {
+      "phrase": "STARS WHEN YOU SHINE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 117
+        },
+        {
+          "word_index": 3,
+          "time": 119
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW HOW I FEEL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 120
+        },
+        {
+          "word_index": 4,
+          "time": 121
+        }
+      ]
+    },
+    {
+      "phrase": "SCENT OF THE PINE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 124
+        },
+        {
+          "word_index": 3,
+          "time": 125
+        }
+      ]
+    },
+    {
+      "phrase": "YOU KNOW HOW I FEEL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 126
+        },
+        {
+          "word_index": 4,
+          "time": 127
+        }
+      ]
+    },
+    {
+      "phrase": "OH FREEDOM IS MINE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 129
+        },
+        {
+          "word_index": 3,
+          "time": 131
+        }
+      ]
+    },
+    {
+      "phrase": "AND I KNOW HOW I FEEL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 133
+        },
+        {
+          "word_index": 5,
+          "time": 134
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW DAWN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 136
+        },
+        {
+          "word_index": 3,
+          "time": 136
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW DAY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 137
+        },
+        {
+          "word_index": 3,
+          "time": 138
+        }
+      ]
+    },
+    {
+      "phrase": "ITS A NEW LIFE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 139
+        },
+        {
+          "word_index": 3,
+          "time": 140
+        }
+      ]
+    },
+    {
+      "phrase": "FOR ME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 142
+        },
+        {
+          "word_index": 1,
+          "time": 142
+        }
+      ]
+    },
+    {
+      "phrase": "AND IM FEELING GOOD",
+      "stops": [
+        {
+          "word_index": 0,
+          "time": 162
+        },
+        {
+          "word_index": 3,
+          "time": 164
+        }
+      ]
+    }
+  ]
+}

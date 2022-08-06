@@ -19,7 +19,7 @@ Vue.createApp({
             }
             event.target.reportValidity()
         },
-        submitFormStep1(event) {
+        submitFormStep1() {
             const videoId = extractVideoId(this.videoUrl)
             this.step = 2
 
@@ -72,7 +72,7 @@ Vue.createApp({
                 } else {
                     const word = {word: each.text}
                     if (each.times.length > 0) {
-                        word.time = each.times
+                        word.times = each.times
                     }
                     return word
                 }

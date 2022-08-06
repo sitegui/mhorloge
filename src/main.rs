@@ -180,10 +180,12 @@ fn grid(
     );
 
     let (width, height) = best_grid.size();
-    let (aspect_width, aspect_height) = aspect_ratio.cover(width, height);
+    log::info!("Build grid {}x{}", width, height);
 
+    let (aspect_width, aspect_height) = aspect_ratio.cover(width, height);
     let mut final_grid = best_grid.clone();
     final_grid.fill_to_size(aspect_width, aspect_height, &mut rand::thread_rng())?;
+    log::info!("Filled grid into {}x{}", aspect_width, aspect_height);
 
     let final_letters = final_grid
         .to_letters()

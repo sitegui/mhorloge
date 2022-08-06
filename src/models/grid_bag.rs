@@ -3,6 +3,7 @@ use crate::models::token::Token;
 use crate::models::token_relations::TokenRelations;
 use crate::AspectRatio;
 use itertools::Itertools;
+use rand::prelude::SliceRandom;
 use rayon::prelude::*;
 use std::{fmt, mem};
 
@@ -38,7 +39,8 @@ impl GridBag {
             let initial_size = self.grids.len();
 
             let mut grids = mem::take(&mut self.grids);
-            grids.par_sort_by_key(|grid| self.weight_for_grid(grid));
+            grids.shuffle(&mut rand::thread_rng());
+            grids.par_sort_unstable_by_key(|grid| self.weight_for_grid(grid));
             grids.truncate(max_size);
             self.grids = grids;
 

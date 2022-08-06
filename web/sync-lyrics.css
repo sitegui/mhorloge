@@ -1,0 +1,28 @@
+#form-step-1 #lyrics {
+    height: 25em;
+}
+
+#youtube-player {
+    width: 720px;
+    height: 405px;
+    border: thin black solid;
+}
+
+#lyrics-pad {
+    white-space: pre;
+    font-size: larger;
+    word-spacing: 0.1em;
+}
+
+#lyrics-pad .word {
+    cursor: pointer;
+}
+
+#lyrics-pad .word.used {
+    text-decoration: underline gray;
+}
+
+#lyrics-pad .word:hover {
+    color: #633;
+}
+

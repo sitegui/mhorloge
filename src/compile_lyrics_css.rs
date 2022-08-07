@@ -25,11 +25,11 @@ struct LetterStop {
     speed: OrderedFloat<f64>,
 }
 
-pub fn compile_lyrics_css(phrases: LyricsPhrasesOutput, grid: GridOutput) -> String {
+pub fn compile_lyrics_css(phrases: &LyricsPhrasesOutput, grid: &GridOutput) -> String {
     let total_duration = phrases.total_duration as f64;
 
     let mut all_words = vec![];
-    for (lyrics_phrase, grid_phrase) in phrases.phrases.into_iter().zip(&grid.phrases) {
+    for (lyrics_phrase, grid_phrase) in phrases.phrases.iter().zip(&grid.phrases) {
         let mut letters = grid_phrase.letters.iter().cloned();
         let mut scheduled_words = lyrics_phrase
             .phrase
@@ -40,7 +40,7 @@ pub fn compile_lyrics_css(phrases: LyricsPhrasesOutput, grid: GridOutput) -> Str
             })
             .collect_vec();
 
-        for stop in lyrics_phrase.stops {
+        for stop in &lyrics_phrase.stops {
             let scheduled = &mut scheduled_words[stop.word_index as usize];
             assert!(
                 scheduled.percentage.is_none(),
@@ -132,10 +132,12 @@ pub fn compile_lyrics_css(phrases: LyricsPhrasesOutput, grid: GridOutput) -> Str
         writeln!(
             source,
             "{} {{",
-            letters.iter().format_with(" ", |letter, f| f(&format_args!(
-                ".letter-{}-{}",
-                letter.0, letter.1
-            ))),
+            letters
+                .iter()
+                .format_with(", ", |letter, f| f(&format_args!(
+                    ".letter-{}-{}",
+                    letter.0, letter.1
+                ))),
         )
         .unwrap();
         writeln!(
@@ -148,10 +150,10 @@ pub fn compile_lyrics_css(phrases: LyricsPhrasesOutput, grid: GridOutput) -> Str
     }
 
     let config = AnimationConfig {
-        ease_in: 0.1,
-        before: 0.2,
-        after: 1.0,
-        ease_out: 0.1,
+        ease_in: 100.0 * 100.0 / total_duration,
+        before: 100.0 * 100.0 / total_duration,
+        after: 1000.0 * 100.0 / total_duration,
+        ease_out: 100.0 * 100.0 / total_duration,
         discrete_time_steps: 100.0 * 100.0 / total_duration,
     };
 
@@ -160,7 +162,13 @@ pub fn compile_lyrics_css(phrases: LyricsPhrasesOutput, grid: GridOutput) -> Str
         writeln!(source, "@keyframes lyrics-timeline-{} {{", timeline_i).unwrap();
         for frame in compile_keyframes(config, timeline) {
             writeln!(source, "    {:.2}% {{", frame.time_percentage).unwrap();
-            writeln!(source, "        opacity: {:.0}%;", frame.effect_percentage).unwrap();
+            writeln!(
+                source,
+                "        opacity: {:.0}%; /* {:.1}s */",
+                frame.effect_percentage,
+                frame.time_percentage * total_duration / 100.0 / 1e3
+            )
+            .unwrap();
             writeln!(source, "    }}").unwrap();
         }
         writeln!(source, "}}").unwrap();
@@ -194,10 +202,10 @@ struct Keyframe {
 
 impl Highlight {
     fn new(config: AnimationConfig, stop: LetterStop) -> Self {
-        let ease_in = config.ease_in * stop.speed.into_inner();
-        let before = config.before * stop.speed.into_inner();
-        let after = config.after * stop.speed.into_inner();
-        let ease_out = config.ease_out * stop.speed.into_inner();
+        let ease_in = config.ease_in;
+        let before = config.before;
+        let after = config.after;
+        let ease_out = config.ease_out;
 
         let percentage = stop.percentage.into_inner();
         Self {
@@ -228,6 +236,8 @@ impl Highlight {
 }
 
 fn compile_keyframes(config: AnimationConfig, timeline: &BTreeSet<LetterStop>) -> Vec<Keyframe> {
+    log::debug!("compile_keyframes {:?}", timeline);
+
     // Convert each stop to a interval of change that highlights the given letter.
     // Sort the highlights by start so that we can detect conflicts next
     let highlights = timeline

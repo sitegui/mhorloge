@@ -161,9 +161,27 @@ fn lyrics_css_animation(
     let phrases: LyricsPhrasesOutput = serde_json::from_str(&fs::read_to_string(&phrases_input)?)?;
     let grid: GridOutput = serde_json::from_str(&fs::read_to_string(&grid_input)?)?;
 
-    let css_source = compile_lyrics_css::compile_lyrics_css(phrases, grid);
+    let css_source = compile_lyrics_css::compile_lyrics_css(&phrases, &grid);
 
     fs::write(&css_output, css_source)?;
+
+    use std::fmt::Write;
+    let mut grid_html = String::new();
+    write!(grid_html, "<div class=\"grid\">").unwrap();
+    for (i, row) in grid.grid.into_iter().enumerate() {
+        for (j, letter) in row.into_iter().enumerate() {
+            write!(
+                grid_html,
+                "<span class=\"letter letter-{}-{}\">{}</span>",
+                j, i, letter
+            )
+            .unwrap();
+        }
+        writeln!(grid_html, "<br>").unwrap();
+    }
+    writeln!(grid_html, "</div>").unwrap();
+
+    fs::write("data/grid.html", grid_html)?;
 
     Ok(())
 }

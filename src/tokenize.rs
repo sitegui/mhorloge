@@ -15,9 +15,10 @@ pub struct RepeatedSequence<'a> {
     instances: Vec<&'a [WordId]>,
 }
 
-pub fn tokenize(book: &PhraseBook) -> MergeDag<WordId, Token> {
+pub fn tokenize(book: &PhraseBook, chain_growth_head_space: i32) -> MergeDag<WordId, Token> {
     let mut seed_tokens = vec![];
     let mut edges = vec![];
+    let mut longest_phrase = 0;
     for phrase in book.phrases() {
         for &word_id in &phrase.words {
             let token = Token::new(&book[word_id]);
@@ -27,15 +28,41 @@ pub fn tokenize(book: &PhraseBook) -> MergeDag<WordId, Token> {
         for (&before, &after) in phrase.words.iter().tuple_windows::<(_, _)>() {
             edges.push((before, after));
         }
+
+        longest_phrase = longest_phrase.max(phrase.words.len() as i32);
     }
 
     let mut graph = MergeDag::new(seed_tokens, &edges);
-    log::info!("Initial token graph has {} words", graph.nodes_len(),);
+    log::info!("Initial token graph has {} words", graph.nodes_len());
+
+    let max_chain_size = longest_phrase + chain_growth_head_space;
+    log::info!(
+        "Longest phrase has {} words, so max_chain_length = {}",
+        longest_phrase,
+        max_chain_size
+    );
 
     let sequences = extract_sequences(book);
     log::info!("Will try to merge {} sequences", sequences.len());
     for sequence in &sequences {
-        merge_sequence(&mut graph, sequence);
+        merge_sequence(&mut graph, sequence, max_chain_size);
+    }
+
+    if log::log_enabled!(log::Level::Debug) {
+        let tokens_and_chains = graph
+            .groups()
+            .map(|(id, token)| (token, graph.longest_chain_size(id)))
+            .sorted_by_key(|(_, chain)| (chain.size(), chain.upstream));
+
+        log::debug!(
+            "Tokens and chains:\nUP DOWN TOKEN\n{}",
+            tokens_and_chains.format_with("\n", |(token, chain), f| {
+                f(&format_args!(
+                    "{:>2} {:>4} {}",
+                    chain.upstream, chain.downstream, token
+                ))
+            })
+        );
     }
 
     graph
@@ -92,12 +119,16 @@ fn extract_sequences_with_length(book: &PhraseBook, length: usize) -> Vec<Repeat
         .collect_vec()
 }
 
-fn merge_sequence(graph: &mut MergeDag<WordId, Token>, sequence: &RepeatedSequence) {
+fn merge_sequence(
+    graph: &mut MergeDag<WordId, Token>,
+    sequence: &RepeatedSequence,
+    max_chain_size: i32,
+) {
     log::debug!("Will merge sequence: {}", sequence.texts.iter().format(" "));
 
     for i in 0..sequence.texts.len() {
         let locations = sequence.instances.iter().map(|loc| loc[i]).collect_vec();
-        merge_locations(graph, &locations);
+        merge_locations(graph, &locations, max_chain_size);
     }
 }
 
@@ -106,7 +137,7 @@ fn merge_sequence(graph: &mut MergeDag<WordId, Token>, sequence: &RepeatedSequen
 /// its own. The following locations will try to merge with the first group. When not possible, it
 /// will try with the second, and so on until no group accepts it. In this case, a new group will
 /// created again.
-fn merge_locations(graph: &mut MergeDag<WordId, Token>, words: &[WordId]) {
+fn merge_locations(graph: &mut MergeDag<WordId, Token>, words: &[WordId], max_chain_size: i32) {
     let mut group_roots = Vec::new();
 
     let unique_tokens_before: BTreeSet<_> = words
@@ -121,9 +152,17 @@ fn merge_locations(graph: &mut MergeDag<WordId, Token>, words: &[WordId]) {
     for &word in words {
         let mut merged = false;
         let word_group = graph.group(word).0;
+        let word_chain = graph.longest_chain_size(word_group);
 
         for &root in &group_roots {
-            if !graph.has_path(root, word_group) {
+            let root_chain = graph.longest_chain_size(root);
+            let old_chain_size = word_chain.size().max(root_chain.size());
+            let new_chain_size = root_chain.merged_with(word_chain).size();
+
+            let grows_chain = new_chain_size > old_chain_size;
+            let new_chain_accepted = new_chain_size <= max_chain_size;
+
+            if (!grows_chain || new_chain_accepted) && !graph.has_path(root, word_group) {
                 graph.merge_groups(root, word_group, |base_token, new_token| {
                     base_token.words.extend(new_token.words);
                 });

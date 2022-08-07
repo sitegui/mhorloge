@@ -79,6 +79,13 @@ enum Options {
         /// You can install it with the `graphviz` package.
         #[structopt(long)]
         debug_tokens_svg: Option<PathBuf>,
+        /// When merging repeated words from different phrases together - into what's internally
+        /// called tokens - they create chains that can be bigger than the original phrase.
+        ///
+        /// This setting controls controls their maximum size, expressed in number of words above
+        /// the longest original phrase.
+        #[structopt(long, default_value = "1")]
+        chain_growth_head_space: i32,
     },
 }
 
@@ -112,6 +119,7 @@ fn main() -> Result<()> {
             aspect_ratio,
             max_grid_bag_size,
             debug_tokens_svg,
+            chain_growth_head_space,
         } => {
             grid(
                 phrases_input,
@@ -120,6 +128,7 @@ fn main() -> Result<()> {
                 aspect_ratio,
                 max_grid_bag_size,
                 debug_tokens_svg,
+                chain_growth_head_space,
             )?;
         }
     }
@@ -216,6 +225,7 @@ fn grid(
     aspect_ratio: AspectRatio,
     max_grid_bag_size: usize,
     debug_tokens_svg: Option<PathBuf>,
+    chain_growth_head_space: i32,
 ) -> Result<()> {
     let grid_input: GridInput = serde_json::from_str(&fs::read_to_string(&phrases_input)?)?;
 
@@ -225,7 +235,7 @@ fn grid(
     }
     log::info!("Read {} phrases", phrase_book.phrases().len());
 
-    let token_graph = tokenize::tokenize(&phrase_book);
+    let token_graph = tokenize::tokenize(&phrase_book, chain_growth_head_space);
     log::info!(
         "Formed token graph with {} tokens",
         token_graph.groups_len(),

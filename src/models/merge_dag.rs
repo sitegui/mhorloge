@@ -4,15 +4,17 @@ use petgraph::algo::DfsSpace;
 use petgraph::dot::{Config, Dot};
 use petgraph::prelude::{EdgeRef, NodeIndex, StableDiGraph};
 use petgraph::stable_graph::EdgeReference;
-use petgraph::visit::{Dfs, EdgeFiltered, IntoEdgeReferences, IntoNodeReferences, Walker};
+use petgraph::visit::{
+    Dfs, EdgeFiltered, IntoEdgeReferences, IntoNodeReferences, VisitMap, Visitable, Walker,
+};
 use petgraph::{algo, Direction};
 use std::collections::BTreeMap;
 use std::fmt::Display;
-use std::fs;
 use std::io::Write;
 use std::ops::Index;
 use std::path::Path;
 use std::process::{Command, Stdio};
+use std::{fs, mem};
 
 /// Represents a direct acyclic graph, whose nodes can be grouped together.
 ///
@@ -25,6 +27,12 @@ pub struct MergeDag<NodeId, Group> {
 
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
 pub struct GroupId(NodeIndex<u16>);
+
+#[derive(Debug, Clone, Copy)]
+pub struct LongestChainSize {
+    pub upstream: i32,
+    pub downstream: i32,
+}
 
 impl<NodeId: Copy + Ord, Group> MergeDag<NodeId, Group> {
     pub fn new(seed_groups: Vec<(NodeId, Group)>, edges: &[(NodeId, NodeId)]) -> Self {
@@ -224,6 +232,52 @@ impl<NodeId: Copy + Ord, Group> MergeDag<NodeId, Group> {
         }
 
         result
+    }
+
+    /// Return the size of the longest chain of tokens in each direction (incoming, outgoing)
+    pub fn longest_chain_size(&self, group: GroupId) -> LongestChainSize {
+        LongestChainSize {
+            upstream: self.longest_chain_size_with_direction(group, Direction::Incoming),
+            downstream: self.longest_chain_size_with_direction(group, Direction::Outgoing),
+        }
+    }
+
+    fn longest_chain_size_with_direction(&self, root: GroupId, direction: Direction) -> i32 {
+        let graph = &self.merged_graph;
+
+        let mut scheduled_visits = Vec::with_capacity(graph.node_count());
+        scheduled_visits.push(root.0);
+
+        // Each loop will move on step further from the root
+        let mut distance = -1;
+        while !scheduled_visits.is_empty() {
+            distance += 1;
+
+            let visits = mem::replace(
+                &mut scheduled_visits,
+                Vec::with_capacity(graph.node_count()),
+            );
+            for node in visits {
+                for neighbor in graph.neighbors_directed(node, direction) {
+                    scheduled_visits.push(neighbor);
+                }
+            }
+        }
+
+        distance
+    }
+}
+
+impl LongestChainSize {
+    pub fn size(self) -> i32 {
+        self.upstream + 1 + self.downstream
+    }
+
+    pub fn merged_with(self, other: Self) -> Self {
+        Self {
+            upstream: self.upstream.max(other.upstream),
+            downstream: self.downstream.max(other.downstream),
+        }
     }
 }
 

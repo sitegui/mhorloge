@@ -22,6 +22,7 @@ use crate::models::token::Token;
 use crate::models::word::WordId;
 
 mod build_grid;
+mod compile_lyrics_css;
 mod generate_phrases;
 mod models;
 mod tokenize;
@@ -87,6 +88,15 @@ enum Options {
         #[structopt(long, default_value = "1")]
         chain_growth_head_space: i32,
     },
+    /// Generate the CSS to sync each letter of a grid with a song's lyrics
+    LyricsCssAnimation {
+        /// The path to the lyrics input JSON file, represented by `LyricsPhrasesOutput`.
+        phrases_input: PathBuf,
+        /// The path to the grid input JSON file, represented by `GridOutput`.
+        grid_input: PathBuf,
+        /// The path to a file where to write the output as CSS.
+        css_output: PathBuf,
+    },
 }
 
 fn main() -> Result<()> {
@@ -131,9 +141,29 @@ fn main() -> Result<()> {
                 chain_growth_head_space,
             )?;
         }
+        Options::LyricsCssAnimation {
+            phrases_input,
+            grid_input,
+            css_output,
+        } => lyrics_css_animation(phrases_input, grid_input, css_output)?,
     }
 
     log::info!("Done in {:?}", start.elapsed());
+
+    Ok(())
+}
+
+fn lyrics_css_animation(
+    phrases_input: PathBuf,
+    grid_input: PathBuf,
+    css_output: PathBuf,
+) -> Result<()> {
+    let phrases: LyricsPhrasesOutput = serde_json::from_str(&fs::read_to_string(&phrases_input)?)?;
+    let grid: GridOutput = serde_json::from_str(&fs::read_to_string(&grid_input)?)?;
+
+    let css_source = compile_lyrics_css::compile_lyrics_css(phrases, grid);
+
+    fs::write(&css_output, css_source)?;
 
     Ok(())
 }
@@ -209,7 +239,10 @@ fn lyrics_phrases(lyrics_input: PathBuf, phrases_output: PathBuf) -> Result<()> 
 
     fs::write(
         &phrases_output,
-        serde_json::to_string_pretty(&LyricsPhrasesOutput { phrases })?,
+        serde_json::to_string_pretty(&LyricsPhrasesOutput {
+            phrases,
+            total_duration: lyrics_input.total_duration,
+        })?,
     )?;
 
     Ok(())

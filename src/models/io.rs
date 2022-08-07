@@ -50,6 +50,7 @@ pub enum WordOrSpace {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LyricsPhrasesOutput {
     pub phrases: Vec<LyricsPhrase>,
+    pub total_duration: i32,
 }
 
 /// Represents each phrase in the lyrics
@@ -64,4 +65,21 @@ pub struct LyricsPhrase {
 pub struct LyricsPhraseStop {
     pub word_index: i32,
     pub time: i32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LyricsKeyframesOutput {
+    pub animations: Vec<LyricsAnimation>,
+    pub animation_per_letter: Vec<Vec<String>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LyricsAnimation {
+    pub name: String,
+    pub keyframes: Vec<LyricsKeyframe>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LyricsKeyframe {
+    pub percentage: f64,
 }

@@ -81,14 +81,6 @@ impl PositionedToken {
         self.oriented.token_id()
     }
 
-    pub fn start(self) -> XY {
-        self.start
-    }
-
-    pub fn middle(self) -> XY {
-        self.start + self.direction().as_xy() * (self.size() / 2)
-    }
-
     pub fn end(self) -> XY {
         self.start + self.direction().as_xy() * (self.size() - 1)
     }

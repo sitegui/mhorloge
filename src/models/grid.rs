@@ -130,10 +130,6 @@ impl Grid {
             .collect()
     }
 
-    pub fn tokens(&self) -> &[PositionedToken] {
-        &self.tokens
-    }
-
     pub fn get(&self, at: XY) -> Option<Letter> {
         self.letter_by_pos.get(&at).copied()
     }

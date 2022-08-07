@@ -2,11 +2,8 @@ use anyhow::{ensure, Result};
 use itertools::Itertools;
 use petgraph::algo::DfsSpace;
 use petgraph::dot::{Config, Dot};
-use petgraph::prelude::{EdgeRef, NodeIndex, StableDiGraph};
-use petgraph::stable_graph::EdgeReference;
-use petgraph::visit::{
-    Dfs, EdgeFiltered, IntoEdgeReferences, IntoNodeReferences, VisitMap, Visitable, Walker,
-};
+use petgraph::prelude::{NodeIndex, StableDiGraph};
+use petgraph::visit::IntoNodeReferences;
 use petgraph::{algo, Direction};
 use std::collections::BTreeMap;
 use std::fmt::Display;
@@ -122,14 +119,6 @@ impl<NodeId: Copy + Ord, Group> MergeDag<NodeId, Group> {
         self.merged_graph.node_count()
     }
 
-    pub fn group_edges(&self) -> impl Iterator<Item = (&Group, &Group)> {
-        self.merged_graph.edge_references().map(move |edge| {
-            let source = &self.merged_graph[edge.source()];
-            let target = &self.merged_graph[edge.target()];
-            (source, target)
-        })
-    }
-
     pub fn dot(&self) -> String
     where
         Group: Display,
@@ -172,12 +161,6 @@ impl<NodeId: Copy + Ord, Group> MergeDag<NodeId, Group> {
         Ok(())
     }
 
-    pub fn reachable_groups(&self, start: GroupId) -> impl Iterator<Item = GroupId> + '_ {
-        Dfs::new(&self.merged_graph, start.0)
-            .iter(&self.merged_graph)
-            .map(GroupId)
-    }
-
     /// Return if there is any path connecting the two groups
     pub fn has_path(&self, a: GroupId, b: GroupId) -> bool {
         let a = a.0;
@@ -186,25 +169,6 @@ impl<NodeId: Copy + Ord, Group> MergeDag<NodeId, Group> {
         let space = &mut DfsSpace::new(&self.merged_graph);
         algo::has_path_connecting(&self.merged_graph, a, b, Some(space))
             || algo::has_path_connecting(&self.merged_graph, b, a, Some(space))
-    }
-
-    /// Return if there is any indirect path connecting the two groups. Unlike
-    /// [`MergeDag::has_path`], direct paths (`a` and `b` are direct neighbors) do not count.
-    pub fn has_indirect_path(&self, a: GroupId, b: GroupId) -> bool {
-        let a = a.0;
-        let b = b.0;
-
-        let graph_no_a_b = EdgeFiltered(&self.merged_graph, |edge: EdgeReference<(), u16>| {
-            edge.source() != a || edge.target() != b
-        });
-        let graph_no_b_a = EdgeFiltered(&self.merged_graph, |edge: EdgeReference<(), u16>| {
-            edge.source() != b || edge.target() != a
-        });
-
-        let space = &mut DfsSpace::new(&self.merged_graph);
-
-        algo::has_path_connecting(&graph_no_a_b, a, b, Some(space))
-            || algo::has_path_connecting(&graph_no_b_a, b, a, Some(space))
     }
 
     /// Return all groups with their depths. `0` means that this group has no "parent".

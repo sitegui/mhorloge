@@ -50,10 +50,6 @@ impl GridBag {
         }
     }
 
-    pub fn tokens(&self) -> &[Token] {
-        &self.tokens
-    }
-
     pub fn grids(&self) -> &[Grid] {
         &self.grids
     }

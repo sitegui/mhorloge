@@ -5,11 +5,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 5
+          "time_ms": 4650
         },
         {
           "word_index": 2,
-          "time": 6
+          "time_ms": 5557
         }
       ]
     },
@@ -18,11 +18,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 6
+          "time_ms": 6089
         },
         {
           "word_index": 4,
-          "time": 7
+          "time_ms": 7040
         }
       ]
     },
@@ -31,11 +31,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 10
+          "time_ms": 10209
         },
         {
           "word_index": 3,
-          "time": 11
+          "time_ms": 11177
         }
       ]
     },
@@ -44,11 +44,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 12
+          "time_ms": 11982
         },
         {
           "word_index": 4,
-          "time": 13
+          "time_ms": 13177
         }
       ]
     },
@@ -57,11 +57,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 17
+          "time_ms": 16764
         },
         {
           "word_index": 3,
-          "time": 18
+          "time_ms": 18389
         }
       ]
     },
@@ -70,11 +70,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 19
+          "time_ms": 19060
         },
         {
           "word_index": 4,
-          "time": 20
+          "time_ms": 19873
         }
       ]
     },
@@ -83,11 +83,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 23
+          "time_ms": 23301
         },
         {
           "word_index": 3,
-          "time": 24
+          "time_ms": 23730
         }
       ]
     },
@@ -96,11 +96,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 25
+          "time_ms": 24978
         },
         {
           "word_index": 3,
-          "time": 26
+          "time_ms": 25529
         }
       ]
     },
@@ -109,11 +109,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 28
+          "time_ms": 28441
         },
         {
           "word_index": 3,
-          "time": 29
+          "time_ms": 29172
         }
       ]
     },
@@ -122,11 +122,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 30
+          "time_ms": 29718
         },
         {
           "word_index": 1,
-          "time": 30
+          "time_ms": 29998
         }
       ]
     },
@@ -135,11 +135,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 31
+          "time_ms": 31328
         },
         {
           "word_index": 3,
-          "time": 32
+          "time_ms": 31778
         }
       ]
     },
@@ -148,11 +148,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 33
+          "time_ms": 32522
         },
         {
           "word_index": 3,
-          "time": 33
+          "time_ms": 32973
         }
       ]
     },
@@ -161,11 +161,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 34
+          "time_ms": 34296
         },
         {
           "word_index": 3,
-          "time": 34
+          "time_ms": 34487
         }
       ]
     },
@@ -174,11 +174,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 35
+          "time_ms": 35040
         },
         {
           "word_index": 1,
-          "time": 35
+          "time_ms": 35299
         }
       ]
     },
@@ -187,11 +187,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 42
+          "time_ms": 41502
         },
         {
           "word_index": 3,
-          "time": 43
+          "time_ms": 43045
         }
       ]
     },
@@ -200,11 +200,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 51
+          "time_ms": 50638
         },
         {
           "word_index": 3,
-          "time": 51
+          "time_ms": 51375
         }
       ]
     },
@@ -213,11 +213,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 53
+          "time_ms": 53063
         },
         {
           "word_index": 4,
-          "time": 54
+          "time_ms": 53934
         }
       ]
     },
@@ -226,11 +226,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 57
+          "time_ms": 56979
         },
         {
           "word_index": 2,
-          "time": 58
+          "time_ms": 57722
         }
       ]
     },
@@ -239,11 +239,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 59
+          "time_ms": 58740
         },
         {
           "word_index": 4,
-          "time": 60
+          "time_ms": 60105
         }
       ]
     },
@@ -252,11 +252,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 63
+          "time_ms": 63200
         },
         {
           "word_index": 3,
-          "time": 64
+          "time_ms": 64399
         }
       ]
     },
@@ -265,11 +265,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 65
+          "time_ms": 65497
         },
         {
           "word_index": 4,
-          "time": 66
+          "time_ms": 66371
         }
       ]
     },
@@ -278,11 +278,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 68
+          "time_ms": 68408
         },
         {
           "word_index": 3,
-          "time": 69
+          "time_ms": 68988
         }
       ]
     },
@@ -291,11 +291,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 70
+          "time_ms": 69740
         },
         {
           "word_index": 3,
-          "time": 70
+          "time_ms": 70384
         }
       ]
     },
@@ -304,11 +304,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 71
+          "time_ms": 71401
         },
         {
           "word_index": 3,
-          "time": 72
+          "time_ms": 72016
         }
       ]
     },
@@ -317,11 +317,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 74
+          "time_ms": 74226
         },
         {
           "word_index": 1,
-          "time": 75
+          "time_ms": 74771
         }
       ]
     },
@@ -330,11 +330,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 77
+          "time_ms": 76886
         },
         {
           "word_index": 3,
-          "time": 78
+          "time_ms": 78146
         }
       ]
     },
@@ -343,11 +343,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 85
+          "time_ms": 84712
         },
         {
           "word_index": 4,
-          "time": 86
+          "time_ms": 86338
         }
       ]
     },
@@ -356,11 +356,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 87
+          "time_ms": 87081
         },
         {
           "word_index": 4,
-          "time": 88
+          "time_ms": 87897
         }
       ]
     },
@@ -369,11 +369,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 88
+          "time_ms": 88397
         },
         {
           "word_index": 2,
-          "time": 89
+          "time_ms": 88774
         }
       ]
     },
@@ -382,11 +382,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 92
+          "time_ms": 91512
         },
         {
           "word_index": 3,
-          "time": 93
+          "time_ms": 93090
         }
       ]
     },
@@ -395,11 +395,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 94
+          "time_ms": 94256
         },
         {
           "word_index": 4,
-          "time": 95
+          "time_ms": 95073
         }
       ]
     },
@@ -408,11 +408,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 98
+          "time_ms": 97877
         },
         {
           "word_index": 6,
-          "time": 100
+          "time_ms": 100126
         }
       ]
     },
@@ -421,11 +421,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 101
+          "time_ms": 100725
         },
         {
           "word_index": 3,
-          "time": 101
+          "time_ms": 101362
         }
       ]
     },
@@ -434,11 +434,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 103
+          "time_ms": 103283
         },
         {
           "word_index": 3,
-          "time": 104
+          "time_ms": 103871
         }
       ]
     },
@@ -447,11 +447,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 105
+          "time_ms": 104827
         },
         {
           "word_index": 3,
-          "time": 106
+          "time_ms": 105528
         }
       ]
     },
@@ -460,11 +460,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 107
+          "time_ms": 106503
         },
         {
           "word_index": 3,
-          "time": 107
+          "time_ms": 107215
         }
       ]
     },
@@ -473,11 +473,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 109
+          "time_ms": 109345
         },
         {
           "word_index": 1,
-          "time": 110
+          "time_ms": 109938
         }
       ]
     },
@@ -486,11 +486,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 117
+          "time_ms": 117374
         },
         {
           "word_index": 3,
-          "time": 119
+          "time_ms": 118743
         }
       ]
     },
@@ -499,11 +499,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 120
+          "time_ms": 119888
         },
         {
           "word_index": 4,
-          "time": 121
+          "time_ms": 120779
         }
       ]
     },
@@ -512,11 +512,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 124
+          "time_ms": 124022
         },
         {
           "word_index": 3,
-          "time": 125
+          "time_ms": 124833
         }
       ]
     },
@@ -525,11 +525,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 126
+          "time_ms": 125726
         },
         {
           "word_index": 4,
-          "time": 127
+          "time_ms": 127166
         }
       ]
     },
@@ -538,11 +538,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 129
+          "time_ms": 128814
         },
         {
           "word_index": 3,
-          "time": 131
+          "time_ms": 130625
         }
       ]
     },
@@ -551,11 +551,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 133
+          "time_ms": 132967
         },
         {
           "word_index": 5,
-          "time": 134
+          "time_ms": 134283
         }
       ]
     },
@@ -564,11 +564,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 136
+          "time_ms": 135837
         },
         {
           "word_index": 3,
-          "time": 136
+          "time_ms": 136465
         }
       ]
     },
@@ -577,11 +577,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 137
+          "time_ms": 137173
         },
         {
           "word_index": 3,
-          "time": 138
+          "time_ms": 137972
         }
       ]
     },
@@ -590,11 +590,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 139
+          "time_ms": 138901
         },
         {
           "word_index": 3,
-          "time": 140
+          "time_ms": 139684
         }
       ]
     },
@@ -603,11 +603,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 142
+          "time_ms": 141546
         },
         {
           "word_index": 1,
-          "time": 142
+          "time_ms": 142406
         }
       ]
     },
@@ -616,11 +616,11 @@
       "stops": [
         {
           "word_index": 0,
-          "time": 162
+          "time_ms": 162082
         },
         {
           "word_index": 3,
-          "time": 164
+          "time_ms": 163574
         }
       ]
     }

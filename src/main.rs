@@ -186,7 +186,7 @@ fn lyrics_phrases(lyrics_input: PathBuf, phrases_output: PathBuf) -> Result<()> 
                     for time in times {
                         phrase.stops.push(LyricsPhraseStop {
                             word_index,
-                            time: time.round() as i32,
+                            time_ms: (1e3 * time).round() as i32,
                         });
                     }
                     word_index += 1;

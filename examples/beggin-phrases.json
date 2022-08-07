@@ -1,0 +1,1130 @@
+{
+  "phrases": [
+    {
+      "phrase": "PUT YOUR LOVING HAND OUT BABY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 921
+        },
+        {
+          "word_index": 2,
+          "time_ms": 2086
+        },
+        {
+          "word_index": 4,
+          "time_ms": 5507
+        },
+        {
+          "word_index": 5,
+          "time_ms": 7526
+        }
+      ]
+    },
+    {
+      "phrase": "CAUSE IM BEGGIN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 12193
+        },
+        {
+          "word_index": 2,
+          "time_ms": 13320
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 25403
+        },
+        {
+          "word_index": 3,
+          "time_ms": 27343
+        }
+      ]
+    },
+    {
+      "phrase": "SO PUT YOUR LOVING HAND OUT BABY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 28918
+        },
+        {
+          "word_index": 6,
+          "time_ms": 30908
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 32495
+        },
+        {
+          "word_index": 3,
+          "time_ms": 34458
+        }
+      ]
+    },
+    {
+      "phrase": "SO PUT YOUR LOVING HAND OUT DARLING",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 36078
+        },
+        {
+          "word_index": 6,
+          "time_ms": 38082
+        }
+      ]
+    },
+    {
+      "phrase": "RIDING HIGH",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 39883
+        },
+        {
+          "word_index": 1,
+          "time_ms": 40278
+        }
+      ]
+    },
+    {
+      "phrase": "WHEN I WAS KING",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 41584
+        },
+        {
+          "word_index": 3,
+          "time_ms": 42080
+        }
+      ]
+    },
+    {
+      "phrase": "I PLAYED IT HARD AND FAST",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 43361
+        },
+        {
+          "word_index": 5,
+          "time_ms": 44428
+        }
+      ]
+    },
+    {
+      "phrase": "CAUSE I HAD EVERYTHING",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 44947
+        },
+        {
+          "word_index": 3,
+          "time_ms": 45533
+        }
+      ]
+    },
+    {
+      "phrase": "I WALKED AWAY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 46979
+        },
+        {
+          "word_index": 2,
+          "time_ms": 47549
+        }
+      ]
+    },
+    {
+      "phrase": "BUT YOU WARNED ME THEN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 48698
+        },
+        {
+          "word_index": 4,
+          "time_ms": 49517
+        }
+      ]
+    },
+    {
+      "phrase": "BUT EASY COME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 50558
+        },
+        {
+          "word_index": 2,
+          "time_ms": 51057
+        }
+      ]
+    },
+    {
+      "phrase": "AND EASY GO",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 51504
+        },
+        {
+          "word_index": 2,
+          "time_ms": 51980
+        }
+      ]
+    },
+    {
+      "phrase": "AND IT WOULD END",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 52457
+        },
+        {
+          "word_index": 3,
+          "time_ms": 52903
+        }
+      ]
+    },
+    {
+      "phrase": "SO ANY TIME I BLEED",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 53181
+        },
+        {
+          "word_index": 4,
+          "time_ms": 53999
+        }
+      ]
+    },
+    {
+      "phrase": "YOU LET ME GO",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 54200
+        },
+        {
+          "word_index": 3,
+          "time_ms": 54657
+        }
+      ]
+    },
+    {
+      "phrase": "YEAH ANY TIME I FEED YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 54878
+        },
+        {
+          "word_index": 5,
+          "time_ms": 55839
+        }
+      ]
+    },
+    {
+      "phrase": "GET ME NO",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 56158
+        },
+        {
+          "word_index": 2,
+          "time_ms": 56451
+        }
+      ]
+    },
+    {
+      "phrase": "ANY TIME I SEEK",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 56909
+        },
+        {
+          "word_index": 3,
+          "time_ms": 57364
+        }
+      ]
+    },
+    {
+      "phrase": "YOU LET ME KNOW",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 57736
+        },
+        {
+          "word_index": 3,
+          "time_ms": 58182
+        }
+      ]
+    },
+    {
+      "phrase": "BUT I PLAN AND SEE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 58511
+        },
+        {
+          "word_index": 4,
+          "time_ms": 59076
+        }
+      ]
+    },
+    {
+      "phrase": "JUST LET ME GO",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 59361
+        },
+        {
+          "word_index": 3,
+          "time_ms": 59955
+        }
+      ]
+    },
+    {
+      "phrase": "IM ON MY KNEES WHEN IM BEGGIN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 60309
+        },
+        {
+          "word_index": 6,
+          "time_ms": 61449
+        }
+      ]
+    },
+    {
+      "phrase": "CAUSE I DONT WANT TO LOSE YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 62260
+        },
+        {
+          "word_index": 6,
+          "time_ms": 63177
+        }
+      ]
+    },
+    {
+      "phrase": "HEY YEAH RATATATA",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 65310
+        },
+        {
+          "word_index": 2,
+          "time_ms": 66972
+        }
+      ]
+    },
+    {
+      "phrase": "CAUSE IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 68416
+        },
+        {
+          "word_index": 4,
+          "time_ms": 70211
+        }
+      ]
+    },
+    {
+      "phrase": "AND PUT YOUR LOVING HAND OUT BABY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 71867
+        },
+        {
+          "word_index": 6,
+          "time_ms": 73924
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 75515
+        },
+        {
+          "word_index": 3,
+          "time_ms": 77437
+        }
+      ]
+    },
+    {
+      "phrase": "AND PUT YOUR LOVING HAND OUT DARLING",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 79001
+        },
+        {
+          "word_index": 6,
+          "time_ms": 81061
+        }
+      ]
+    },
+    {
+      "phrase": "I NEED YOU TO UNDERSTAND",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 82341
+        },
+        {
+          "word_index": 4,
+          "time_ms": 83879
+        }
+      ]
+    },
+    {
+      "phrase": "TRIED SO HARD TO BE YOUR MAN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 85824
+        },
+        {
+          "word_index": 6,
+          "time_ms": 88000
+        }
+      ]
+    },
+    {
+      "phrase": "THE KIND OF MAN YOU WANT IN THE END",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 89440
+        },
+        {
+          "word_index": 8,
+          "time_ms": 91640
+        }
+      ]
+    },
+    {
+      "phrase": "ONLY THEN CAN I BEGIN TO LIVE AGAIN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 92244
+        },
+        {
+          "word_index": 7,
+          "time_ms": 94931
+        }
+      ]
+    },
+    {
+      "phrase": "AN EMPTY SHELL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 97014
+        },
+        {
+          "word_index": 2,
+          "time_ms": 97643
+        }
+      ]
+    },
+    {
+      "phrase": "I USED TO BE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 98963
+        },
+        {
+          "word_index": 3,
+          "time_ms": 99339
+        }
+      ]
+    },
+    {
+      "phrase": "THE SHADOW OF MY LIFE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 100578
+        },
+        {
+          "word_index": 4,
+          "time_ms": 101716
+        }
+      ]
+    },
+    {
+      "phrase": "WAS HANGING OVER ME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 102134
+        },
+        {
+          "word_index": 3,
+          "time_ms": 102972
+        }
+      ]
+    },
+    {
+      "phrase": "A BROKEN MAN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 104142
+        },
+        {
+          "word_index": 2,
+          "time_ms": 104706
+        }
+      ]
+    },
+    {
+      "phrase": "THAT I DONT KNOW",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 106030
+        },
+        {
+          "word_index": 3,
+          "time_ms": 106536
+        }
+      ]
+    },
+    {
+      "phrase": "WONT EVEN STAND THE DEVILS",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 107795
+        },
+        {
+          "word_index": 4,
+          "time_ms": 108794
+        }
+      ]
+    },
+    {
+      "phrase": "CHANCE TO WIN MY SOUL",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 109241
+        },
+        {
+          "word_index": 4,
+          "time_ms": 110122
+        }
+      ]
+    },
+    {
+      "phrase": "WHAT WE DOING",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 110447
+        },
+        {
+          "word_index": 2,
+          "time_ms": 110750
+        }
+      ]
+    },
+    {
+      "phrase": "WHAT WE CHASING",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 111249
+        },
+        {
+          "word_index": 2,
+          "time_ms": 111531
+        }
+      ]
+    },
+    {
+      "phrase": "WHY THE BOTTOM",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 112183
+        },
+        {
+          "word_index": 2,
+          "time_ms": 112485
+        }
+      ]
+    },
+    {
+      "phrase": "WHY THE BASEMENT",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 113034
+        },
+        {
+          "word_index": 2,
+          "time_ms": 113410
+        }
+      ]
+    },
+    {
+      "phrase": "WHY WE GOT GOOD SHIT",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 114072
+        },
+        {
+          "word_index": 4,
+          "time_ms": 114637
+        }
+      ]
+    },
+    {
+      "phrase": "DONT EMBRACE IT",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 114893
+        },
+        {
+          "word_index": 2,
+          "time_ms": 115323
+        }
+      ]
+    },
+    {
+      "phrase": "WHY THE FEEL FOR",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 115813
+        },
+        {
+          "word_index": 3,
+          "time_ms": 116221
+        }
+      ]
+    },
+    {
+      "phrase": "THE NEED TO REPLACE ME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 116558
+        },
+        {
+          "word_index": 4,
+          "time_ms": 117236
+        }
+      ]
+    },
+    {
+      "phrase": "YOURE THE WRONG WAY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 117641
+        },
+        {
+          "word_index": 3,
+          "time_ms": 118121
+        }
+      ]
+    },
+    {
+      "phrase": "TRACK FROM THE GOOD",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 118354
+        },
+        {
+          "word_index": 3,
+          "time_ms": 118703
+        }
+      ]
+    },
+    {
+      "phrase": "I WANT TO PAINT A PICTURE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 119195
+        },
+        {
+          "word_index": 5,
+          "time_ms": 119598
+        }
+      ]
+    },
+    {
+      "phrase": "TELLING WHERE WE COULD BE AT",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 119915
+        },
+        {
+          "word_index": 5,
+          "time_ms": 120887
+        }
+      ]
+    },
+    {
+      "phrase": "LIKE A HEART IN THE BEST WAY SHOULD",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 121228
+        },
+        {
+          "word_index": 7,
+          "time_ms": 122249
+        }
+      ]
+    },
+    {
+      "phrase": "YOU CAN GIVE IT AWAY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 122715
+        },
+        {
+          "word_index": 4,
+          "time_ms": 123114
+        }
+      ]
+    },
+    {
+      "phrase": "YOU HAD AND YOU TOOK THE PAY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 123458
+        },
+        {
+          "word_index": 6,
+          "time_ms": 124430
+        }
+      ]
+    },
+    {
+      "phrase": "BUT I KEEP WALKING ON",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 124829
+        },
+        {
+          "word_index": 4,
+          "time_ms": 125724
+        }
+      ]
+    },
+    {
+      "phrase": "KEEP OPENING DOORS",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 126072
+        },
+        {
+          "word_index": 2,
+          "time_ms": 126571
+        }
+      ]
+    },
+    {
+      "phrase": "KEEP HOPING FOR",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 126989
+        },
+        {
+          "word_index": 2,
+          "time_ms": 127496
+        }
+      ]
+    },
+    {
+      "phrase": "THAT THE DOOR IS YOURS",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 127846
+        },
+        {
+          "word_index": 4,
+          "time_ms": 128487
+        }
+      ]
+    },
+    {
+      "phrase": "KEEP OHSO HOME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 128857
+        },
+        {
+          "word_index": 2,
+          "time_ms": 129355
+        }
+      ]
+    },
+    {
+      "phrase": "CAUSE I DONT WANNA",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 129880
+        },
+        {
+          "word_index": 3,
+          "time_ms": 130199
+        }
+      ]
+    },
+    {
+      "phrase": "LIVE IN A BROKEN HOME",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 130613
+        },
+        {
+          "word_index": 4,
+          "time_ms": 131129
+        }
+      ]
+    },
+    {
+      "phrase": "GIRL IM BEGGIN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 131620
+        },
+        {
+          "word_index": 2,
+          "time_ms": 131810
+        }
+      ]
+    },
+    {
+      "phrase": "MMM YEEEAH",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 133397
+        },
+        {
+          "word_index": 1,
+          "time_ms": 133637
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 134891
+        },
+        {
+          "word_index": 3,
+          "time_ms": 136572
+        }
+      ]
+    },
+    {
+      "phrase": "SO PUT YOUR LOVING HAND OUT BABY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 138095
+        },
+        {
+          "word_index": 6,
+          "time_ms": 140220
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 141718
+        },
+        {
+          "word_index": 3,
+          "time_ms": 143739
+        }
+      ]
+    },
+    {
+      "phrase": "SO PUT YOUR LOVING HAND OUT DARLING",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 145329
+        },
+        {
+          "word_index": 6,
+          "time_ms": 147727
+        }
+      ]
+    },
+    {
+      "phrase": "IM FIGHTING HARD TO HOLD MY OWN",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 148598
+        },
+        {
+          "word_index": 6,
+          "time_ms": 150713
+        }
+      ]
+    },
+    {
+      "phrase": "JUST CANT MAKE IT ALL ALONE",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 152080
+        },
+        {
+          "word_index": 5,
+          "time_ms": 154089
+        }
+      ]
+    },
+    {
+      "phrase": "IM HOLDING ON I CANT FALL BACK",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 155655
+        },
+        {
+          "word_index": 6,
+          "time_ms": 157868
+        }
+      ]
+    },
+    {
+      "phrase": "IM JUST A CALM BOUT TO FADE TO BLACK",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 158693
+        },
+        {
+          "word_index": 8,
+          "time_ms": 161520
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 163383
+        },
+        {
+          "word_index": 3,
+          "time_ms": 165266
+        }
+      ]
+    },
+    {
+      "phrase": "PUT YOUR LOVING HAND OUT BABY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 167073
+        },
+        {
+          "word_index": 5,
+          "time_ms": 168932
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 170431
+        },
+        {
+          "word_index": 3,
+          "time_ms": 172364
+        }
+      ]
+    },
+    {
+      "phrase": "SO PUT YOUR LOVING HAND OUT DARLING",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 174107
+        },
+        {
+          "word_index": 6,
+          "time_ms": 176187
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 177591
+        },
+        {
+          "word_index": 3,
+          "time_ms": 179573
+        }
+      ]
+    },
+    {
+      "phrase": "SO PUT YOUR LOVING HAND OUT BABY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 181123
+        },
+        {
+          "word_index": 6,
+          "time_ms": 183207
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 184726
+        },
+        {
+          "word_index": 3,
+          "time_ms": 186677
+        }
+      ]
+    },
+    {
+      "phrase": "SO PUT YOUR LOVING HAND OUT DARLING",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 188230
+        },
+        {
+          "word_index": 6,
+          "time_ms": 190258
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 191919
+        },
+        {
+          "word_index": 3,
+          "time_ms": 193900
+        }
+      ]
+    },
+    {
+      "phrase": "SO PUT YOUR LOVING HAND OUT BABY",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 195447
+        },
+        {
+          "word_index": 6,
+          "time_ms": 197486
+        }
+      ]
+    },
+    {
+      "phrase": "IM BEGGIN BEGGIN YOU",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 199064
+        },
+        {
+          "word_index": 3,
+          "time_ms": 201079
+        }
+      ]
+    },
+    {
+      "phrase": "SO PUT YOUR LOVING HAND OUT",
+      "stops": [
+        {
+          "word_index": 0,
+          "time_ms": 202691
+        },
+        {
+          "word_index": 5,
+          "time_ms": 204959
+        }
+      ]
+    }
+  ]
+}

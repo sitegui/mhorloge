@@ -1,7 +1,6 @@
 use crate::models::letter::Letter;
 use crate::models::phrase::TimePhrase;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TimePhrasesOutput {
@@ -61,5 +60,5 @@ pub struct LyricsPhrase {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LyricsPhraseStop {
     pub word_index: u8,
-    pub time: i32,
+    pub time_ms: i32,
 }

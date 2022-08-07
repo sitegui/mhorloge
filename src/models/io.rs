@@ -30,8 +30,11 @@ pub struct GridOutputPhrase {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct LyricsPhrasesInput(pub Vec<WordOrSpace>);
+pub struct LyricsPhrasesInput {
+    pub video_id: String,
+    pub total_duration: i32,
+    pub stops: Vec<WordOrSpace>,
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -39,7 +42,7 @@ pub enum WordOrSpace {
     Word {
         word: String,
         #[serde(default)]
-        times: Vec<f64>,
+        times: Vec<i32>,
     },
     Space(String),
 }
@@ -59,6 +62,6 @@ pub struct LyricsPhrase {
 /// Represents each keyframe in the lyrics syncing
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LyricsPhraseStop {
-    pub word_index: u8,
-    pub time_ms: i32,
+    pub word_index: i32,
+    pub time: i32,
 }

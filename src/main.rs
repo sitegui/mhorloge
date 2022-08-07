@@ -173,7 +173,7 @@ fn lyrics_phrases(lyrics_input: PathBuf, phrases_output: PathBuf) -> Result<()> 
     let lyrics_input: LyricsPhrasesInput =
         serde_json::from_str(&fs::read_to_string(&lyrics_input)?)?;
 
-    let lines = lyrics_input.0.split(|element| match element {
+    let lines = lyrics_input.stops.split(|element| match element {
         WordOrSpace::Word { .. } => false,
         WordOrSpace::Space(text) => text.contains('\n'),
     });
@@ -192,11 +192,8 @@ fn lyrics_phrases(lyrics_input: PathBuf, phrases_output: PathBuf) -> Result<()> 
                 WordOrSpace::Word { word, times } => {
                     phrase.phrase += word;
                     phrase.phrase.push(' ');
-                    for time in times {
-                        phrase.stops.push(LyricsPhraseStop {
-                            word_index,
-                            time_ms: (1e3 * time).round() as i32,
-                        });
+                    for &time in times {
+                        phrase.stops.push(LyricsPhraseStop { word_index, time });
                     }
                     word_index += 1;
                 }

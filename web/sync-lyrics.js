@@ -12,7 +12,7 @@ Vue.createApp({
     },
     methods: {
         checkVideoUrl(event) {
-            if (!extractVideoId(this.videoUrl)) {
+            if (!this.videoId) {
                 event.target.setCustomValidity('Could not extract video id from URL')
             } else {
                 event.target.setCustomValidity('')
@@ -20,7 +20,6 @@ Vue.createApp({
             event.target.reportValidity()
         },
         submitFormStep1() {
-            const videoId = extractVideoId(this.videoUrl)
             this.step = 2
 
             const wordsAndSpaces = Array.from(this.lyrics.matchAll(/\s+|\S+/g))
@@ -35,7 +34,7 @@ Vue.createApp({
                     this.player = new YT.Player('youtube-player', {
                         height: '405',
                         width: '720',
-                        videoId,
+                        videoId: this.videoId,
                         playerVars: {
                             // Documented at https://developers.google.com/youtube/player_parameters
                             autoplay: '1',
@@ -52,7 +51,7 @@ Vue.createApp({
         },
         addStop(stop) {
             if (!stop.isSpace) {
-                stop.times.push(this.player.getCurrentTime())
+                stop.times.push(Math.round(1e3 * this.player.getCurrentTime()))
                 this.undoStack.push(stop)
             }
         },
@@ -66,7 +65,7 @@ Vue.createApp({
     },
     computed: {
         lyricsStopWords() {
-            return this.lyricsStops.map(each => {
+            const stops =  this.lyricsStops.map(each => {
                 if (each.isSpace) {
                     return each.text
                 } else {
@@ -76,17 +75,21 @@ Vue.createApp({
                     }
                     return word
                 }
-            })
+            });
+
+            return {
+                video_id: this.videoId,
+                total_duration: Math.round(1e3 * this.player.getDuration()),
+                stops,
+            }
+        },
+        videoId() {
+            try {
+                return new URL(this.videoUrl).searchParams.get('v')
+            } catch (err) {
+            }
+            return null
         }
     }
 }).mount('#app')
-
-
-function extractVideoId(videoUrl) {
-    try {
-        return new URL(videoUrl).searchParams.get('v')
-    } catch (err) {
-    }
-    return null
-}
 

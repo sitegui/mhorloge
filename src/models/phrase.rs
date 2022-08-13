@@ -1,4 +1,5 @@
 use crate::models::language::Language;
+use crate::models::text::Text;
 use crate::models::time::Time;
 use crate::models::word::WordId;
 use serde::{Deserialize, Serialize};
@@ -9,7 +10,7 @@ pub struct TimePhrase {
     pub language: Language,
     #[serde(flatten)]
     pub time: Time,
-    pub phrase: String,
+    pub texts: Vec<Text>,
 }
 
 /// Represents a phrase

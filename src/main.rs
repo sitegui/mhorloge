@@ -1,7 +1,7 @@
 use std::env::VarError;
 use std::path::PathBuf;
 use std::time::Instant;
-use std::{env, fs};
+use std::{env, fs, mem};
 
 use anyhow::{ensure, Result};
 use jemallocator::Jemalloc;
@@ -10,8 +10,8 @@ use structopt::StructOpt;
 use crate::models::aspect_ratio::AspectRatio;
 use crate::models::grid::Grid;
 use crate::models::io::{
-    GridInput, GridOutput, GridOutputPhrase, LyricsPhrase, LyricsPhraseStop, LyricsPhrasesInput,
-    LyricsPhrasesOutput, TimePhrasesOutput, WordOrSpace,
+    GridInput, GridOutput, GridOutputPhrase, LyricsPhrase, LyricsPhrasesInput, LyricsPhrasesOutput,
+    LyricsWord, TimePhrasesOutput, WordOrSpace,
 };
 use crate::models::language::Language;
 use crate::models::merge_dag::MergeDag;
@@ -22,7 +22,7 @@ use crate::models::token::Token;
 use crate::models::word::WordId;
 
 mod build_grid;
-mod compile_lyrics_css;
+mod compile_lyrics_page;
 mod generate_phrases;
 mod models;
 mod tokenize;
@@ -88,14 +88,14 @@ enum Options {
         #[structopt(long, default_value = "1")]
         chain_growth_head_space: i32,
     },
-    /// Generate the CSS to sync each letter of a grid with a song's lyrics
-    LyricsCssAnimation {
+    /// Generate a HTML file to sync each letter of a grid with a song's lyrics
+    LyricsPuzzle {
         /// The path to the lyrics input JSON file, represented by `LyricsPhrasesOutput`.
         phrases_input: PathBuf,
         /// The path to the grid input JSON file, represented by `GridOutput`.
         grid_input: PathBuf,
-        /// The path to a file where to write the output as CSS.
-        css_output: PathBuf,
+        /// The path to a file where to write the output as HTML.
+        html_output: PathBuf,
     },
 }
 
@@ -141,11 +141,11 @@ fn main() -> Result<()> {
                 chain_growth_head_space,
             )?;
         }
-        Options::LyricsCssAnimation {
+        Options::LyricsPuzzle {
             phrases_input,
             grid_input,
-            css_output,
-        } => lyrics_css_animation(phrases_input, grid_input, css_output)?,
+            html_output,
+        } => lyrics_puzzle(phrases_input, grid_input, html_output)?,
     }
 
     log::info!("Done in {:?}", start.elapsed());
@@ -153,17 +153,13 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn lyrics_css_animation(
-    phrases_input: PathBuf,
-    grid_input: PathBuf,
-    css_output: PathBuf,
-) -> Result<()> {
+fn lyrics_puzzle(phrases_input: PathBuf, grid_input: PathBuf, html_output: PathBuf) -> Result<()> {
     let phrases: LyricsPhrasesOutput = serde_json::from_str(&fs::read_to_string(&phrases_input)?)?;
     let grid: GridOutput = serde_json::from_str(&fs::read_to_string(&grid_input)?)?;
 
-    let css_source = compile_lyrics_css::compile_lyrics_css(&phrases, &grid);
+    let css_source = compile_lyrics_page::compile_css(&phrases, &grid);
 
-    fs::write(&css_output, css_source)?;
+    fs::write(&html_output, css_source)?;
 
     use std::fmt::Write;
     let mut grid_html = String::new();
@@ -221,38 +217,37 @@ fn lyrics_phrases(lyrics_input: PathBuf, phrases_output: PathBuf) -> Result<()> 
     let lyrics_input: LyricsPhrasesInput =
         serde_json::from_str(&fs::read_to_string(&lyrics_input)?)?;
 
-    let lines = lyrics_input.stops.split(|element| match element {
-        WordOrSpace::Word { .. } => false,
-        WordOrSpace::Space(text) => text.contains('\n'),
-    });
-
     let mut phrases = vec![];
+    let mut phrase_words = vec![];
+    let total_duration = lyrics_input.total_duration as f64;
 
-    for line in lines {
-        let mut phrase = LyricsPhrase {
-            phrase: String::new(),
-            stops: vec![],
-        };
-        let mut word_index = 0;
-
-        for element in line {
-            match element {
-                WordOrSpace::Word { word, times } => {
-                    phrase.phrase += word;
-                    phrase.phrase.push(' ');
-                    for &time in times {
-                        phrase.stops.push(LyricsPhraseStop { word_index, time });
+    for element in lyrics_input.elements {
+        match element {
+            WordOrSpace::Space(s) => {
+                if s.contains('\n') {
+                    // Start new phrase
+                    if !phrase_words.is_empty() {
+                        phrases.push(LyricsPhrase {
+                            words: mem::take(&mut phrase_words),
+                        });
                     }
-                    word_index += 1;
                 }
-                WordOrSpace::Space(_) => {}
+            }
+            WordOrSpace::Word { text, times } => {
+                ensure!(times.len() < 2);
+
+                phrase_words.push(LyricsWord {
+                    text,
+                    stop: times.first().map(|&stop| stop as f64 / total_duration),
+                });
             }
         }
+    }
 
-        if !phrase.phrase.is_empty() {
-            ensure!(phrase.phrase.pop() == Some(' '));
-            phrases.push(phrase);
-        }
+    if !phrase_words.is_empty() {
+        phrases.push(LyricsPhrase {
+            words: mem::take(&mut phrase_words),
+        });
     }
 
     fs::write(
@@ -279,7 +274,7 @@ fn grid(
 
     let mut phrase_book = PhraseBook::default();
     for phrase in grid_input.phrases {
-        phrase_book.insert_phrase(&phrase.phrase);
+        phrase_book.insert_phrase(phrase.texts);
     }
     log::info!("Read {} phrases", phrase_book.phrases().len());
 
@@ -323,7 +318,7 @@ fn grid(
         .phrases()
         .iter()
         .map(|phrase| GridOutputPhrase {
-            letters: phrase_to_letter_positions(&token_graph, &final_grid, phrase),
+            words: phrase_to_letter_positions(&token_graph, &final_grid, phrase),
         })
         .collect();
 
@@ -346,20 +341,21 @@ fn phrase_to_letter_positions(
     token_graph: &MergeDag<WordId, Token>,
     grid: &Grid,
     phrase: &Phrase,
-) -> Vec<(i16, i16)> {
+) -> Vec<Vec<(i16, i16)>> {
     let top_left = grid.top_left();
 
     phrase
         .words
         .iter()
-        .map(|&word| token_graph.group(word).1)
-        .flat_map(|token| {
+        .map(|&word| {
+            let token = token_graph.group(word).1;
             grid.positions_for_token(token.id)
                 .expect("The token must be present")
-        })
-        .map(|pos| {
-            let abs_pos = pos - top_left;
-            (abs_pos.x, abs_pos.y)
+                .map(|pos| {
+                    let abs_pos = pos - top_left;
+                    (abs_pos.x, abs_pos.y)
+                })
+                .collect()
         })
         .collect()
 }

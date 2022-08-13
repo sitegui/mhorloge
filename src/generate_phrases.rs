@@ -15,7 +15,7 @@ pub fn generate_phrases(language_specs: &[(Language, i32)]) -> Vec<TimePhrase> {
             phrases.push(TimePhrase {
                 language,
                 time,
-                phrase: language.spell(time),
+                texts: language.spell(time),
             });
         }
     }

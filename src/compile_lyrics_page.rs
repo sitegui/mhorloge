@@ -1,3 +1,5 @@
+mod extract_segments;
+
 use crate::{GridOutput, LyricsPhrasesOutput};
 use itertools::Itertools;
 use ordered_float::OrderedFloat;
@@ -25,12 +27,12 @@ struct LetterStop {
     speed: OrderedFloat<f64>,
 }
 
-pub fn compile_lyrics_css(phrases: &LyricsPhrasesOutput, grid: &GridOutput) -> String {
+pub fn compile_css(phrases: &LyricsPhrasesOutput, grid: &GridOutput) -> String {
     let total_duration = phrases.total_duration as f64;
 
     let mut all_words = vec![];
     for (lyrics_phrase, grid_phrase) in phrases.phrases.iter().zip(&grid.phrases) {
-        let mut letters = grid_phrase.letters.iter().cloned();
+        let mut letters = grid_phrase.words.iter().cloned();
         let mut scheduled_words = lyrics_phrase
             .phrase
             .split(' ')

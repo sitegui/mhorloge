@@ -11,10 +11,10 @@ pub struct PhraseBook {
 }
 
 impl PhraseBook {
-    pub fn insert_phrase(&mut self, phrase: &str) -> PhraseId {
+    pub fn insert_phrase(&mut self, phrase: Vec<Text>) -> PhraseId {
         let mut words = vec![];
-        for word in phrase.split(' ') {
-            words.push(self.insert_word(Text::new(word)));
+        for word in phrase {
+            words.push(self.insert_word(word));
         }
 
         let id = PhraseId(self.phrases.len() as u16);

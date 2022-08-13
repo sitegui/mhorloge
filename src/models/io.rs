@@ -1,5 +1,6 @@
 use crate::models::letter::Letter;
 use crate::models::phrase::TimePhrase;
+use crate::models::text::Text;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -14,7 +15,7 @@ pub struct GridInput {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GridInputPhrase {
-    pub phrase: String,
+    pub texts: Vec<Text>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -26,6 +27,11 @@ pub struct GridOutput {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GridOutputPhrase {
+    pub words: Vec<GridOutputWord>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GridOutputWord {
     pub letters: Vec<(i16, i16)>,
 }
 
@@ -33,14 +39,14 @@ pub struct GridOutputPhrase {
 pub struct LyricsPhrasesInput {
     pub video_id: String,
     pub total_duration: i32,
-    pub stops: Vec<WordOrSpace>,
+    pub elements: Vec<WordOrSpace>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum WordOrSpace {
     Word {
-        word: String,
+        text: Text,
         #[serde(default)]
         times: Vec<i32>,
     },
@@ -56,30 +62,13 @@ pub struct LyricsPhrasesOutput {
 /// Represents each phrase in the lyrics
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LyricsPhrase {
-    pub phrase: String,
-    pub stops: Vec<LyricsPhraseStop>,
+    pub words: Vec<LyricsWord>,
 }
 
-/// Represents each keyframe in the lyrics syncing
+/// Represents each word in the lyrics
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct LyricsPhraseStop {
-    pub word_index: i32,
-    pub time: i32,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct LyricsKeyframesOutput {
-    pub animations: Vec<LyricsAnimation>,
-    pub animation_per_letter: Vec<Vec<String>>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct LyricsAnimation {
-    pub name: String,
-    pub keyframes: Vec<LyricsKeyframe>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct LyricsKeyframe {
-    pub percentage: f64,
+pub struct LyricsWord {
+    pub text: Text,
+    /// The position in time (0=start, 1=end) of this word in the whole song
+    pub stop: Option<f64>,
 }

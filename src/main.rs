@@ -89,15 +89,15 @@ enum Options {
         grid_input: PathBuf,
         /// The path to a file where to write the output as HTML.
         html_output: PathBuf,
-        #[structopt(long, default_value = "100")]
+        #[structopt(long, default_value = "250")]
         ease_in: i32,
-        #[structopt(long, default_value = "100")]
+        #[structopt(long, default_value = "0")]
         margin_before: i32,
-        #[structopt(long, default_value = "100")]
+        #[structopt(long, default_value = "0")]
         margin_after: i32,
         #[structopt(long, default_value = "100")]
         ease_out: i32,
-        #[structopt(long, default_value = "100")]
+        #[structopt(long, default_value = "42")]
         discrete_time_step: i32,
     },
 }

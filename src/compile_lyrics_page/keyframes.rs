@@ -12,7 +12,6 @@ pub struct Keyframes {
 #[derive(Debug, Clone, Copy)]
 struct Keyframe {
     time_percentage: f64,
-    time: i32,
     effect_percentage: f64,
 }
 
@@ -108,7 +107,6 @@ impl Keyframe {
     fn new(total_duration: i32, time: i32, effect_percentage: f64) -> Self {
         Self {
             time_percentage: 100.0 * time as f64 / total_duration as f64,
-            time,
             effect_percentage,
         }
     }
@@ -118,8 +116,8 @@ impl fmt::Display for Keyframe {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
-            "{:.2}% {{opacity: {:.0}%; /* {:.1}ms */}}",
-            self.time_percentage, self.effect_percentage, self.time
+            "{:.2}% {{opacity: {:.0}%;}}",
+            self.time_percentage, self.effect_percentage
         )
     }
 }

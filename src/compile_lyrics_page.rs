@@ -117,8 +117,8 @@ fn compile_grid_html(grid: &GridOutput) -> String {
         .format_with("<br>\n", |(j, letters), f| {
             for (i, letter) in letters.iter().enumerate() {
                 f(&format_args!(
-                    "<span class=\"letter-{}-{}\">{}</span>",
-                    i, j, letter
+                    "<span class=\"letter-off\">{}<span class=\"letter-on letter-on-{}-{}\">{}</span></span>",
+                    letter, i, j, letter
                 ))?;
             }
             Ok(())
@@ -154,7 +154,7 @@ impl fmt::Display for LettersAnimation {
             self.letters
                 .iter()
                 .format_with(", ", |letter, f| f(&format_args!(
-                    ".letter-{}-{}",
+                    ".letter-on-{}-{}",
                     letter.0, letter.1
                 ))),
             self.total_duration,

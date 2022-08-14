@@ -7,12 +7,32 @@
     <style>
         .grid {
             font-family: monospace;
-            font-size: larger;
-            font-weight: bolder;
+            font-size: 20px;
+            font-weight: bold;
+            background-image: url(wood.jpg);
+            border: thin gray solid;
+            width: fit-content;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            color: rgba(139,69,19,0.4);
+            text-shadow: -1px -1px rgba(0,0,0,0.5), 1px 1px rgba(255,255,255,0.5);
+            padding: 7px;
+            margin: 7px;
+            display: inline-block;
         }
 
-        .grid > span {
+        .letter-off {
+            position: relative;
+            margin: 2px;
+        }
+
+        .letter-on {
             opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: darkblue;
         }
     </style>
 
@@ -21,9 +41,9 @@
     </style>
 </head>
 <body>
-<div id="player"></div>
-
 <div class="grid">${GRID}</div>
+
+<div id="player"></div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 

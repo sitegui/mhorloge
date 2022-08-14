@@ -1,1074 +1,489 @@
 {
   "video_id": "oHRNrgDIJfo",
-  "total_duration": 182821,
-  "stops": [
-    {
-      "word": "BIRDS",
-      "times": [
-        4650
-      ]
-    },
-    " ",
-    {
-      "word": "FLYING"
-    },
-    " ",
-    {
-      "word": "HIGH",
-      "times": [
-        5557
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        6089
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "HOW"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEEL",
-      "times": [
-        7040
-      ]
-    },
-    "\n",
-    {
-      "word": "SUN",
-      "times": [
-        10209
-      ]
-    },
-    " ",
-    {
-      "word": "IN"
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "SKY",
-      "times": [
-        11177
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        11982
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "HOW"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEEL",
-      "times": [
-        13177
-      ]
-    },
-    "\n",
-    {
-      "word": "BREEZE",
-      "times": [
-        16764
-      ]
-    },
-    " ",
-    {
-      "word": "DRIFTIN"
-    },
-    " ",
-    {
-      "word": "ON"
-    },
-    " ",
-    {
-      "word": "BY",
-      "times": [
-        18389
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        19060
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "HOW"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEEL",
-      "times": [
-        19873
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        23301
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "DAWN",
-      "times": [
-        23730
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        24978
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "DAY",
-      "times": [
-        25529
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        28441
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "LIFE",
-      "times": [
-        29172
-      ]
-    },
-    "\n",
-    {
-      "word": "FOR",
-      "times": [
-        29718
-      ]
-    },
-    " ",
-    {
-      "word": "ME",
-      "times": [
-        29998
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        31328
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "DAWN",
-      "times": [
-        31778
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        32522
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "DAY",
-      "times": [
-        32973
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        34296
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "LIFE",
-      "times": [
-        34487
-      ]
-    },
-    "\n",
-    {
-      "word": "FOR",
-      "times": [
-        35040
-      ]
-    },
-    " ",
-    {
-      "word": "ME",
-      "times": [
-        35299
-      ]
-    },
-    "\n",
-    {
-      "word": "AND",
-      "times": [
-        41502
-      ]
-    },
-    " ",
-    {
-      "word": "IM"
-    },
-    " ",
-    {
-      "word": "FEELING"
-    },
-    " ",
-    {
-      "word": "GOOD",
-      "times": [
-        43045
-      ]
-    },
-    "\n\n",
-    {
-      "word": "FISH",
-      "times": [
-        50638
-      ]
-    },
-    " ",
-    {
-      "word": "IN"
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "SEA",
-      "times": [
-        51375
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        53063
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "HOW"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEEL",
-      "times": [
-        53934
-      ]
-    },
-    "\n",
-    {
-      "word": "RIVER",
-      "times": [
-        56979
-      ]
-    },
-    " ",
-    {
-      "word": "RUNNING"
-    },
-    " ",
-    {
-      "word": "FREE",
-      "times": [
-        57722
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        58740
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "HOW"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEEL",
-      "times": [
-        60105
-      ]
-    },
-    "\n",
-    {
-      "word": "BLOSSOM",
-      "times": [
-        63200
-      ]
-    },
-    " ",
-    {
-      "word": "ON"
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "TREE",
-      "times": [
-        64399
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        65497
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "HOW"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEEL",
-      "times": [
-        66371
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        68408
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "DAWN",
-      "times": [
-        68988
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        69740
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "DAY",
-      "times": [
-        70384
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        71401
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "LIFE",
-      "times": [
-        72016
-      ]
-    },
-    "\n",
-    {
-      "word": "FOR",
-      "times": [
-        74226
-      ]
-    },
-    " ",
-    {
-      "word": "ME",
-      "times": [
-        74771
-      ]
-    },
-    "\n",
-    {
-      "word": "AND",
-      "times": [
-        76886
-      ]
-    },
-    " ",
-    {
-      "word": "IM"
-    },
-    " ",
-    {
-      "word": "FEELING"
-    },
-    " ",
-    {
-      "word": "GOOD",
-      "times": [
-        78146
-      ]
-    },
-    "\n\n",
-    {
-      "word": "DRAGONFLY",
-      "times": [
-        84712
-      ]
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "IN"
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "SUN",
-      "times": [
-        86338
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        87081
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "WHAT"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "MEAN",
-      "times": [
-        87897
-      ]
-    },
-    "\n",
-    {
-      "word": "DONT",
-      "times": [
-        88397
-      ]
-    },
-    " ",
-    {
-      "word": "YOU"
-    },
-    " ",
-    {
-      "word": "KNOW",
-      "times": [
-        88774
-      ]
-    },
-    "\n",
-    {
-      "word": "BUTTERFLIES",
-      "times": [
-        91512
-      ]
-    },
-    " ",
-    {
-      "word": "ALL"
-    },
-    " ",
-    {
-      "word": "HAVIN"
-    },
-    " ",
-    {
-      "word": "FUN",
-      "times": [
-        93090
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        94256
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "WHAT"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "MEAN",
-      "times": [
-        95073
-      ]
-    },
-    "\n",
-    {
-      "word": "SLEEP",
-      "times": [
-        97877
-      ]
-    },
-    " ",
-    {
-      "word": "IN"
-    },
-    " ",
-    {
-      "word": "PEACE"
-    },
-    " ",
-    {
-      "word": "WHEN"
-    },
-    " ",
-    {
-      "word": "DAY"
-    },
-    " ",
-    {
-      "word": "IS"
-    },
-    " ",
-    {
-      "word": "DONE",
-      "times": [
-        100126
-      ]
-    },
-    "\n",
-    {
-      "word": "THATS",
-      "times": [
-        100725
-      ]
-    },
-    " ",
-    {
-      "word": "WHAT"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "MEAN",
-      "times": [
-        101362
-      ]
-    },
-    "\n",
-    {
-      "word": "AND",
-      "times": [
-        103283
-      ]
-    },
-    " ",
-    {
-      "word": "THIS"
-    },
-    " ",
-    {
-      "word": "OLD"
-    },
-    " ",
-    {
-      "word": "WORLD",
-      "times": [
-        103871
-      ]
-    },
-    "\n",
-    {
-      "word": "IS",
-      "times": [
-        104827
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "WORLD",
-      "times": [
-        105528
-      ]
-    },
-    "\n",
-    {
-      "word": "AND",
-      "times": [
-        106503
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "BOLD"
-    },
-    " ",
-    {
-      "word": "WORLD",
-      "times": [
-        107215
-      ]
-    },
-    "\n",
-    {
-      "word": "FOR",
-      "times": [
-        109345
-      ]
-    },
-    " ",
-    {
-      "word": "ME",
-      "times": [
-        109938
-      ]
-    },
-    "\n\n",
-    {
-      "word": "STARS",
-      "times": [
-        117374
-      ]
-    },
-    " ",
-    {
-      "word": "WHEN"
-    },
-    " ",
-    {
-      "word": "YOU"
-    },
-    " ",
-    {
-      "word": "SHINE",
-      "times": [
-        118743
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        119888
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "HOW"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEEL",
-      "times": [
-        120779
-      ]
-    },
-    "\n",
-    {
-      "word": "SCENT",
-      "times": [
-        124022
-      ]
-    },
-    " ",
-    {
-      "word": "OF"
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "PINE",
-      "times": [
-        124833
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        125726
-      ]
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "HOW"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEEL",
-      "times": [
-        127166
-      ]
-    },
-    "\n",
-    {
-      "word": "OH",
-      "times": [
-        128814
-      ]
-    },
-    " ",
-    {
-      "word": "FREEDOM"
-    },
-    " ",
-    {
-      "word": "IS"
-    },
-    " ",
-    {
-      "word": "MINE",
-      "times": [
-        130625
-      ]
-    },
-    "\n",
-    {
-      "word": "AND",
-      "times": [
-        132967
-      ]
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "KNOW"
-    },
-    " ",
-    {
-      "word": "HOW"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEEL",
-      "times": [
-        134283
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        135837
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "DAWN",
-      "times": [
-        136465
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        137173
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "DAY",
-      "times": [
-        137972
-      ]
-    },
-    "\n",
-    {
-      "word": "ITS",
-      "times": [
-        138901
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "NEW"
-    },
-    " ",
-    {
-      "word": "LIFE",
-      "times": [
-        139684
-      ]
-    },
-    "\n",
-    {
-      "word": "FOR",
-      "times": [
-        141546
-      ]
-    },
-    " ",
-    {
-      "word": "ME",
-      "times": [
-        142406
-      ]
-    },
-    "\n\n",
-    {
-      "word": "AND",
-      "times": [
-        162082
-      ]
-    },
-    " ",
-    {
-      "word": "IM"
-    },
-    " ",
-    {
-      "word": "FEELING"
-    },
-    " ",
-    {
-      "word": "GOOD",
-      "times": [
-        163574
-      ]
-    },
-    "\n"
+  "total_duration": 183000,
+  "phrases": [
+    {
+      "texts": [
+        "BIRDS",
+        "FLYING",
+        "HIGH"
+      ],
+      "start": 4665,
+      "end": 6205
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "HOW",
+        "I",
+        "FEEL"
+      ],
+      "start": 6205,
+      "end": 8254
+    },
+    {
+      "texts": [
+        "SUN",
+        "IN",
+        "THE",
+        "SKY"
+      ],
+      "start": 10268,
+      "end": 12283
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "HOW",
+        "I",
+        "FEEL"
+      ],
+      "start": 12283,
+      "end": 14598
+    },
+    {
+      "texts": [
+        "BREEZE",
+        "DRIFTIN",
+        "ON",
+        "BY"
+      ],
+      "start": 16750,
+      "end": 18801
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "HOW",
+        "I",
+        "FEEL"
+      ],
+      "start": 18801,
+      "end": 21078
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "DAWN"
+      ],
+      "start": 23305,
+      "end": 24856
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "DAY"
+      ],
+      "start": 24856,
+      "end": 26497
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "LIFE"
+      ],
+      "start": 28471,
+      "end": 29647
+    },
+    {
+      "texts": [
+        "FOR",
+        "ME"
+      ],
+      "start": 29647,
+      "end": 30799
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "DAWN"
+      ],
+      "start": 31537,
+      "end": 32437
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "DAY"
+      ],
+      "start": 32437,
+      "end": 33751
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "LIFE"
+      ],
+      "start": 33751,
+      "end": 34936
+    },
+    {
+      "texts": [
+        "FOR",
+        "ME"
+      ],
+      "start": 34936,
+      "end": 36249
+    },
+    {
+      "texts": [
+        "AND",
+        "IM",
+        "FEELING",
+        "GOOD"
+      ],
+      "start": 41515,
+      "end": 44042
+    },
+    {
+      "texts": [
+        "FISH",
+        "IN",
+        "THE",
+        "SEA"
+      ],
+      "start": 50711,
+      "end": 52375
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "HOW",
+        "I",
+        "FEEL"
+      ],
+      "start": 52375,
+      "end": 54652
+    },
+    {
+      "texts": [
+        "RIVER",
+        "RUNNING",
+        "FREE"
+      ],
+      "start": 56991,
+      "end": 58742
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "HOW",
+        "I",
+        "FEEL"
+      ],
+      "start": 58742,
+      "end": 60971
+    },
+    {
+      "texts": [
+        "BLOSSOM",
+        "ON",
+        "A",
+        "TREE"
+      ],
+      "start": 62884,
+      "end": 65662
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "HOW",
+        "I",
+        "FEEL"
+      ],
+      "start": 65662,
+      "end": 67550
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "DAWN"
+      ],
+      "start": 68301,
+      "end": 69514
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "DAY"
+      ],
+      "start": 69514,
+      "end": 70903
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "LIFE"
+      ],
+      "start": 70903,
+      "end": 73130
+    },
+    {
+      "texts": [
+        "FOR",
+        "ME"
+      ],
+      "start": 74244,
+      "end": 75569
+    },
+    {
+      "texts": [
+        "AND",
+        "IM",
+        "FEELING",
+        "GOOD"
+      ],
+      "start": 76897,
+      "end": 80636
+    },
+    {
+      "texts": [
+        "DRAGONFLY",
+        "OUT",
+        "IN",
+        "THE",
+        "SUN"
+      ],
+      "start": 84739,
+      "end": 86941
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "WHAT",
+        "I",
+        "MEAN"
+      ],
+      "start": 86941,
+      "end": 88229
+    },
+    {
+      "texts": [
+        "DONT",
+        "YOU",
+        "KNOW"
+      ],
+      "start": 88229,
+      "end": 89238
+    },
+    {
+      "texts": [
+        "BUTTERFLIES",
+        "ALL",
+        "HAVIN",
+        "FUN"
+      ],
+      "start": 91562,
+      "end": 93672
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "WHAT",
+        "I",
+        "MEAN"
+      ],
+      "start": 93672,
+      "end": 95874
+    },
+    {
+      "texts": [
+        "SLEEP",
+        "IN",
+        "PEACE",
+        "WHEN",
+        "DAY",
+        "IS",
+        "DONE"
+      ],
+      "start": 97985,
+      "end": 100615
+    },
+    {
+      "texts": [
+        "THATS",
+        "WHAT",
+        "I",
+        "MEAN"
+      ],
+      "start": 100615,
+      "end": 102106
+    },
+    {
+      "texts": [
+        "AND",
+        "THIS",
+        "OLD",
+        "WORLD"
+      ],
+      "start": 103217,
+      "end": 104481
+    },
+    {
+      "texts": [
+        "IS",
+        "A",
+        "NEW",
+        "WORLD"
+      ],
+      "start": 104481,
+      "end": 106257
+    },
+    {
+      "texts": [
+        "AND",
+        "A",
+        "BOLD",
+        "WORLD"
+      ],
+      "start": 106257,
+      "end": 108109
+    },
+    {
+      "texts": [
+        "FOR",
+        "ME"
+      ],
+      "start": 109398,
+      "end": 110886
+    },
+    {
+      "texts": [
+        "STARS",
+        "WHEN",
+        "YOU",
+        "SHINE"
+      ],
+      "start": 117517,
+      "end": 119856
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "HOW",
+        "I",
+        "FEEL"
+      ],
+      "start": 119856,
+      "end": 121988
+    },
+    {
+      "texts": [
+        "SCENT",
+        "OF",
+        "THE",
+        "PINE"
+      ],
+      "start": 124010,
+      "end": 125772
+    },
+    {
+      "texts": [
+        "YOU",
+        "KNOW",
+        "HOW",
+        "I",
+        "FEEL"
+      ],
+      "start": 125772,
+      "end": 128013
+    },
+    {
+      "texts": [
+        "OH",
+        "FREEDOM",
+        "IS",
+        "MINE"
+      ],
+      "start": 128814,
+      "end": 131766
+    },
+    {
+      "texts": [
+        "AND",
+        "I",
+        "KNOW",
+        "HOW",
+        "I",
+        "FEEL"
+      ],
+      "start": 132970,
+      "end": 135056
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "DAWN"
+      ],
+      "start": 135056,
+      "end": 137128
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "DAY"
+      ],
+      "start": 137128,
+      "end": 138800
+    },
+    {
+      "texts": [
+        "ITS",
+        "A",
+        "NEW",
+        "LIFE"
+      ],
+      "start": 138800,
+      "end": 140993
+    },
+    {
+      "texts": [
+        "FOR",
+        "ME"
+      ],
+      "start": 140993,
+      "end": 143275
+    },
+    {
+      "texts": [
+        "AND",
+        "IM",
+        "FEELING",
+        "GOOD"
+      ],
+      "start": 161349,
+      "end": 172854
+    }
   ]
 }

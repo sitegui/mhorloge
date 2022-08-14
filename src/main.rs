@@ -89,6 +89,16 @@ enum Options {
         grid_input: PathBuf,
         /// The path to a file where to write the output as HTML.
         html_output: PathBuf,
+        #[structopt(long, default_value = "100")]
+        ease_in: i32,
+        #[structopt(long, default_value = "100")]
+        margin_before: i32,
+        #[structopt(long, default_value = "100")]
+        margin_after: i32,
+        #[structopt(long, default_value = "100")]
+        ease_out: i32,
+        #[structopt(long, default_value = "100")]
+        discrete_time_step: i32,
     },
 }
 
@@ -132,7 +142,21 @@ fn main() -> Result<()> {
             lyrics_input,
             grid_input,
             html_output,
-        } => lyrics_puzzle(lyrics_input, grid_input, html_output)?,
+            ease_in,
+            margin_before,
+            margin_after,
+            ease_out,
+            discrete_time_step,
+        } => lyrics_puzzle(
+            lyrics_input,
+            grid_input,
+            html_output,
+            ease_in,
+            margin_before,
+            margin_after,
+            ease_out,
+            discrete_time_step,
+        )?,
     }
 
     log::info!("Done in {:?}", start.elapsed());
@@ -140,41 +164,31 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn lyrics_puzzle(lyrics_input: PathBuf, grid_input: PathBuf, html_output: PathBuf) -> Result<()> {
+#[allow(clippy::too_many_arguments)]
+fn lyrics_puzzle(
+    lyrics_input: PathBuf,
+    grid_input: PathBuf,
+    html_output: PathBuf,
+    ease_in: i32,
+    margin_before: i32,
+    margin_after: i32,
+    ease_out: i32,
+    discrete_time_step: i32,
+) -> Result<()> {
     let phrases: LyricsPuzzleInput = serde_json::from_str(&fs::read_to_string(&lyrics_input)?)?;
     let grid: GridOutput = serde_json::from_str(&fs::read_to_string(&grid_input)?)?;
 
-    let css_source = compile_lyrics_page::compile_css(
-        &phrases,
-        &grid,
-        AnimationConfig {
-            ease_in: 100,
-            margin_before: 100,
-            margin_after: 100,
-            ease_out: 100,
-            discrete_time_step: 100,
-        },
+    let config = AnimationConfig {
+        ease_in,
+        margin_before,
+        margin_after,
+        ease_out,
+        discrete_time_step,
+    };
+    fs::write(
+        &html_output,
+        compile_lyrics_page::compile_lyrics_page(&phrases, &grid, config)?,
     )?;
-
-    fs::write(&html_output, css_source)?;
-
-    use std::fmt::Write;
-    let mut grid_html = String::new();
-    write!(grid_html, "<div class=\"grid\">").unwrap();
-    for (i, row) in grid.grid.into_iter().enumerate() {
-        for (j, letter) in row.into_iter().enumerate() {
-            write!(
-                grid_html,
-                "<span class=\"letter letter-{}-{}\">{}</span>",
-                j, i, letter
-            )
-            .unwrap();
-        }
-        writeln!(grid_html, "<br>").unwrap();
-    }
-    writeln!(grid_html, "</div>").unwrap();
-
-    fs::write("data/grid.html", grid_html)?;
 
     Ok(())
 }

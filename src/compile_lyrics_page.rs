@@ -34,6 +34,19 @@ struct LettersAnimation {
     keyframes: Keyframes,
 }
 
+pub fn compile_lyrics_page(
+    phrases: &LyricsPuzzleInput,
+    grid: &GridOutput,
+    config: AnimationConfig,
+) -> Result<String> {
+    let page = include_str!("compile_lyrics_page/template.html");
+    let page = page.replacen("${STYLE}", &compile_css(phrases, grid, config)?, 1);
+    let page = page.replacen("${GRID}", &compile_grid_html(grid), 1);
+    let page = page.replacen("${VIDEO_ID}", &phrases.video_id, 1);
+
+    Ok(page)
+}
+
 fn compile_css(
     phrases: &LyricsPuzzleInput,
     grid: &GridOutput,
@@ -100,7 +113,16 @@ fn compile_css(
 fn compile_grid_html(grid: &GridOutput) -> String {
     grid.grid
         .iter()
-        .format_with("<br>", |row, f| todo!())
+        .enumerate()
+        .format_with("<br>\n", |(j, letters), f| {
+            for (i, letter) in letters.iter().enumerate() {
+                f(&format_args!(
+                    "<span class=\"letter-{}-{}\">{}</span>",
+                    i, j, letter
+                ))?;
+            }
+            Ok(())
+        })
         .to_string()
 }
 

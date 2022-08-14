@@ -9,20 +9,6 @@
 }
 
 #lyrics-pad {
-    white-space: pre;
     font-size: larger;
     word-spacing: 0.1em;
 }
-
-#lyrics-pad .word {
-    cursor: pointer;
-}
-
-#lyrics-pad .word.used {
-    text-decoration: underline gray;
-}
-
-#lyrics-pad .word:hover {
-    color: #633;
-}
-

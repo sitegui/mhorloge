@@ -5,9 +5,8 @@ Vue.createApp({
             videoUrl: '',
             lyrics: '',
             player: null,
-            // objects like {text: string, times: number[], isSpace: boolean}
-            lyricsStops: [],
-            undoStack: [],
+            // objects like {texts: string[], start: ?number, end: ?number}
+            phrases: [],
         }
     },
     methods: {
@@ -22,11 +21,12 @@ Vue.createApp({
         submitFormStep1() {
             this.step = 2
 
-            const wordsAndSpaces = Array.from(this.lyrics.matchAll(/\s+|\S+/g))
-            this.lyricsStops = wordsAndSpaces.map(([text]) => ({
-                text,
-                times: [],
-                isSpace: text.match(/\s/) !== null
+            // Split the lyrics in phrases and only keep the non-empty ones
+            const phrases = this.lyrics.split('\n').map(line => line.trim()).filter(Boolean)
+            this.phrases = phrases.map(line => ({
+                texts: line.split(' '),
+                start: null,
+                end: null,
             }))
 
             Vue.nextTick(() => {
@@ -49,38 +49,35 @@ Vue.createApp({
                 })
             })
         },
-        addStop(stop) {
-            if (!stop.isSpace) {
-                stop.times.push(Math.round(1e3 * this.player.getCurrentTime()))
-                this.undoStack.push(stop)
-            }
-        },
-        undoStop() {
-            const stop = this.undoStack.pop()
-            stop.times.pop()
-        },
         finish() {
             this.step = 3
+        },
+        formatTime(time) {
+            const seconds = Math.floor(time / 1e3) % 60
+            const minutes = Math.floor(time / 60e3)
+
+            return minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0')
+        },
+        currentPlayerTime() {
+            return Math.round(1e3 * this.player.getCurrentTime())
+        },
+        setPhraseStart(i) {
+            this.phrases[i].start = this.currentPlayerTime()
+        },
+        setPhraseEnd(i) {
+            const currentTime = this.currentPlayerTime()
+            this.phrases[i].end = currentTime
+            if (i < this.phrases.length - 1) {
+                this.phrases[i + 1].start = currentTime
+            }
         }
     },
     computed: {
-        lyricsStopWords() {
-            const stops =  this.lyricsStops.map(each => {
-                if (each.isSpace) {
-                    return each.text
-                } else {
-                    const word = {word: each.text}
-                    if (each.times.length > 0) {
-                        word.times = each.times
-                    }
-                    return word
-                }
-            });
-
+        result() {
             return {
                 video_id: this.videoId,
                 total_duration: Math.round(1e3 * this.player.getDuration()),
-                stops,
+                phrases: this.phrases,
             }
         },
         videoId() {
@@ -89,6 +86,9 @@ Vue.createApp({
             } catch (err) {
             }
             return null
+        },
+        hasIncompleteLineInfo() {
+            return this.phrases.some(line => line.start === null || line.end === null)
         }
     }
 }).mount('#app')

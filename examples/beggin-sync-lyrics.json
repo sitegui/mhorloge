@@ -1,2204 +1,941 @@
 {
   "video_id": "Xg72z08aTXY",
-  "total_duration": 213121,
-  "stops": [
-    {
-      "word": "PUT",
-      "times": [
-        921
-      ]
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING",
-      "times": [
-        2086
-      ]
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT",
-      "times": [
-        5507
-      ]
-    },
-    " ",
-    {
-      "word": "BABY",
-      "times": [
-        7526
-      ]
-    },
-    "\n",
-    {
-      "word": "CAUSE",
-      "times": [
-        12193
-      ]
-    },
-    " ",
-    {
-      "word": "IM"
-    },
-    " ",
-    {
-      "word": "BEGGIN",
-      "times": [
-        13320
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        25403
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        27343
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        28918
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "BABY",
-      "times": [
-        30908
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        32495
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        34458
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        36078
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "DARLING",
-      "times": [
-        38082
-      ]
-    },
-    "\n",
-    {
-      "word": "RIDING",
-      "times": [
-        39883
-      ]
-    },
-    " ",
-    {
-      "word": "HIGH",
-      "times": [
-        40278
-      ]
-    },
-    "\n",
-    {
-      "word": "WHEN",
-      "times": [
-        41584
-      ]
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "WAS"
-    },
-    " ",
-    {
-      "word": "KING",
-      "times": [
-        42080
-      ]
-    },
-    "\n",
-    {
-      "word": "I",
-      "times": [
-        43361
-      ]
-    },
-    " ",
-    {
-      "word": "PLAYED"
-    },
-    " ",
-    {
-      "word": "IT"
-    },
-    " ",
-    {
-      "word": "HARD"
-    },
-    " ",
-    {
-      "word": "AND"
-    },
-    " ",
-    {
-      "word": "FAST",
-      "times": [
-        44428
-      ]
-    },
-    "\n",
-    {
-      "word": "CAUSE",
-      "times": [
-        44947
-      ]
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "HAD"
-    },
-    " ",
-    {
-      "word": "EVERYTHING",
-      "times": [
-        45533
-      ]
-    },
-    "\n",
-    {
-      "word": "I",
-      "times": [
-        46979
-      ]
-    },
-    " ",
-    {
-      "word": "WALKED"
-    },
-    " ",
-    {
-      "word": "AWAY",
-      "times": [
-        47549
-      ]
-    },
-    "\n",
-    {
-      "word": "BUT",
-      "times": [
-        48698
-      ]
-    },
-    " ",
-    {
-      "word": "YOU"
-    },
-    " ",
-    {
-      "word": "WARNED"
-    },
-    " ",
-    {
-      "word": "ME"
-    },
-    " ",
-    {
-      "word": "THEN",
-      "times": [
-        49517
-      ]
-    },
-    "\n",
-    {
-      "word": "BUT",
-      "times": [
-        50558
-      ]
-    },
-    " ",
-    {
-      "word": "EASY"
-    },
-    " ",
-    {
-      "word": "COME",
-      "times": [
-        51057
-      ]
-    },
-    "\n",
-    {
-      "word": "AND",
-      "times": [
-        51504
-      ]
-    },
-    " ",
-    {
-      "word": "EASY"
-    },
-    " ",
-    {
-      "word": "GO",
-      "times": [
-        51980
-      ]
-    },
-    "\n",
-    {
-      "word": "AND",
-      "times": [
-        52457
-      ]
-    },
-    " ",
-    {
-      "word": "IT"
-    },
-    " ",
-    {
-      "word": "WOULD"
-    },
-    " ",
-    {
-      "word": "END",
-      "times": [
-        52903
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        53181
-      ]
-    },
-    " ",
-    {
-      "word": "ANY"
-    },
-    " ",
-    {
-      "word": "TIME"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "BLEED",
-      "times": [
-        53999
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        54200
-      ]
-    },
-    " ",
-    {
-      "word": "LET"
-    },
-    " ",
-    {
-      "word": "ME"
-    },
-    " ",
-    {
-      "word": "GO",
-      "times": [
-        54657
-      ]
-    },
-    "\n",
-    {
-      "word": "YEAH",
-      "times": [
-        54878
-      ]
-    },
-    " ",
-    {
-      "word": "ANY"
-    },
-    " ",
-    {
-      "word": "TIME"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "FEED"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        55839
-      ]
-    },
-    "\n",
-    {
-      "word": "GET",
-      "times": [
-        56158
-      ]
-    },
-    " ",
-    {
-      "word": "ME"
-    },
-    " ",
-    {
-      "word": "NO",
-      "times": [
-        56451
-      ]
-    },
-    "\n",
-    {
-      "word": "ANY",
-      "times": [
-        56909
-      ]
-    },
-    " ",
-    {
-      "word": "TIME"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "SEEK",
-      "times": [
-        57364
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        57736
-      ]
-    },
-    " ",
-    {
-      "word": "LET"
-    },
-    " ",
-    {
-      "word": "ME"
-    },
-    " ",
-    {
-      "word": "KNOW",
-      "times": [
-        58182
-      ]
-    },
-    "\n",
-    {
-      "word": "BUT",
-      "times": [
-        58511
-      ]
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "PLAN"
-    },
-    " ",
-    {
-      "word": "AND"
-    },
-    " ",
-    {
-      "word": "SEE",
-      "times": [
-        59076
-      ]
-    },
-    "\n",
-    {
-      "word": "JUST",
-      "times": [
-        59361
-      ]
-    },
-    " ",
-    {
-      "word": "LET"
-    },
-    " ",
-    {
-      "word": "ME"
-    },
-    " ",
-    {
-      "word": "GO",
-      "times": [
-        59955
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        60309
-      ]
-    },
-    " ",
-    {
-      "word": "ON"
-    },
-    " ",
-    {
-      "word": "MY"
-    },
-    " ",
-    {
-      "word": "KNEES"
-    },
-    " ",
-    {
-      "word": "WHEN"
-    },
-    " ",
-    {
-      "word": "IM"
-    },
-    " ",
-    {
-      "word": "BEGGIN",
-      "times": [
-        61449
-      ]
-    },
-    "\n",
-    {
-      "word": "CAUSE",
-      "times": [
-        62260
-      ]
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "DONT"
-    },
-    " ",
-    {
-      "word": "WANT"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "LOSE"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        63177
-      ]
-    },
-    "\n",
-    {
-      "word": "HEY",
-      "times": [
-        65310
-      ]
-    },
-    " ",
-    {
-      "word": "YEAH"
-    },
-    " ",
-    {
-      "word": "RATATATA",
-      "times": [
-        66972
-      ]
-    },
-    "\n",
-    {
-      "word": "CAUSE",
-      "times": [
-        68416
-      ]
-    },
-    " ",
-    {
-      "word": "IM"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        70211
-      ]
-    },
-    "\n",
-    {
-      "word": "AND",
-      "times": [
-        71867
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "BABY",
-      "times": [
-        73924
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        75515
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        77437
-      ]
-    },
-    "\n",
-    {
-      "word": "AND",
-      "times": [
-        79001
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "DARLING",
-      "times": [
-        81061
-      ]
-    },
-    "\n",
-    {
-      "word": "I",
-      "times": [
-        82341
-      ]
-    },
-    " ",
-    {
-      "word": "NEED"
-    },
-    " ",
-    {
-      "word": "YOU"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "UNDERSTAND",
-      "times": [
-        83879
-      ]
-    },
-    "\n",
-    {
-      "word": "TRIED",
-      "times": [
-        85824
-      ]
-    },
-    " ",
-    {
-      "word": "SO"
-    },
-    " ",
-    {
-      "word": "HARD"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "BE"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "MAN",
-      "times": [
-        88000
-      ]
-    },
-    "\n",
-    {
-      "word": "THE",
-      "times": [
-        89440
-      ]
-    },
-    " ",
-    {
-      "word": "KIND"
-    },
-    " ",
-    {
-      "word": "OF"
-    },
-    " ",
-    {
-      "word": "MAN"
-    },
-    " ",
-    {
-      "word": "YOU"
-    },
-    " ",
-    {
-      "word": "WANT"
-    },
-    " ",
-    {
-      "word": "IN"
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "END",
-      "times": [
-        91640
-      ]
-    },
-    "\n",
-    {
-      "word": "ONLY",
-      "times": [
-        92244
-      ]
-    },
-    " ",
-    {
-      "word": "THEN"
-    },
-    " ",
-    {
-      "word": "CAN"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "BEGIN"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "LIVE"
-    },
-    " ",
-    {
-      "word": "AGAIN",
-      "times": [
-        94931
-      ]
-    },
-    "\n",
-    {
-      "word": "AN",
-      "times": [
-        97014
-      ]
-    },
-    " ",
-    {
-      "word": "EMPTY"
-    },
-    " ",
-    {
-      "word": "SHELL",
-      "times": [
-        97643
-      ]
-    },
-    "\n",
-    {
-      "word": "I",
-      "times": [
-        98963
-      ]
-    },
-    " ",
-    {
-      "word": "USED"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "BE",
-      "times": [
-        99339
-      ]
-    },
-    "\n",
-    {
-      "word": "THE",
-      "times": [
-        100578
-      ]
-    },
-    " ",
-    {
-      "word": "SHADOW"
-    },
-    " ",
-    {
-      "word": "OF"
-    },
-    " ",
-    {
-      "word": "MY"
-    },
-    " ",
-    {
-      "word": "LIFE",
-      "times": [
-        101716
-      ]
-    },
-    "\n",
-    {
-      "word": "WAS",
-      "times": [
-        102134
-      ]
-    },
-    " ",
-    {
-      "word": "HANGING"
-    },
-    " ",
-    {
-      "word": "OVER"
-    },
-    " ",
-    {
-      "word": "ME",
-      "times": [
-        102972
-      ]
-    },
-    "\n",
-    {
-      "word": "A",
-      "times": [
-        104142
-      ]
-    },
-    " ",
-    {
-      "word": "BROKEN"
-    },
-    " ",
-    {
-      "word": "MAN",
-      "times": [
-        104706
-      ]
-    },
-    "\n",
-    {
-      "word": "THAT",
-      "times": [
-        106030
-      ]
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "DONT"
-    },
-    " ",
-    {
-      "word": "KNOW",
-      "times": [
-        106536
-      ]
-    },
-    "\n",
-    {
-      "word": "WONT",
-      "times": [
-        107795
-      ]
-    },
-    " ",
-    {
-      "word": "EVEN"
-    },
-    " ",
-    {
-      "word": "STAND"
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "DEVILS",
-      "times": [
-        108794
-      ]
-    },
-    "\n",
-    {
-      "word": "CHANCE",
-      "times": [
-        109241
-      ]
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "WIN"
-    },
-    " ",
-    {
-      "word": "MY"
-    },
-    " ",
-    {
-      "word": "SOUL",
-      "times": [
-        110122
-      ]
-    },
-    "\n",
-    {
-      "word": "WHAT",
-      "times": [
-        110447
-      ]
-    },
-    " ",
-    {
-      "word": "WE"
-    },
-    " ",
-    {
-      "word": "DOING",
-      "times": [
-        110750
-      ]
-    },
-    "\n",
-    {
-      "word": "WHAT",
-      "times": [
-        111249
-      ]
-    },
-    " ",
-    {
-      "word": "WE"
-    },
-    " ",
-    {
-      "word": "CHASING",
-      "times": [
-        111531
-      ]
-    },
-    "\n",
-    {
-      "word": "WHY",
-      "times": [
-        112183
-      ]
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "BOTTOM",
-      "times": [
-        112485
-      ]
-    },
-    "\n",
-    {
-      "word": "WHY",
-      "times": [
-        113034
-      ]
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "BASEMENT",
-      "times": [
-        113410
-      ]
-    },
-    "\n",
-    {
-      "word": "WHY",
-      "times": [
-        114072
-      ]
-    },
-    " ",
-    {
-      "word": "WE"
-    },
-    " ",
-    {
-      "word": "GOT"
-    },
-    " ",
-    {
-      "word": "GOOD"
-    },
-    " ",
-    {
-      "word": "SHIT",
-      "times": [
-        114637
-      ]
-    },
-    "\n",
-    {
-      "word": "DONT",
-      "times": [
-        114893
-      ]
-    },
-    " ",
-    {
-      "word": "EMBRACE"
-    },
-    " ",
-    {
-      "word": "IT",
-      "times": [
-        115323
-      ]
-    },
-    "\n",
-    {
-      "word": "WHY",
-      "times": [
-        115813
-      ]
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "FEEL"
-    },
-    " ",
-    {
-      "word": "FOR",
-      "times": [
-        116221
-      ]
-    },
-    "\n",
-    {
-      "word": "THE",
-      "times": [
-        116558
-      ]
-    },
-    " ",
-    {
-      "word": "NEED"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "REPLACE"
-    },
-    " ",
-    {
-      "word": "ME",
-      "times": [
-        117236
-      ]
-    },
-    "\n",
-    {
-      "word": "YOURE",
-      "times": [
-        117641
-      ]
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "WRONG"
-    },
-    " ",
-    {
-      "word": "WAY",
-      "times": [
-        118121
-      ]
-    },
-    "\n",
-    {
-      "word": "TRACK",
-      "times": [
-        118354
-      ]
-    },
-    " ",
-    {
-      "word": "FROM"
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "GOOD",
-      "times": [
-        118703
-      ]
-    },
-    "\n",
-    {
-      "word": "I",
-      "times": [
-        119195
-      ]
-    },
-    " ",
-    {
-      "word": "WANT"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "PAINT"
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "PICTURE",
-      "times": [
-        119598
-      ]
-    },
-    "\n",
-    {
-      "word": "TELLING",
-      "times": [
-        119915
-      ]
-    },
-    " ",
-    {
-      "word": "WHERE"
-    },
-    " ",
-    {
-      "word": "WE"
-    },
-    " ",
-    {
-      "word": "COULD"
-    },
-    " ",
-    {
-      "word": "BE"
-    },
-    " ",
-    {
-      "word": "AT",
-      "times": [
-        120887
-      ]
-    },
-    "\n",
-    {
-      "word": "LIKE",
-      "times": [
-        121228
-      ]
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "HEART"
-    },
-    " ",
-    {
-      "word": "IN"
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "BEST"
-    },
-    " ",
-    {
-      "word": "WAY"
-    },
-    " ",
-    {
-      "word": "SHOULD",
-      "times": [
-        122249
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        122715
-      ]
-    },
-    " ",
-    {
-      "word": "CAN"
-    },
-    " ",
-    {
-      "word": "GIVE"
-    },
-    " ",
-    {
-      "word": "IT"
-    },
-    " ",
-    {
-      "word": "AWAY",
-      "times": [
-        123114
-      ]
-    },
-    "\n",
-    {
-      "word": "YOU",
-      "times": [
-        123458
-      ]
-    },
-    " ",
-    {
-      "word": "HAD"
-    },
-    " ",
-    {
-      "word": "AND"
-    },
-    " ",
-    {
-      "word": "YOU"
-    },
-    " ",
-    {
-      "word": "TOOK"
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "PAY",
-      "times": [
-        124430
-      ]
-    },
-    "\n",
-    {
-      "word": "BUT",
-      "times": [
-        124829
-      ]
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "KEEP"
-    },
-    " ",
-    {
-      "word": "WALKING"
-    },
-    " ",
-    {
-      "word": "ON",
-      "times": [
-        125724
-      ]
-    },
-    "\n",
-    {
-      "word": "KEEP",
-      "times": [
-        126072
-      ]
-    },
-    " ",
-    {
-      "word": "OPENING"
-    },
-    " ",
-    {
-      "word": "DOORS",
-      "times": [
-        126571
-      ]
-    },
-    "\n",
-    {
-      "word": "KEEP",
-      "times": [
-        126989
-      ]
-    },
-    " ",
-    {
-      "word": "HOPING"
-    },
-    " ",
-    {
-      "word": "FOR",
-      "times": [
-        127496
-      ]
-    },
-    "\n",
-    {
-      "word": "THAT",
-      "times": [
-        127846
-      ]
-    },
-    " ",
-    {
-      "word": "THE"
-    },
-    " ",
-    {
-      "word": "DOOR"
-    },
-    " ",
-    {
-      "word": "IS"
-    },
-    " ",
-    {
-      "word": "YOURS",
-      "times": [
-        128487
-      ]
-    },
-    "\n",
-    {
-      "word": "KEEP",
-      "times": [
-        128857
-      ]
-    },
-    " ",
-    {
-      "word": "OHSO"
-    },
-    " ",
-    {
-      "word": "HOME",
-      "times": [
-        129355
-      ]
-    },
-    "\n",
-    {
-      "word": "CAUSE",
-      "times": [
-        129880
-      ]
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "DONT"
-    },
-    " ",
-    {
-      "word": "WANNA",
-      "times": [
-        130199
-      ]
-    },
-    "\n",
-    {
-      "word": "LIVE",
-      "times": [
-        130613
-      ]
-    },
-    " ",
-    {
-      "word": "IN"
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "BROKEN"
-    },
-    " ",
-    {
-      "word": "HOME",
-      "times": [
-        131129
-      ]
-    },
-    "\n",
-    {
-      "word": "GIRL",
-      "times": [
-        131620
-      ]
-    },
-    " ",
-    {
-      "word": "IM"
-    },
-    " ",
-    {
-      "word": "BEGGIN",
-      "times": [
-        131810
-      ]
-    },
-    "\n",
-    {
-      "word": "MMM",
-      "times": [
-        133397
-      ]
-    },
-    " ",
-    {
-      "word": "YEEEAH",
-      "times": [
-        133637
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        134891
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        136572
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        138095
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "BABY",
-      "times": [
-        140220
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        141718
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        143739
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        145329
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "DARLING",
-      "times": [
-        147727
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        148598
-      ]
-    },
-    " ",
-    {
-      "word": "FIGHTING"
-    },
-    " ",
-    {
-      "word": "HARD"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "HOLD"
-    },
-    " ",
-    {
-      "word": "MY"
-    },
-    " ",
-    {
-      "word": "OWN",
-      "times": [
-        150713
-      ]
-    },
-    "\n",
-    {
-      "word": "JUST",
-      "times": [
-        152080
-      ]
-    },
-    " ",
-    {
-      "word": "CANT"
-    },
-    " ",
-    {
-      "word": "MAKE"
-    },
-    " ",
-    {
-      "word": "IT"
-    },
-    " ",
-    {
-      "word": "ALL"
-    },
-    " ",
-    {
-      "word": "ALONE",
-      "times": [
-        154089
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        155655
-      ]
-    },
-    " ",
-    {
-      "word": "HOLDING"
-    },
-    " ",
-    {
-      "word": "ON"
-    },
-    " ",
-    {
-      "word": "I"
-    },
-    " ",
-    {
-      "word": "CANT"
-    },
-    " ",
-    {
-      "word": "FALL"
-    },
-    " ",
-    {
-      "word": "BACK",
-      "times": [
-        157868
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        158693
-      ]
-    },
-    " ",
-    {
-      "word": "JUST"
-    },
-    " ",
-    {
-      "word": "A"
-    },
-    " ",
-    {
-      "word": "CALM"
-    },
-    " ",
-    {
-      "word": "BOUT"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "FADE"
-    },
-    " ",
-    {
-      "word": "TO"
-    },
-    " ",
-    {
-      "word": "BLACK",
-      "times": [
-        161520
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        163383
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        165266
-      ]
-    },
-    "\n",
-    {
-      "word": "PUT",
-      "times": [
-        167073
-      ]
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "BABY",
-      "times": [
-        168932
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        170431
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        172364
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        174107
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "DARLING",
-      "times": [
-        176187
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        177591
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        179573
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        181123
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "BABY",
-      "times": [
-        183207
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        184726
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        186677
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        188230
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "DARLING",
-      "times": [
-        190258
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        191919
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        193900
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        195447
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT"
-    },
-    " ",
-    {
-      "word": "BABY",
-      "times": [
-        197486
-      ]
-    },
-    "\n",
-    {
-      "word": "IM",
-      "times": [
-        199064
-      ]
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "BEGGIN"
-    },
-    " ",
-    {
-      "word": "YOU",
-      "times": [
-        201079
-      ]
-    },
-    "\n",
-    {
-      "word": "SO",
-      "times": [
-        202691
-      ]
-    },
-    " ",
-    {
-      "word": "PUT"
-    },
-    " ",
-    {
-      "word": "YOUR"
-    },
-    " ",
-    {
-      "word": "LOVING"
-    },
-    " ",
-    {
-      "word": "HAND"
-    },
-    " ",
-    {
-      "word": "OUT",
-      "times": [
-        204959
-      ]
-    },
-    "\n"
+  "total_duration": 214000,
+  "phrases": [
+    {
+      "texts": [
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "BABY"
+      ],
+      "start": 714,
+      "end": 9724
+    },
+    {
+      "texts": [
+        "CAUSE",
+        "IM",
+        "BEGGIN"
+      ],
+      "start": 12250,
+      "end": 16575
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 25412,
+      "end": 28564
+    },
+    {
+      "texts": [
+        "SO",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "BABY"
+      ],
+      "start": 28564,
+      "end": 32347
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 32347,
+      "end": 35845
+    },
+    {
+      "texts": [
+        "SO",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "DARLING"
+      ],
+      "start": 35845,
+      "end": 39211
+    },
+    {
+      "texts": [
+        "RIDING",
+        "HIGH"
+      ],
+      "start": 39211,
+      "end": 40687
+    },
+    {
+      "texts": [
+        "WHEN",
+        "I",
+        "WAS",
+        "KING"
+      ],
+      "start": 41517,
+      "end": 42620
+    },
+    {
+      "texts": [
+        "I",
+        "PLAYED",
+        "IT",
+        "HARD",
+        "AND",
+        "FAST"
+      ],
+      "start": 43270,
+      "end": 44470
+    },
+    {
+      "texts": [
+        "CAUSE",
+        "I",
+        "HAD",
+        "EVERYTHING"
+      ],
+      "start": 44470,
+      "end": 46181
+    },
+    {
+      "texts": [
+        "I",
+        "WALKED",
+        "AWAY"
+      ],
+      "start": 46181,
+      "end": 47957
+    },
+    {
+      "texts": [
+        "BUT",
+        "YOU",
+        "WARNED",
+        "ME",
+        "THEN"
+      ],
+      "start": 47957,
+      "end": 49762
+    },
+    {
+      "texts": [
+        "BUT",
+        "EASY",
+        "COME"
+      ],
+      "start": 49762,
+      "end": 51162
+    },
+    {
+      "texts": [
+        "AND",
+        "EASY",
+        "GO"
+      ],
+      "start": 51162,
+      "end": 52006
+    },
+    {
+      "texts": [
+        "AND",
+        "IT",
+        "WOULD",
+        "END"
+      ],
+      "start": 52006,
+      "end": 52914
+    },
+    {
+      "texts": [
+        "SO",
+        "ANY",
+        "TIME",
+        "I",
+        "BLEED"
+      ],
+      "start": 52914,
+      "end": 53940
+    },
+    {
+      "texts": [
+        "YOU",
+        "LET",
+        "ME",
+        "GO"
+      ],
+      "start": 53940,
+      "end": 54666
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ANY",
+        "TIME",
+        "I",
+        "FEED",
+        "YOU"
+      ],
+      "start": 54666,
+      "end": 55919
+    },
+    {
+      "texts": [
+        "GET",
+        "ME",
+        "NO"
+      ],
+      "start": 55919,
+      "end": 56481
+    },
+    {
+      "texts": [
+        "ANY",
+        "TIME",
+        "I",
+        "SEEK"
+      ],
+      "start": 56481,
+      "end": 57719
+    },
+    {
+      "texts": [
+        "YOU",
+        "LET",
+        "ME",
+        "KNOW"
+      ],
+      "start": 57719,
+      "end": 58561
+    },
+    {
+      "texts": [
+        "BUT",
+        "I",
+        "PLAN",
+        "AND",
+        "SEE"
+      ],
+      "start": 58561,
+      "end": 59370
+    },
+    {
+      "texts": [
+        "JUST",
+        "LET",
+        "ME",
+        "GO"
+      ],
+      "start": 59370,
+      "end": 60392
+    },
+    {
+      "texts": [
+        "IM",
+        "ON",
+        "MY",
+        "KNEES",
+        "WHEN",
+        "IM",
+        "BEGGIN"
+      ],
+      "start": 60392,
+      "end": 61929
+    },
+    {
+      "texts": [
+        "CAUSE",
+        "I",
+        "DONT",
+        "WANT",
+        "TO",
+        "LOSE",
+        "YOU"
+      ],
+      "start": 61929,
+      "end": 64580
+    },
+    {
+      "texts": [
+        "HEY",
+        "YEAH",
+        "RATATATA"
+      ],
+      "start": 65318,
+      "end": 67990
+    },
+    {
+      "texts": [
+        "CAUSE",
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 67990,
+      "end": 71644
+    },
+    {
+      "texts": [
+        "AND",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "BABY"
+      ],
+      "start": 71644,
+      "end": 75142
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 75142,
+      "end": 78664
+    },
+    {
+      "texts": [
+        "AND",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "DARLING"
+      ],
+      "start": 78664,
+      "end": 81928
+    },
+    {
+      "texts": [
+        "I",
+        "NEED",
+        "YOU",
+        "TO",
+        "UNDERSTAND"
+      ],
+      "start": 81928,
+      "end": 85356
+    },
+    {
+      "texts": [
+        "TRIED",
+        "SO",
+        "HARD",
+        "TO",
+        "BE",
+        "YOUR",
+        "MAN"
+      ],
+      "start": 85356,
+      "end": 88909
+    },
+    {
+      "texts": [
+        "THE",
+        "KIND",
+        "OF",
+        "MAN",
+        "YOU",
+        "WANT",
+        "IN",
+        "THE",
+        "END"
+      ],
+      "start": 88909,
+      "end": 92098
+    },
+    {
+      "texts": [
+        "ONLY",
+        "THEN",
+        "CAN",
+        "I",
+        "BEGIN",
+        "TO",
+        "LIVE",
+        "AGAIN"
+      ],
+      "start": 92098,
+      "end": 96033
+    },
+    {
+      "texts": [
+        "AN",
+        "EMPTY",
+        "SHELL"
+      ],
+      "start": 97054,
+      "end": 98065
+    },
+    {
+      "texts": [
+        "I",
+        "USED",
+        "TO",
+        "BE"
+      ],
+      "start": 98860,
+      "end": 99830
+    },
+    {
+      "texts": [
+        "THE",
+        "SHADOW",
+        "OF",
+        "MY",
+        "LIFE"
+      ],
+      "start": 100611,
+      "end": 102062
+    },
+    {
+      "texts": [
+        "WAS",
+        "HANGING",
+        "OVER",
+        "ME"
+      ],
+      "start": 102062,
+      "end": 103644
+    },
+    {
+      "texts": [
+        "A",
+        "BROKEN",
+        "MAN"
+      ],
+      "start": 104070,
+      "end": 105178
+    },
+    {
+      "texts": [
+        "THAT",
+        "I",
+        "DONT",
+        "KNOW"
+      ],
+      "start": 105178,
+      "end": 106966
+    },
+    {
+      "texts": [
+        "WONT",
+        "EVEN",
+        "STAND",
+        "THE",
+        "DEVILS"
+      ],
+      "start": 107843,
+      "end": 109206
+    },
+    {
+      "texts": [
+        "CHANCE",
+        "TO",
+        "WIN",
+        "MY",
+        "SOUL"
+      ],
+      "start": 109206,
+      "end": 110351
+    },
+    {
+      "texts": [
+        "WHAT",
+        "WE",
+        "DOING"
+      ],
+      "start": 110351,
+      "end": 111393
+    },
+    {
+      "texts": [
+        "WHAT",
+        "WE",
+        "CHASING"
+      ],
+      "start": 111393,
+      "end": 112189
+    },
+    {
+      "texts": [
+        "WHY",
+        "THE",
+        "BOTTOM"
+      ],
+      "start": 112189,
+      "end": 113081
+    },
+    {
+      "texts": [
+        "WHY",
+        "THE",
+        "BASEMENT"
+      ],
+      "start": 113081,
+      "end": 114033
+    },
+    {
+      "texts": [
+        "WHY",
+        "WE",
+        "GOT",
+        "GOOD",
+        "SHIT"
+      ],
+      "start": 114033,
+      "end": 114929
+    },
+    {
+      "texts": [
+        "DONT",
+        "EMBRACE",
+        "IT"
+      ],
+      "start": 114929,
+      "end": 115815
+    },
+    {
+      "texts": [
+        "WHY",
+        "THE",
+        "FEEL",
+        "FOR"
+      ],
+      "start": 115815,
+      "end": 116469
+    },
+    {
+      "texts": [
+        "THE",
+        "NEED",
+        "TO",
+        "REPLACE",
+        "ME"
+      ],
+      "start": 116469,
+      "end": 117321
+    },
+    {
+      "texts": [
+        "YOURE",
+        "THE",
+        "WRONG",
+        "WAY"
+      ],
+      "start": 117321,
+      "end": 118233
+    },
+    {
+      "texts": [
+        "TRACK",
+        "FROM",
+        "THE",
+        "GOOD"
+      ],
+      "start": 118233,
+      "end": 118944
+    },
+    {
+      "texts": [
+        "I",
+        "WANT",
+        "TO",
+        "PAINT",
+        "A",
+        "PICTURE"
+      ],
+      "start": 118944,
+      "end": 119864
+    },
+    {
+      "texts": [
+        "TELLING",
+        "WHERE",
+        "WE",
+        "COULD",
+        "BE",
+        "AT"
+      ],
+      "start": 119864,
+      "end": 120946
+    },
+    {
+      "texts": [
+        "LIKE",
+        "A",
+        "HEART",
+        "IN",
+        "THE",
+        "BEST",
+        "WAY",
+        "SHOULD"
+      ],
+      "start": 120946,
+      "end": 122348
+    },
+    {
+      "texts": [
+        "YOU",
+        "CAN",
+        "GIVE",
+        "IT",
+        "AWAY"
+      ],
+      "start": 122348,
+      "end": 123240
+    },
+    {
+      "texts": [
+        "YOU",
+        "HAD",
+        "AND",
+        "YOU",
+        "TOOK",
+        "THE",
+        "PAY"
+      ],
+      "start": 123240,
+      "end": 124615
+    },
+    {
+      "texts": [
+        "BUT",
+        "I",
+        "KEEP",
+        "WALKING",
+        "ON"
+      ],
+      "start": 124615,
+      "end": 125946
+    },
+    {
+      "texts": [
+        "KEEP",
+        "OPENING",
+        "DOORS"
+      ],
+      "start": 125946,
+      "end": 126901
+    },
+    {
+      "texts": [
+        "KEEP",
+        "HOPING",
+        "FOR"
+      ],
+      "start": 126901,
+      "end": 127685
+    },
+    {
+      "texts": [
+        "THAT",
+        "THE",
+        "DOOR",
+        "IS",
+        "YOURS"
+      ],
+      "start": 127685,
+      "end": 128695
+    },
+    {
+      "texts": [
+        "KEEP",
+        "OHSO",
+        "HOME"
+      ],
+      "start": 128695,
+      "end": 129484
+    },
+    {
+      "texts": [
+        "CAUSE",
+        "I",
+        "DONT",
+        "WANNA"
+      ],
+      "start": 129484,
+      "end": 130343
+    },
+    {
+      "texts": [
+        "LIVE",
+        "IN",
+        "A",
+        "BROKEN",
+        "HOME"
+      ],
+      "start": 130343,
+      "end": 131343
+    },
+    {
+      "texts": [
+        "GIRL",
+        "IM",
+        "BEGGIN"
+      ],
+      "start": 131343,
+      "end": 132187
+    },
+    {
+      "texts": [
+        "MMM",
+        "YEEEAH"
+      ],
+      "start": 133371,
+      "end": 134354
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 134354,
+      "end": 137650
+    },
+    {
+      "texts": [
+        "SO",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "BABY"
+      ],
+      "start": 137650,
+      "end": 141603
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 141603,
+      "end": 144955
+    },
+    {
+      "texts": [
+        "SO",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "DARLING"
+      ],
+      "start": 144955,
+      "end": 148347
+    },
+    {
+      "texts": [
+        "IM",
+        "FIGHTING",
+        "HARD",
+        "TO",
+        "HOLD",
+        "MY",
+        "OWN"
+      ],
+      "start": 148347,
+      "end": 151519
+    },
+    {
+      "texts": [
+        "JUST",
+        "CANT",
+        "MAKE",
+        "IT",
+        "ALL",
+        "ALONE"
+      ],
+      "start": 152076,
+      "end": 155340
+    },
+    {
+      "texts": [
+        "IM",
+        "HOLDING",
+        "ON",
+        "I",
+        "CANT",
+        "FALL",
+        "BACK"
+      ],
+      "start": 155340,
+      "end": 158492
+    },
+    {
+      "texts": [
+        "IM",
+        "JUST",
+        "A",
+        "CALM",
+        "BOUT",
+        "TO",
+        "FADE",
+        "TO",
+        "BLACK"
+      ],
+      "start": 158492,
+      "end": 162365
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 162365,
+      "end": 166541
+    },
+    {
+      "texts": [
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "BABY"
+      ],
+      "start": 166541,
+      "end": 170277
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 170277,
+      "end": 173611
+    },
+    {
+      "texts": [
+        "SO",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "DARLING"
+      ],
+      "start": 173611,
+      "end": 177107
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 177107,
+      "end": 180860
+    },
+    {
+      "texts": [
+        "SO",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "BABY"
+      ],
+      "start": 180860,
+      "end": 184240
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 184240,
+      "end": 187811
+    },
+    {
+      "texts": [
+        "SO",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "DARLING"
+      ],
+      "start": 187811,
+      "end": 191408
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 191408,
+      "end": 195128
+    },
+    {
+      "texts": [
+        "SO",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT",
+        "BABY"
+      ],
+      "start": 195128,
+      "end": 198839
+    },
+    {
+      "texts": [
+        "IM",
+        "BEGGIN",
+        "BEGGIN",
+        "YOU"
+      ],
+      "start": 198839,
+      "end": 202348
+    },
+    {
+      "texts": [
+        "SO",
+        "PUT",
+        "YOUR",
+        "LOVING",
+        "HAND",
+        "OUT"
+      ],
+      "start": 202348,
+      "end": 206161
+    }
   ]
 }

@@ -49,10 +49,7 @@
         <h2>Step 2</h2>
 
         <p>
-            As the song plays, click on the word that corresponds to what is being sung.
-            This will place a "keyframe" at that spot. The more keyframes you add, the more precise
-            the lyrics syncing will be. You can freely add keyframes: you can even come travel
-            "back" in the lyrics, which is usually useful for the chorus section.
+            As the song plays, click when a lyrics phrase starts and ends.
         </p>
         <p>
             You can freely pause and move the video around if needed.
@@ -61,20 +58,31 @@
 
         <div id="youtube-player"></div>
 
-        <div>
-            <button type="button" class="btn btn-secondary m-1" :disabled="undoStack.length == 0" @click="undoStop()">
-                Undo
-            </button>
-        </div>
-
         <div id="lyrics-pad" class="p-2">
-            <span v-for="stop in lyricsStops" :class="{word: !stop.isSpace, used: stop.times.length > 0}"
-                  @click="addStop(stop)">{{stop.text}}</span>
+            <div v-for="(phrase, i) in phrases">
+                <button type="button" class="btn btn-sm m-1"
+                        :class="{'btn-primary': phrase.start === null, 'btn-secondary': phrase.start !== null}"
+                        @click="setPhraseStart(i)">
+                    <span v-if="phrase.start === null">Set start now</span>
+                    <span v-else>Start at {{formatTime(phrase.start)}}</span>
+                </button>
+
+                <button type="button" class="btn btn-sm m-1"
+                        :class="{'btn-primary': phrase.end === null, 'btn-secondary': phrase.end !== null}"
+                        @click="setPhraseEnd(i)">
+                    <span v-if="phrase.end === null">Set end now</span>
+                    <span v-else>End at {{formatTime(phrase.end)}}</span>
+                </button>
+
+                <span v-for="text in phrase.texts">{{text}}&nbsp;</span>
+            </div>
         </div>
 
         <div>
             <button type="button" class="btn btn-secondary m-1" @click="step = 1">Back</button>
-            <button type="button" class="btn btn-primary m-1" @click="finish()">Finish</button>
+            <button type="button" class="btn btn-primary m-1" @click="finish()" :disabled="hasIncompleteLineInfo">
+                Finish
+            </button>
         </div>
     </div>
 
@@ -85,7 +93,7 @@
             This is the final result encoded as JSON
         </p>
 
-        <textarea style="height: 10em; width: 100%">{{JSON.stringify(this.lyricsStopWords, null, 4)}}</textarea>
+        <textarea style="height: 10em; width: 100%">{{JSON.stringify(this.result, null, 4)}}</textarea>
 
         <button type="button" class="btn btn-secondary m-1" @click="step = 2">Back</button>
     </div>

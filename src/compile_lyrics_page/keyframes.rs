@@ -22,20 +22,29 @@ pub(super) fn extract_frames(
     discrete_time_step: i32,
     timeline: &[Animation],
 ) -> Keyframes {
-    log::debug!("extract_frames {:?}", timeline);
+    log::debug!("extract_frames id={} timeline={:?}", id, timeline);
 
     // Categorize the animations based on whether they conflict with some other
+    let mut latest_end_ease_out = 0;
+    let mut is_conflicting = vec![false; timeline.len()];
+    for (i, animation) in timeline.iter().enumerate() {
+        if animation.start_ease_in < latest_end_ease_out {
+            // Set the current and the previous animation to conflict
+            is_conflicting[i] = true;
+            is_conflicting[i - 1] = true;
+        }
+
+        latest_end_ease_out = latest_end_ease_out.max(animation.end_ease_out);
+    }
+
     let mut conflicting_animations = vec![];
     let mut non_conflicting_animations = vec![];
-    let mut latest_end_ease_out = 0;
-    for &animation in timeline {
-        if animation.start_ease_in < latest_end_ease_out {
+    for (&animation, is_conflicting) in timeline.iter().zip(is_conflicting) {
+        if is_conflicting {
             conflicting_animations.push(animation);
         } else {
             non_conflicting_animations.push(animation);
         }
-
-        latest_end_ease_out = latest_end_ease_out.max(animation.end_ease_out);
     }
 
     let mut frames = extract_non_conflicting_frames(total_duration, &non_conflicting_animations);
@@ -70,6 +79,8 @@ fn extract_conflicting_frames(
     discrete_time_step: i32,
     animations: &[Animation],
 ) -> Vec<Keyframe> {
+    log::debug!("extract_conflicting_frames {:?}", animations);
+
     let mut frames = BTreeMap::new();
 
     for &animation in animations {
@@ -83,18 +94,20 @@ fn extract_conflicting_frames(
         }
     }
 
-    frames
+    let x = frames
         .into_iter()
         .map(|(i, effect_percentage)| {
             Keyframe::new(total_duration, i * discrete_time_step, effect_percentage)
         })
-        .collect_vec()
+        .collect_vec();
+    log::debug!("{:?}", x);
+    x
 }
 
 impl Keyframe {
     fn new(total_duration: i32, time: i32, effect_percentage: f64) -> Self {
         Self {
-            time_percentage: time as f64 / total_duration as f64,
+            time_percentage: 100.0 * time as f64 / total_duration as f64,
             time,
             effect_percentage,
         }
@@ -103,7 +116,7 @@ impl Keyframe {
 
 impl fmt::Display for Keyframe {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        writeln!(
+        write!(
             f,
             "{:.2}% {{opacity: {:.0}%; /* {:.1}ms */}}",
             self.time_percentage, self.effect_percentage, self.time
@@ -117,6 +130,6 @@ impl fmt::Display for Keyframes {
         for frame in &self.frames {
             writeln!(f, "{}", frame)?;
         }
-        writeln!(f, "}}")
+        write!(f, "}}")
     }
 }

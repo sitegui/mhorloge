@@ -16,6 +16,8 @@ pub struct AnimationConfig {
     pub margin_before: i32,
     pub margin_after: i32,
     pub ease_out: i32,
+    /// The ratio of the phrase duration that is dedicated to animate the letter as a incoming wave
+    pub letters_entering: f64,
     pub discrete_time_step: i32,
 }
 
@@ -57,20 +59,25 @@ fn compile_css(
     ensure!(phrases.phrases.len() == grid.phrases.len());
     for (lyrics_phrase, grid_phrase) in phrases.phrases.iter().zip(&grid.phrases) {
         ensure!(lyrics_phrase.texts.len() == grid_phrase.words.len());
-        for grid_word in &grid_phrase.words {
-            for &letter in &grid_word.letters {
-                let end_ease_in = lyrics_phrase.start - config.margin_before;
-                let start_ease_out = lyrics_phrase.end + config.margin_after;
-                timelines_per_letter
-                    .entry(letter)
-                    .or_insert_with(Vec::new)
-                    .push(Animation {
-                        start_ease_in: end_ease_in - config.ease_in,
-                        end_ease_in,
-                        start_ease_out,
-                        end_ease_out: start_ease_out + config.ease_out,
-                    });
-            }
+        let end_ease_in = lyrics_phrase.start - config.margin_before;
+        let start_ease_out = lyrics_phrase.end + config.margin_after;
+        let entering_duration =
+            ((start_ease_out - end_ease_in) as f64 * config.letters_entering).floor();
+
+        let letters = grid_phrase.words.iter().flat_map(|word| &word.letters);
+        let entering_step = entering_duration / (letters.clone().count() - 1) as f64;
+
+        for (i, &letter) in letters.enumerate() {
+            let end_ease_in = end_ease_in + (i as f64 * entering_step) as i32;
+            timelines_per_letter
+                .entry(letter)
+                .or_insert_with(Vec::new)
+                .push(Animation {
+                    start_ease_in: end_ease_in - config.ease_in,
+                    end_ease_in,
+                    start_ease_out,
+                    end_ease_out: start_ease_out + config.ease_out,
+                });
         }
     }
     log::info!(

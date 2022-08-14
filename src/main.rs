@@ -99,6 +99,8 @@ enum Options {
         ease_out: i32,
         #[structopt(long, default_value = "42")]
         discrete_time_step: i32,
+        #[structopt(long, default_value = "0.5")]
+        letters_entering: f64,
     },
 }
 
@@ -147,6 +149,7 @@ fn main() -> Result<()> {
             margin_after,
             ease_out,
             discrete_time_step,
+            letters_entering,
         } => lyrics_puzzle(
             lyrics_input,
             grid_input,
@@ -156,6 +159,7 @@ fn main() -> Result<()> {
             margin_after,
             ease_out,
             discrete_time_step,
+            letters_entering,
         )?,
     }
 
@@ -174,6 +178,7 @@ fn lyrics_puzzle(
     margin_after: i32,
     ease_out: i32,
     discrete_time_step: i32,
+    letters_entering: f64,
 ) -> Result<()> {
     let phrases: LyricsPuzzleInput = serde_json::from_str(&fs::read_to_string(&lyrics_input)?)?;
     let grid: GridOutput = serde_json::from_str(&fs::read_to_string(&grid_input)?)?;
@@ -183,6 +188,7 @@ fn lyrics_puzzle(
         margin_before,
         margin_after,
         ease_out,
+        letters_entering,
         discrete_time_step,
     };
     fs::write(

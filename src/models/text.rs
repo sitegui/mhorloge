@@ -30,7 +30,7 @@ impl FromStr for Text {
     fn from_str(s: &str) -> Result<Self> {
         let letters = s
             .chars()
-            .map(|c| Letter::try_from(c))
+            .map(Letter::try_from)
             .collect::<Result<Vec<_>>>()?;
         ensure!(!letters.is_empty());
         Ok(Text { letters })

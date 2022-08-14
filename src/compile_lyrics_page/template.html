@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lyrics</title>
+
+    <style>
+        .grid {
+            font-family: monospace;
+            font-size: larger;
+            font-weight: bolder;
+        }
+
+        .letter {
+            opacity: 0;
+        }
+    </style>
+
+    <style>
+        ${STYLE}
+    </style>
+</head>
+<body>
+<div id="player"></div>
+
+<div class="grid">${GRID}</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+    let player = null
+
+    YT.ready(() => {
+        player = new YT.Player('player', {
+            height: '405',
+            width: '720',
+            videoId: '${VIDEO_ID}',
+            playerVars: {
+                autoplay: '1',
+            },
+            events: {
+                onReady: () => {
+
+                },
+            }
+        })
+    })
+
+    let lastAnimationTime = 0
+    let lastInterval = 0
+
+    setInterval(() => {
+        if (player) {
+            const now = Date.now()
+            const expectedAnimationTime = lastAnimationTime + (now - lastInterval)
+
+            const time = player.getCurrentTime() * 1e3
+
+            if (Math.abs(expectedAnimationTime - time) > 100) {
+                // Drifted too much: force update
+                for (const animation of document.getAnimations()) {
+                    animation.currentTime = time
+                }
+                lastAnimationTime = time
+            } else {
+                lastAnimationTime = expectedAnimationTime
+            }
+
+            lastInterval = now
+        }
+    }, 1e3)
+</script>
+
+
+</body>
+</html>

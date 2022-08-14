@@ -36,39 +36,16 @@ pub struct GridOutputWord {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct LyricsPhrasesInput {
+pub struct LyricsPuzzleInput {
     pub video_id: String,
     pub total_duration: i32,
-    pub elements: Vec<WordOrSpace>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum WordOrSpace {
-    Word {
-        text: Text,
-        #[serde(default)]
-        times: Vec<i32>,
-    },
-    Space(String),
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct LyricsPhrasesOutput {
     pub phrases: Vec<LyricsPhrase>,
-    pub total_duration: i32,
 }
 
 /// Represents each phrase in the lyrics
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LyricsPhrase {
-    pub words: Vec<LyricsWord>,
-}
-
-/// Represents each word in the lyrics
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct LyricsWord {
-    pub text: Text,
-    /// The position in time (0=start, 1=end) of this word in the whole song
-    pub stop: Option<f64>,
+    pub texts: Vec<Text>,
+    pub start: i32,
+    pub end: i32,
 }

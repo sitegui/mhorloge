@@ -1,17 +1,17 @@
 use std::env::VarError;
 use std::path::PathBuf;
 use std::time::Instant;
-use std::{env, fs, mem};
+use std::{env, fs};
 
-use anyhow::{ensure, Result};
+use crate::compile_lyrics_page::AnimationConfig;
+use anyhow::Result;
 use jemallocator::Jemalloc;
 use structopt::StructOpt;
 
 use crate::models::aspect_ratio::AspectRatio;
 use crate::models::grid::Grid;
 use crate::models::io::{
-    GridInput, GridOutput, GridOutputPhrase, LyricsPhrase, LyricsPhrasesInput, LyricsPhrasesOutput,
-    LyricsWord, TimePhrasesOutput, WordOrSpace,
+    GridInput, GridOutput, GridOutputPhrase, GridOutputWord, LyricsPuzzleInput, TimePhrasesOutput,
 };
 use crate::models::language::Language;
 use crate::models::merge_dag::MergeDag;
@@ -51,13 +51,6 @@ enum Options {
         /// The path to a file where to write the output as JSON, represented by `TimePhrasesOutput`.
         phrases_output: PathBuf,
     },
-    /// Generate phrases from the format produced by `web/sync-lyrics.html` tool
-    LyricsPhrases {
-        /// The path to the input JSON file, represented by `LyricsPhrasesInput`.
-        lyrics_input: PathBuf,
-        /// The path to a file where to write the output as JSON, represented by `LyricsPhrasesOutput`.
-        phrases_output: PathBuf,
-    },
     /// Generate a grid for a given set of phrases
     Grid {
         /// The path to the input JSON file, represented by `GridInput`.
@@ -90,8 +83,8 @@ enum Options {
     },
     /// Generate a HTML file to sync each letter of a grid with a song's lyrics
     LyricsPuzzle {
-        /// The path to the lyrics input JSON file, represented by `LyricsPhrasesOutput`.
-        phrases_input: PathBuf,
+        /// The path to the lyrics input JSON file, represented by `LyricsPuzzleInput`.
+        lyrics_input: PathBuf,
         /// The path to the grid input JSON file, represented by `GridOutput`.
         grid_input: PathBuf,
         /// The path to a file where to write the output as HTML.
@@ -116,12 +109,6 @@ fn main() -> Result<()> {
         } => {
             time_phrases(languages, phrases_output)?;
         }
-        Options::LyricsPhrases {
-            lyrics_input,
-            phrases_output,
-        } => {
-            lyrics_phrases(lyrics_input, phrases_output)?;
-        }
         Options::Grid {
             phrases_input,
             grid_output,
@@ -142,10 +129,10 @@ fn main() -> Result<()> {
             )?;
         }
         Options::LyricsPuzzle {
-            phrases_input,
+            lyrics_input,
             grid_input,
             html_output,
-        } => lyrics_puzzle(phrases_input, grid_input, html_output)?,
+        } => lyrics_puzzle(lyrics_input, grid_input, html_output)?,
     }
 
     log::info!("Done in {:?}", start.elapsed());
@@ -153,11 +140,21 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn lyrics_puzzle(phrases_input: PathBuf, grid_input: PathBuf, html_output: PathBuf) -> Result<()> {
-    let phrases: LyricsPhrasesOutput = serde_json::from_str(&fs::read_to_string(&phrases_input)?)?;
+fn lyrics_puzzle(lyrics_input: PathBuf, grid_input: PathBuf, html_output: PathBuf) -> Result<()> {
+    let phrases: LyricsPuzzleInput = serde_json::from_str(&fs::read_to_string(&lyrics_input)?)?;
     let grid: GridOutput = serde_json::from_str(&fs::read_to_string(&grid_input)?)?;
 
-    let css_source = compile_lyrics_page::compile_css(&phrases, &grid);
+    let css_source = compile_lyrics_page::compile_css(
+        &phrases,
+        &grid,
+        AnimationConfig {
+            ease_in: 100,
+            margin_before: 100,
+            margin_after: 100,
+            ease_out: 100,
+            discrete_time_step: 100,
+        },
+    )?;
 
     fs::write(&html_output, css_source)?;
 
@@ -208,54 +205,6 @@ fn time_phrases(languages: String, phrases_output: PathBuf) -> Result<()> {
     fs::write(
         &phrases_output,
         serde_json::to_string_pretty(&TimePhrasesOutput { phrases })?,
-    )?;
-
-    Ok(())
-}
-
-fn lyrics_phrases(lyrics_input: PathBuf, phrases_output: PathBuf) -> Result<()> {
-    let lyrics_input: LyricsPhrasesInput =
-        serde_json::from_str(&fs::read_to_string(&lyrics_input)?)?;
-
-    let mut phrases = vec![];
-    let mut phrase_words = vec![];
-    let total_duration = lyrics_input.total_duration as f64;
-
-    for element in lyrics_input.elements {
-        match element {
-            WordOrSpace::Space(s) => {
-                if s.contains('\n') {
-                    // Start new phrase
-                    if !phrase_words.is_empty() {
-                        phrases.push(LyricsPhrase {
-                            words: mem::take(&mut phrase_words),
-                        });
-                    }
-                }
-            }
-            WordOrSpace::Word { text, times } => {
-                ensure!(times.len() < 2);
-
-                phrase_words.push(LyricsWord {
-                    text,
-                    stop: times.first().map(|&stop| stop as f64 / total_duration),
-                });
-            }
-        }
-    }
-
-    if !phrase_words.is_empty() {
-        phrases.push(LyricsPhrase {
-            words: mem::take(&mut phrase_words),
-        });
-    }
-
-    fs::write(
-        &phrases_output,
-        serde_json::to_string_pretty(&LyricsPhrasesOutput {
-            phrases,
-            total_duration: lyrics_input.total_duration,
-        })?,
     )?;
 
     Ok(())
@@ -341,7 +290,7 @@ fn phrase_to_letter_positions(
     token_graph: &MergeDag<WordId, Token>,
     grid: &Grid,
     phrase: &Phrase,
-) -> Vec<Vec<(i16, i16)>> {
+) -> Vec<GridOutputWord> {
     let top_left = grid.top_left();
 
     phrase
@@ -349,13 +298,15 @@ fn phrase_to_letter_positions(
         .iter()
         .map(|&word| {
             let token = token_graph.group(word).1;
-            grid.positions_for_token(token.id)
+            let letters = grid
+                .positions_for_token(token.id)
                 .expect("The token must be present")
                 .map(|pos| {
                     let abs_pos = pos - top_left;
                     (abs_pos.x, abs_pos.y)
                 })
-                .collect()
+                .collect();
+            GridOutputWord { letters }
         })
         .collect()
 }

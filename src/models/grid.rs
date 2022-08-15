@@ -47,8 +47,8 @@ impl Grid {
     /// Returns `(width, height)` of the bounding box of the grid
     pub fn size(&self) -> (i16, i16) {
         let (x, y) = self.space();
-        let width = x.end() - x.start();
-        let height = y.end() - y.start();
+        let width = x.end() - x.start() + 1;
+        let height = y.end() - y.start() + 1;
         (width, height)
     }
 

@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use std::time::Instant;
 use std::{env, fs};
 
+use crate::build_grid::compile_html::compile_html;
 use crate::compile_lyrics_page::AnimationConfig;
 use anyhow::Result;
 use jemallocator::Jemalloc;
@@ -57,6 +58,9 @@ enum Options {
         phrases_input: PathBuf,
         /// The path to a file where to write the output as JSON, represented by `GridOutput`.
         grid_output: PathBuf,
+        /// The path to a file where to write the output as HTML.
+        #[structopt(long)]
+        grid_html_output: Option<PathBuf>,
         /// If present, will also try to position the token diagonally.
         #[structopt(long)]
         allow_diagonal: bool,
@@ -129,6 +133,7 @@ fn main() -> Result<()> {
             max_grid_bag_size,
             debug_tokens_svg,
             chain_growth_head_space,
+            grid_html_output,
         } => {
             grid(
                 phrases_input,
@@ -138,6 +143,7 @@ fn main() -> Result<()> {
                 max_grid_bag_size,
                 debug_tokens_svg,
                 chain_growth_head_space,
+                grid_html_output,
             )?;
         }
         Options::LyricsPuzzle {
@@ -230,6 +236,7 @@ fn time_phrases(languages: String, phrases_output: PathBuf) -> Result<()> {
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 fn grid(
     phrases_input: PathBuf,
     grid_output: PathBuf,
@@ -238,12 +245,13 @@ fn grid(
     max_grid_bag_size: usize,
     debug_tokens_svg: Option<PathBuf>,
     chain_growth_head_space: i32,
+    grid_html_output: Option<PathBuf>,
 ) -> Result<()> {
     let grid_input: GridInput = serde_json::from_str(&fs::read_to_string(&phrases_input)?)?;
 
     let mut phrase_book = PhraseBook::default();
-    for phrase in grid_input.phrases {
-        phrase_book.insert_phrase(phrase.texts);
+    for phrase in &grid_input.phrases {
+        phrase_book.insert_phrase(phrase.texts.clone());
     }
     log::info!("Read {} phrases", phrase_book.phrases().len());
 
@@ -291,17 +299,20 @@ fn grid(
         })
         .collect();
 
+    let grid = GridOutput {
+        minimal_grid: best_grid.to_letters(),
+        grid: final_letters,
+        phrases: final_phrases,
+    };
+
     if let Some(parent) = grid_output.parent() {
         fs::create_dir_all(parent)?;
     }
-    fs::write(
-        &grid_output,
-        serde_json::to_string(&GridOutput {
-            minimal_grid: best_grid.to_letters(),
-            grid: final_letters,
-            phrases: final_phrases,
-        })?,
-    )?;
+    fs::write(&grid_output, serde_json::to_string(&grid)?)?;
+
+    if let Some(grid_html_output) = grid_html_output {
+        fs::write(&grid_html_output, compile_html(&grid_input, &grid))?;
+    }
 
     Ok(())
 }

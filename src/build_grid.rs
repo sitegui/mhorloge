@@ -1,3 +1,5 @@
+pub mod compile_html;
+
 use crate::models::grid::Grid;
 use crate::models::grid_bag::GridBag;
 use crate::models::merge_dag::MergeDag;

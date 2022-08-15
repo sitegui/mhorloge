@@ -32,9 +32,9 @@ fn spell_hours_with_article(hours: u8) -> String {
 
     match hours {
         0 => "A MEIA NOITE".to_owned(),
-        1 => "A UMA HORA".to_owned(),
+        1 => "A UMA".to_owned(),
         12 => "O MEIO DIA".to_owned(),
-        n if n < 12 => format!("AS {} HORAS", spell_number(n, false)),
+        n if n < 12 => format!("AS {}", spell_number(n, false)),
         n => spell_hours_with_article(n - 12),
     }
 }

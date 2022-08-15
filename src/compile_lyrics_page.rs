@@ -6,6 +6,7 @@ use std::fmt;
 use anyhow::{ensure, Result};
 use itertools::Itertools;
 
+use crate::build_grid::compile_html::compile_grid;
 use crate::compile_lyrics_page::keyframes::{extract_frames, Keyframes};
 use crate::{GridOutput, LyricsPuzzleInput};
 
@@ -43,7 +44,7 @@ pub fn compile_lyrics_page(
 ) -> Result<String> {
     let page = include_str!("compile_lyrics_page/template.html");
     let page = page.replacen("${STYLE}", &compile_css(phrases, grid, config)?, 1);
-    let page = page.replacen("${GRID}", &compile_grid_html(grid), 1);
+    let page = page.replacen("${GRID}", &compile_grid(grid), 1);
     let page = page.replacen("${VIDEO_ID}", &phrases.video_id, 1);
 
     Ok(page)
@@ -115,22 +116,6 @@ fn compile_css(
         .collect_vec();
 
     Ok(letter_animations.into_iter().format("\n").to_string())
-}
-
-fn compile_grid_html(grid: &GridOutput) -> String {
-    grid.grid
-        .iter()
-        .enumerate()
-        .format_with("<br>\n", |(j, letters), f| {
-            for (i, letter) in letters.iter().enumerate() {
-                f(&format_args!(
-                    "<span class=\"letter-off\">{}<span class=\"letter-on letter-on-{}-{}\">{}</span></span>",
-                    letter, i, j, letter
-                ))?;
-            }
-            Ok(())
-        })
-        .to_string()
 }
 
 impl Animation {

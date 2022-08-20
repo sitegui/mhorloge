@@ -9,7 +9,7 @@ function lyrics() {
     SONG="$1"
 
     "$BIN" grid "docs/data/$SONG-sync-lyrics.json" "docs/build/$SONG-grid.json" \
-       --debug-tokens-svg "docs/build/$SONG-tokens.svg"
+       --debug-tokens-svg "docs/build/$SONG-tokens.svg" --aspect-ratio 1:1
     "$BIN" lyrics-puzzle "docs/data/$SONG-sync-lyrics.json" "docs/build/$SONG-grid.json" \
         "docs/$SONG.html"
 }

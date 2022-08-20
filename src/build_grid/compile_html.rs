@@ -12,14 +12,15 @@ pub fn compile_grid(grid: &GridOutput) -> String {
     grid.grid
         .iter()
         .enumerate()
-        .format_with("<br>\n", |(j, letters), f| {
+        .format_with("\n", |(j, letters), f| {
+            f(&"<tr>")?;
             for (i, letter) in letters.iter().enumerate() {
                 f(&format_args!(
-                    "<span class=\"letter-off\">{}<span class=\"letter-on letter-on-{}-{}\">{}</span></span>",
+                    "<td class=\"letter-off\">{}<span class=\"letter-on letter-on-{}-{}\">{}</span></td>",
                     letter, i, j, letter
                 ))?;
             }
-            Ok(())
+            f(&"</tr>")
         })
         .to_string()
 }

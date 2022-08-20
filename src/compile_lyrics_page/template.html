@@ -2,29 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Lyrics</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 5px;
+        }
+
         .grid {
             font-family: monospace;
-            font-size: 20px;
             font-weight: bold;
             background-image: url(wood.jpg);
             border: thin gray solid;
-            width: fit-content;
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            color: rgba(139, 69, 19, 0.4);
-            text-shadow: -1px -1px rgba(0, 0, 0, 0.25), 1px 1px rgba(255, 255, 255, 0.5);
-            padding: 7px;
-            margin: 7px;
-            display: inline-block;
+            color: rgba(139, 69, 19, 0.6);
+            text-shadow: 1px 1px rgba(255, 255, 255, 0.5);
+            padding: 5px;
+            margin: 5px;
+            text-align: center;
         }
 
         .letter-off {
             position: relative;
-            margin: 2px;
+            padding: 0;
         }
 
         .letter-on {
@@ -32,6 +47,7 @@
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
             color: #0000cc;
         }
     </style>
@@ -41,7 +57,9 @@
     </style>
 </head>
 <body>
-<div class="grid">${GRID}</div>
+<table class="grid">
+    ${GRID}
+</table>
 
 <div id="player"></div>
 
@@ -60,37 +78,66 @@
             },
             events: {
                 onReady: () => {
-
+                    resize()
+                    syncAnimations()
                 },
+                onStateChange: () => {
+                    syncAnimations()
+                },
+                onPlaybackRateChange: () => {
+                    syncAnimations()
+                }
             }
         })
     })
 
-    let lastAnimationTime = 0
-    let lastInterval = 0
-
-    setInterval(() => {
-        if (player) {
-            const now = Date.now()
-            const expectedAnimationTime = lastAnimationTime + (now - lastInterval)
-
-            const time = player.getCurrentTime() * 1e3
-
-            if (Math.abs(expectedAnimationTime - time) > 100) {
-                // Drifted too much: force update
-                for (const animation of document.getAnimations()) {
-                    animation.currentTime = time
-                }
-                lastAnimationTime = time
-            } else {
-                lastAnimationTime = expectedAnimationTime
+    function syncAnimations() {
+        console.log('Will sync animations')
+        if (!player || player.getPlayerState() !== 1) {
+            for (const animation of document.getAnimations()) {
+                animation.pause()
             }
-
-            lastInterval = now
+        } else {
+            const time = player.getCurrentTime() * 1e3
+            const speed = player.getPlaybackRate()
+            for (const animation of document.getAnimations()) {
+                animation.play()
+                animation.currentTime = time
+                animation.playbackRate = speed
+            }
         }
-    }, 1e3)
-</script>
+    }
 
+    function resize() {
+        console.log('Will resize page')
+        const grid = document.querySelector('.grid')
+
+        const viewPort = document.body.getBoundingClientRect().width
+        const margin = 10
+
+        let fontSizePx = 10
+        let gridWidth = 0
+        for (; fontSizePx < 30; fontSizePx++) {
+            grid.style.fontSize = `${fontSizePx}px`
+            gridWidth = grid.getBoundingClientRect().width
+
+            if (gridWidth >= viewPort - margin) {
+                break
+            }
+        }
+
+        grid.style.fontSize = `${fontSizePx - 1}px`
+
+        if (player) {
+            player.setSize(gridWidth, 3 * gridWidth / 4)
+        }
+    }
+
+    window.onresize = resize
+
+    resize()
+    syncAnimations()
+</script>
 
 </body>
 </html>

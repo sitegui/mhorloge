@@ -2,28 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Time grid</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 5px;
+        }
+
         .grid {
             font-family: monospace;
-            font-size: 20px;
             font-weight: bold;
             background-image: url(wood.jpg);
             border: thin gray solid;
-            width: fit-content;
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            color: rgba(139, 69, 19, 0.4);
-            text-shadow: -1px -1px rgba(0, 0, 0, 0.25), 1px 1px rgba(255, 255, 255, 0.5);
-            padding: 7px;
-            margin: 7px;
+            color: rgba(139, 69, 19, 0.6);
+            text-shadow: 1px 1px rgba(255, 255, 255, 0.5);
+            padding: 5px;
+            margin: 5px;
+            text-align: center;
         }
 
         .letter-off {
             position: relative;
-            margin: 2px;
+            padding: 0;
         }
 
         .letter-on {
@@ -31,33 +47,62 @@
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
             color: #0000cc;
         }
     </style>
 </head>
 <body>
 
-<div class="grid">${GRID}</div>
+<table class="grid">
+    ${GRID}
+</table>
 
 <select id="phrase">
     ${PHRASES}
 </select>
 
 <script>
-const phraseSelect = document.getElementById('phrase')
+    const phraseSelect = document.getElementById('phrase')
 
-function updateGrid() {
-    for (const el of document.querySelectorAll('.letter-on')) {
-        el.style.opacity = '0'
+    function updateGrid() {
+        for (const el of document.querySelectorAll('.letter-on')) {
+            el.style.opacity = '0'
+        }
+        for (const letter of phraseSelect.value.split(' ')) {
+            document.querySelector('.' + letter).style.opacity = '1'
+        }
     }
-    for (const letter of phraseSelect.value.split(' ')) {
-        document.querySelector('.' + letter).style.opacity = '1'
+
+    phraseSelect.oninput = updateGrid
+
+    function resize() {
+        console.log('Will resize page')
+        const grid = document.querySelector('.grid')
+
+        const viewPort = document.body.getBoundingClientRect().width
+        const margin = 10
+        const maxWidth = Math.min(viewPort - margin, 1024)
+
+        for (let fontSizePx = 10; fontSizePx < 30; fontSizePx++) {
+            grid.style.fontSize = `${fontSizePx}px`
+
+            const gridWidth = grid.getBoundingClientRect().width
+            if (gridWidth >= viewPort - margin) {
+                grid.style.fontSize = `${fontSizePx - 1}px`
+                break
+            }
+        }
+
+        if (player) {
+            player.setSize(maxWidth, 3 * maxWidth / 4)
+        }
     }
-}
 
-phraseSelect.oninput = updateGrid
+    window.onresize = resize
 
-updateGrid()
+    updateGrid()
+    resize()
 </script>
 
 </body>

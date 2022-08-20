@@ -67,6 +67,8 @@
 
 <script>
     let player = null
+    let lastResize = null
+    let resizeTimer = null
 
     YT.ready(() => {
         player = new YT.Player('player', {
@@ -78,7 +80,7 @@
             },
             events: {
                 onReady: () => {
-                    resize()
+                    resize(true)
                     syncAnimations()
                 },
                 onStateChange: () => {
@@ -108,12 +110,17 @@
         }
     }
 
-    function resize() {
+    function resize(force) {
         console.log('Will resize page')
-        const grid = document.querySelector('.grid')
 
+        const grid = document.querySelector('.grid')
         const viewPort = document.body.getBoundingClientRect().width
         const margin = 10
+
+        if (!force && lastResize === viewPort) {
+            return
+        }
+        lastResize = viewPort
 
         let fontSizePx = 10
         let gridWidth = 0
@@ -133,9 +140,14 @@
         }
     }
 
-    window.onresize = resize
+    function scheduleResize() {
+        console.log('Will schedule resize page')
+        clearTimeout(resizeTimer)
+        resizeTimer = setTimeout(() => resize(false), 500)
+    }
 
-    resize()
+    window.onresize = scheduleResize
+    resize(false)
     syncAnimations()
 </script>
 

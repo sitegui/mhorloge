@@ -64,6 +64,8 @@
 
 <script>
     const phraseSelect = document.getElementById('phrase')
+    let lastResize = null
+    let resizeTimer = null
 
     function updateGrid() {
         for (const el of document.querySelectorAll('.letter-on')) {
@@ -74,29 +76,40 @@
         }
     }
 
-    phraseSelect.oninput = updateGrid
-
     function resize() {
         console.log('Will resize page')
-        const grid = document.querySelector('.grid')
 
+        const grid = document.querySelector('.grid')
         const viewPort = document.body.getBoundingClientRect().width
         const margin = 10
-        const maxWidth = Math.min(viewPort - margin, 1024)
 
-        for (let fontSizePx = 10; fontSizePx < 30; fontSizePx++) {
+        if (lastResize === viewPort) {
+            return
+        }
+        lastResize = viewPort
+
+        let fontSizePx = 10
+        let gridWidth = 0
+        for (; fontSizePx < 30; fontSizePx++) {
             grid.style.fontSize = `${fontSizePx}px`
+            gridWidth = grid.getBoundingClientRect().width
 
-            const gridWidth = grid.getBoundingClientRect().width
             if (gridWidth >= viewPort - margin) {
-                grid.style.fontSize = `${fontSizePx - 1}px`
                 break
             }
         }
+
+        grid.style.fontSize = `${fontSizePx - 1}px`
     }
 
-    window.onresize = resize
+    function scheduleResize() {
+        console.log('Will schedule resize page')
+        clearTimeout(resizeTimer)
+        resizeTimer = setTimeout(() => resize(false), 500)
+    }
 
+    phraseSelect.oninput = updateGrid
+    window.onresize = scheduleResize
     updateGrid()
     resize()
 </script>

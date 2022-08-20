@@ -65,7 +65,7 @@ enum Options {
         #[structopt(long)]
         allow_diagonal: bool,
         /// The target aspect ratio, expressed by two integers separated by a colon ":".
-        #[structopt(long, default_value = "16:9")]
+        #[structopt(long, default_value = "32:9")]
         aspect_ratio: AspectRatio,
         /// Multiple grids are constructed at each step of the algorithm. This controls how many
         /// grids at most can be considered.

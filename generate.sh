@@ -14,10 +14,22 @@ function lyrics() {
         "docs/$SONG.html"
 }
 
+function time_phrases() {
+    PRECISION="$1"
+
+    "$BIN" time-phrases \
+      "English:$PRECISION,French:$PRECISION,German:$PRECISION,Portuguese:$PRECISION" \
+      "docs/build/time-phrases-$PRECISION.json"
+    "$BIN" grid "docs/build/time-phrases-$PRECISION.json" \
+      "docs/build/time-phrases-$PRECISION-grid.json" \
+      --grid-html-output "docs/time-phrases-$PRECISION.html" \
+      --debug-tokens-svg "docs/build/time-phrases-$PRECISION-tokens.svg"
+}
+
 lyrics beggin
 lyrics feeling-good
+lyrics shining-light
 
-"$BIN" time-phrases English:5,French:5,German:5,Portuguese:5 docs/build/time-phrases.json
-"$BIN" grid docs/build/time-phrases.json docs/build/time-phrases-grid.json \
-  --grid-html-output docs/time-phrases.html \
-  --debug-tokens-svg docs/build/time-phrases-tokens.svg
+time_phrases 1
+time_phrases 5
+time_phrases 15

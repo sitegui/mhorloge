@@ -1,0 +1,648 @@
+{
+  "video_id": "K8jPQ2TU65Q",
+  "total_duration": 235701,
+  "phrases": [
+    {
+      "texts": [
+        "IVE",
+        "BEEN",
+        "ALONE",
+        "INSIDE",
+        "MY",
+        "MIND"
+      ],
+      "start": 15505,
+      "end": 21609
+    },
+    {
+      "texts": [
+        "YEAH",
+        "I",
+        "KNOW",
+        "WHAT",
+        "I",
+        "FELT"
+      ],
+      "start": 23134,
+      "end": 25779
+    },
+    {
+      "texts": [
+        "KEPT",
+        "ME",
+        "DOWN"
+      ],
+      "start": 26790,
+      "end": 28737
+    },
+    {
+      "texts": [
+        "THAT",
+        "AINT",
+        "RIGHT"
+      ],
+      "start": 28737,
+      "end": 30784
+    },
+    {
+      "texts": [
+        "THOSE",
+        "DAYS",
+        "OF",
+        "FEELING",
+        "LONELY"
+      ],
+      "start": 30784,
+      "end": 34999
+    },
+    {
+      "texts": [
+        "EVER",
+        "DRIFT",
+        "AWAY",
+        "FADING",
+        "LINES"
+      ],
+      "start": 34999,
+      "end": 38660
+    },
+    {
+      "texts": [
+        "EVERY",
+        "TIME",
+        "THAT",
+        "YOU",
+        "SAY",
+        "YOU",
+        "LOVE",
+        "ME"
+      ],
+      "start": 38660,
+      "end": 43074
+    },
+    {
+      "texts": [
+        "I",
+        "COME",
+        "ALIVE"
+      ],
+      "start": 43074,
+      "end": 46678
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "NEED",
+        "IS"
+      ],
+      "start": 46678,
+      "end": 49362
+    },
+    {
+      "texts": [
+        "THE",
+        "WAY",
+        "THAT",
+        "YOU",
+        "LOVE",
+        "ME"
+      ],
+      "start": 49362,
+      "end": 50906
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "WANT",
+        "IS",
+        "ALL",
+        "RIGHT",
+        "HERE"
+      ],
+      "start": 50906,
+      "end": 54949
+    },
+    {
+      "texts": [
+        "AND",
+        "ALL",
+        "I",
+        "FEAR",
+        "IS",
+        "TO",
+        "BE",
+        "WITHOUT",
+        "YOU"
+      ],
+      "start": 54949,
+      "end": 59178
+    },
+    {
+      "texts": [
+        "MY",
+        "SHINING",
+        "LIGHT"
+      ],
+      "start": 59178,
+      "end": 62391
+    },
+    {
+      "texts": [
+        "YEAH",
+        "IVE",
+        "BEEN",
+        "ON",
+        "MY",
+        "OWN",
+        "MOST",
+        "MY",
+        "LIFE"
+      ],
+      "start": 64883,
+      "end": 70573
+    },
+    {
+      "texts": [
+        "ISOLATION",
+        "BROUGHT",
+        "ME",
+        "DOWN",
+        "EVERY",
+        "TIME"
+      ],
+      "start": 72551,
+      "end": 79795
+    },
+    {
+      "texts": [
+        "MY",
+        "DAYS",
+        "OF",
+        "FEELING",
+        "LONELY"
+      ],
+      "start": 81018,
+      "end": 84734
+    },
+    {
+      "texts": [
+        "EVER",
+        "DRIFT",
+        "AWAY",
+        "FADING",
+        "LINES"
+      ],
+      "start": 84734,
+      "end": 88126
+    },
+    {
+      "texts": [
+        "EVERY",
+        "TIME",
+        "THAT",
+        "YOU",
+        "SAY",
+        "YOU",
+        "LOVE",
+        "ME"
+      ],
+      "start": 88126,
+      "end": 92703
+    },
+    {
+      "texts": [
+        "I",
+        "SEE",
+        "THE",
+        "LIGHT"
+      ],
+      "start": 92703,
+      "end": 94467
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "NEED",
+        "IS"
+      ],
+      "start": 96839,
+      "end": 98697
+    },
+    {
+      "texts": [
+        "THE",
+        "WAY",
+        "THAT",
+        "YOU",
+        "LOVE",
+        "ME"
+      ],
+      "start": 98697,
+      "end": 100572
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "WANT",
+        "IS",
+        "ALL",
+        "RIGHT",
+        "HERE"
+      ],
+      "start": 100572,
+      "end": 104242
+    },
+    {
+      "texts": [
+        "AND",
+        "ALL",
+        "I",
+        "FEAR",
+        "IS",
+        "TO",
+        "BE",
+        "WITHOUT",
+        "YOU"
+      ],
+      "start": 104242,
+      "end": 108842
+    },
+    {
+      "texts": [
+        "MY",
+        "SHINING",
+        "LIGHT"
+      ],
+      "start": 108842,
+      "end": 113082
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "NEED",
+        "IS"
+      ],
+      "start": 113082,
+      "end": 115525
+    },
+    {
+      "texts": [
+        "THE",
+        "WAY",
+        "THAT",
+        "YOU",
+        "LOVE",
+        "ME"
+      ],
+      "start": 115525,
+      "end": 117183
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "WANT",
+        "IS",
+        "ALL",
+        "RIGHT",
+        "HERE"
+      ],
+      "start": 117183,
+      "end": 120988
+    },
+    {
+      "texts": [
+        "AND",
+        "ALL",
+        "I",
+        "FEAR",
+        "IS",
+        "TO",
+        "BE",
+        "WITHOUT",
+        "YOU"
+      ],
+      "start": 120988,
+      "end": 125463
+    },
+    {
+      "texts": [
+        "MY",
+        "SHINING",
+        "LIGHT"
+      ],
+      "start": 125463,
+      "end": 128224
+    },
+    {
+      "texts": [
+        "SAVE",
+        "ME",
+        "SLIPPING"
+      ],
+      "start": 130185,
+      "end": 131961
+    },
+    {
+      "texts": [
+        "TAKING",
+        "THE",
+        "WRONG",
+        "WAY"
+      ],
+      "start": 131961,
+      "end": 133980
+    },
+    {
+      "texts": [
+        "GOING",
+        "DOWN"
+      ],
+      "start": 133980,
+      "end": 135868
+    },
+    {
+      "texts": [
+        "CAUSE",
+        "IM",
+        "FIGHTING",
+        "FROM",
+        "THE",
+        "SUNRISE"
+      ],
+      "start": 138672,
+      "end": 142149
+    },
+    {
+      "texts": [
+        "TIL",
+        "IT",
+        "DIES"
+      ],
+      "start": 142149,
+      "end": 146003
+    },
+    {
+      "texts": [
+        "FIND",
+        "ME",
+        "LOVE"
+      ],
+      "start": 146003,
+      "end": 148095
+    },
+    {
+      "texts": [
+        "GIVE",
+        "ME",
+        "LOVE"
+      ],
+      "start": 148095,
+      "end": 150190
+    },
+    {
+      "texts": [
+        "GIVE",
+        "ME",
+        "LIFE",
+        "LIFE"
+      ],
+      "start": 150190,
+      "end": 155631
+    },
+    {
+      "texts": [
+        "OH"
+      ],
+      "start": 155631,
+      "end": 157075
+    },
+    {
+      "texts": [
+        "GIVE",
+        "ME",
+        "THE",
+        "LOVE"
+      ],
+      "start": 157075,
+      "end": 158683
+    },
+    {
+      "texts": [
+        "GIVE",
+        "ME",
+        "THE",
+        "LIFE"
+      ],
+      "start": 158683,
+      "end": 162587
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "NEED",
+        "IS"
+      ],
+      "start": 165255,
+      "end": 167043
+    },
+    {
+      "texts": [
+        "THE",
+        "WAY",
+        "THAT",
+        "YOU",
+        "LOVE",
+        "ME"
+      ],
+      "start": 167043,
+      "end": 168904
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "WANT",
+        "IS",
+        "ALL",
+        "RIGHT",
+        "HERE"
+      ],
+      "start": 168904,
+      "end": 172785
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "NEED",
+        "IS"
+      ],
+      "start": 172785,
+      "end": 175287
+    },
+    {
+      "texts": [
+        "THE",
+        "WAY",
+        "THAT",
+        "YOU",
+        "LOVE",
+        "ME"
+      ],
+      "start": 175287,
+      "end": 177218
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "WANT",
+        "IS",
+        "ALL",
+        "RIGHT",
+        "HERE"
+      ],
+      "start": 177218,
+      "end": 181117
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "NEED",
+        "IS"
+      ],
+      "start": 181117,
+      "end": 183681
+    },
+    {
+      "texts": [
+        "THE",
+        "WAY",
+        "THAT",
+        "YOU",
+        "LOVE",
+        "ME"
+      ],
+      "start": 183681,
+      "end": 185388
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "WANT",
+        "IS",
+        "ALL",
+        "RIGHT",
+        "HERE"
+      ],
+      "start": 185388,
+      "end": 189334
+    },
+    {
+      "texts": [
+        "AND",
+        "ALL",
+        "I",
+        "FEAR",
+        "IS",
+        "TO",
+        "BE",
+        "WITHOUT",
+        "YOU"
+      ],
+      "start": 189334,
+      "end": 193775
+    },
+    {
+      "texts": [
+        "MY",
+        "SHINING",
+        "LIGHT"
+      ],
+      "start": 193775,
+      "end": 197607
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "NEED",
+        "IS"
+      ],
+      "start": 197607,
+      "end": 200206
+    },
+    {
+      "texts": [
+        "THE",
+        "WAY",
+        "THAT",
+        "YOU",
+        "LOVE",
+        "ME"
+      ],
+      "start": 200206,
+      "end": 202059
+    },
+    {
+      "texts": [
+        "YEAH",
+        "ALL",
+        "I",
+        "WANT",
+        "IS",
+        "ALL",
+        "RIGHT",
+        "HERE"
+      ],
+      "start": 202059,
+      "end": 205910
+    },
+    {
+      "texts": [
+        "AND",
+        "ALL",
+        "I",
+        "FEAR",
+        "IS",
+        "TO",
+        "BE",
+        "WITHOUT",
+        "YOU"
+      ],
+      "start": 205910,
+      "end": 210314
+    },
+    {
+      "texts": [
+        "MY",
+        "SHINING",
+        "LIGHT"
+      ],
+      "start": 210314,
+      "end": 214053
+    }
+  ]
+}
